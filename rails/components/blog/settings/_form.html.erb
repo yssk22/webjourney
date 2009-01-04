@@ -1,0 +1,14 @@
+<%= message_from_flash_now(:info) %>
+<%= message_from_flash_now(:error) %>
+<%= error_messages_for 'setting' %>
+<fieldset>
+  <legend>Blog Setting</legend>
+  <div>
+    <label style="width: 100px">Title</label>
+    <%= text_field 'setting', 'title', :size => 60, :class => "textfield" %>
+  </div>
+  <div>
+    <label style="width: 100px">Description</label>
+    <%= text_area 'setting', 'description', :size => "50x8", :class => "textarea" %>
+  </div>
+</fieldset>

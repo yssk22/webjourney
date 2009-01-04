@@ -1,0 +1,11 @@
+<ul id="component_menu" class="jd_menu">
+  <% WjComponent.component_menu_list(current_user).each do |component, pages| -%>
+  <li><%=h component.display_name -%>
+    <ul>
+      <% pages.each do |page| -%>
+      <li onclick="location.href=<%=h url_for(:controller => page.controller).to_json %>"><%= h(page.display_name) %></a></li>
+      <% end -%>
+    </ul>
+  </li>
+  <% end %>
+</ul>

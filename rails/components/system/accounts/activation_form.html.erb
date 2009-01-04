@@ -1,0 +1,16 @@
+<%= message_from_flash_now :error %>
+<fieldset>
+  <legend>Activate Your Account(<%=h @account.login_name %>)</legend>
+  <%= hidden_field 'account', 'request_passcode'  %>
+  <p>To activate your account, set your login password following to the password policy.</p>
+  <ul>
+    <li>Password must be longer than <%= WjUser::LocalDB::MINIMUM_PASSWORD_LENGTH %> charactors.</li>
+  </ul>
+  <div>
+    <%= password_field_tag 'password', nil, :size => 16 %>
+      <%= submit_tag "Activate",
+          :id => "activate_submit",
+      :class => "submit"
+      %>
+  </div>
+</fieldset>

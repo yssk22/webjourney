@@ -1,0 +1,38 @@
+<div class="content">
+  <div id="<%= page.dom_id('blog_settings_table') %>"></div>
+</div>
+<div id="<%= page.dom_id('create_blog_setting_form_dialog') %>">
+  <div class="form-container" style="padding: 0 5px 10px 5px">
+  <% form_remote_tag(:url      => formatted_blog_settings_path(:format => "json"),
+                     :loading  => disable_submit_button(page.dom_id("create_blog_setting_form_submit")),
+                     :complete => enable_submit_button(page.dom_id("create_blog_setting_form_submit")),
+                     :success  => "MyBlog.onCreateBlogSettingSuccess();"
+                     ) do -%>
+  <div id="<%= page.dom_id('create_blog_setting_form') %>">
+    <%= render :partial => "blog/settings/form" %>
+  </div>
+  <div style="margin-left:130px;">
+    <%= submit_tag "Create", :id => page.dom_id("create_blog_setting_form_submit"), :class => "submit"%>
+  </div>
+  <% end %>
+  </div>
+</div>
+<div id="<%= page.dom_id('update_blog_setting_form_dialog') %>">
+  <div class="form-container" style="padding: 0 5px 10px 5px">
+  <% form_remote_tag() do -%>
+  <div id="<%= page.dom_id('update_blog_setting_form') %>">
+    <%= render :partial => "blog/settings/form" %>
+  </div>
+  <div style="margin-left:130px;">
+    <%= submit_tag "Update", :id => page.dom_id("update_blog_setting_form_submit"), :class => "submit"%>
+  </div>
+  <% end %>
+  </div>
+</div>
+
+<script type="text/javascript">
+jQuery(document).ready(function(){
+   MyBlog.makeDialogs();
+   MyBlog.loadBlogSettings();
+});
+</script>

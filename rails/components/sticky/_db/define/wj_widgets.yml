@@ -1,0 +1,7 @@
+--- 
+- text: 
+    display_name: Text
+- html: 
+    display_name: Html
+- feed: 
+    display_name: Feed

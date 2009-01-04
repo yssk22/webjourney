@@ -1,0 +1,54 @@
+<%= javascript_include_tag "/components/blog/javascripts/entry_loader" %>
+<div class="content blog">
+  <div class="blog_setting">
+    <div class="link">
+      <%= link_to("Feed", formatted_blog_setting_entries_url(@setting.id, "atom", :include_content => true),
+                  :class => "with_inline_icon blog_feed") %>
+      <% if @setting.allow_manage?(current_user) %>
+      <%= link_to("Manage", {:controller => "my_blog", :action => "manage", :id => @setting.id},
+                  :class => "with_inline_icon blog_entries_manage") %>
+      <% end %>
+    </div>
+    <div class="description">
+      <%=simple_format @setting.description %>
+    </div>
+  </div>
+  <div class="navigation">
+    <div>
+      <a class="with_inline_icon blog_entry_previous disabled"
+         href="javascript:void(0)">
+        Previous
+      </a>
+      <a class="with_inline_iconr blog_entry_next disabled"
+         href="javascript:void(0)">
+        Next
+      </a>
+    </div>
+  </div>
+  <div id="<%= page.dom_id('blog_entries') %>" style="margin-top: 1.5em;"></div>
+  <div class="navigation">
+    <div>
+      <a class="with_inline_icon blog_entry_previous disabled"
+         href="javascript:void(0)">
+        Previous
+      </a>
+      &nbsp;&nbsp;
+      <a class="with_inline_iconr blog_entry_next disabled"
+         href="javascript:void(0)">
+        Next
+      </a>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+jQuery(document).ready(function(){
+   var loader = new Blog.EntryLoader(Page.getDom("blog_entries"), {
+      setting      : <%= @setting.to_json %>,
+      previousLink : Page.getDom().find("div.navigation a.blog_entry_previous"),
+      nextLink     : Page.getDom().find("div.navigation a.blog_entry_next"),
+      allow_manage  : <%= @setting.allow_manage?(current_user).to_json %>,
+      allow_comment : <%= @setting.allow_comment?(current_user).to_json %>
+   });
+   loader.loadEntries();
+});
+</script>

@@ -1,0 +1,16 @@
+<div class="form-container">
+  <% form_tag do -%>
+  <fieldset>
+    <div>
+      <label style="width: 80px" for="url">Feed URL</label>
+      <%= text_field_tag 'url', widget.parameters[:url], :size => 50 %>
+    </div>
+    <div>
+      <label style="width: 80px" for="list_items">List Items</label>
+      <%= select_tag 'list_items',
+          options_for_select([5, 10, 20].map{|n| [n, n]}, widget.parameters[:list_items]),
+          {:style=> "width: 4em;"}%>
+    </div>
+  </fieldset>
+  <% end -%>
+</div>

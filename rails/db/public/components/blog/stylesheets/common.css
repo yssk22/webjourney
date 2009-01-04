@@ -1,0 +1,90 @@
+/* common styles */
+div.ac_tag_list {
+    float:left;
+    clear:right;
+}
+
+div.ac_tag_count {
+    text-align: right;
+}
+
+div.content div.blog_setting div.description {
+    margin: 1em 1.5em 1em 1.5em;
+    padding: 0.2em 1em 0.2em 1em;
+    background-color: #ecefff;
+}
+
+div.widget div.body div.content div.navigation a.disabled {
+    text-decoration: none;
+    color: #ccc;
+    cursor: default;
+}
+
+
+/* icon links */
+a.blog_feed {
+    background-image: url(../images/blog_feed.png);
+}
+
+a.blog_setting_add{
+    background-image: url(../images/blog_setting_add.png);
+}
+a.blog_setting_edit{
+    background-image: url(../images/blog_setting_edit.png);
+}
+a.blog_setting_delete{
+    background-image: url(../images/blog_setting_delete.png);
+}
+
+a.blog_entry_add{
+    background-image: url(../images/blog_entry_add.png);
+}
+a.blog_entry_edit{
+    background-image: url(../images/blog_entry_edit.png);
+}
+a.blog_entry_delete{
+    background-image: url(../images/blog_entry_delete.png);
+}
+
+a.blog_entries_manage {
+    background-image: url(../images/blog_entries_manage.png);
+}
+a.blog_entries_view {
+    background-image: url(../images/blog_entries_view.png);
+}
+
+a.blog_entry_view {
+    background-image: url(../images/blog_entry_view.png);
+}
+
+a.blog_entry_link {
+    background-image: url(../images/blog_entry_link.png);
+}
+
+span.blog_user {
+    background-image: url(../images/blog_user.png);
+}
+span.blog_anonymous {
+    background-image: url(../images/blog_anonymous.png);
+}
+span.blog_entry_post_date {
+    background-image: url(../images/blog_entry_post_date.png);
+}
+
+a.blog_entry_reload {
+    background-image: url(../images/blog_entry_reload.png);
+}
+
+a.blog_entry_next {
+    background-image: url(../images/blog_entry_next.png);
+    background-position-top: 10px;
+}
+
+a.blog_entry_previous {
+    background-image: url(../images/blog_entry_previous.png);
+}
+
+span.blog_entry_tags {
+    background-image: url(../images/blog_entry_tags.png);
+}
+

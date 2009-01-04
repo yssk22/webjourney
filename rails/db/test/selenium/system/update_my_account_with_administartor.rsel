@@ -1,0 +1,39 @@
+include_partial 'setup'
+
+open "/"
+wait
+assert_path "/pages/top"
+
+click_link "Login"
+wait
+assert_path "/components/system/login/with_password"
+
+type 'account_login_name', 'administrator'
+type 'account_password', 'password'
+
+click_button 'Login'
+wait
+
+open "/components/system/my_account_page"
+type 'account_email', 'new@example.com'
+type 'account_current_password', 'password'
+type 'account_new_password', 'newpassword'
+click_button 'Save'
+
+click_link 'Logout'
+wait
+
+
+open "/"
+wait
+assert_path "/pages/top"
+
+click_link "Login"
+wait
+assert_path "/components/system/login/with_password"
+
+type 'account_login_name', 'administrator'
+type 'account_password', 'newpassword'
+
+click_button 'Login'
+wait

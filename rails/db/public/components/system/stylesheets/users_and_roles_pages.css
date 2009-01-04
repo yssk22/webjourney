@@ -1,0 +1,37 @@
+table.alphabet {
+    width: 100%;
+    font-size: 1.1em;
+    font-family: monospace;
+}
+
+table.alphabet tbody tr td {
+    margin: 0;
+}
+
+table.alphabet tbody tr td a {
+    margin: 0;
+    display:block;
+    text-align: center;
+    text-decoration: none;
+}
+
+table.alphabet tbody tr td a.selected{
+    font-weight: bold;
+    background-color: #ccecfc;
+}
+
+div#users {
+    width: 100%;
+    min-height: 300px;
+}
+
+table.account {
+    width: 100%;
+}
+
+table.account td.created_at,
+table.account td.status,
+table.account td.last_login_at {
+    font-family: monospace;
+    text-align:center
+}

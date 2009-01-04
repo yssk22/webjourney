@@ -1,0 +1,8 @@
+<div class="content">
+<% if widget.parameters[:html] %>
+<%= sanitize widget.parameters[:html] %>
+<% else %>
+<p>No html contents are configured.</p>
+<% end %>
+</div>
+

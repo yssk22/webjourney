@@ -1,0 +1,18 @@
+include_partial 'setup'
+
+open "/"
+wait
+assert_path "/pages/top"
+
+click_link "Login"
+wait
+assert_path "/components/system/login/with_password"
+
+type 'account_login_name', 'administrator'
+type 'account_password', 'password'
+
+click_button 'Login'
+wait
+
+click_link 'Logout'
+wait

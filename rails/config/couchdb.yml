@@ -1,0 +1,30 @@
+development:
+  wj_user_profiles:
+    host: localhost
+    port: 5984
+    database: webjourney_dev_wj_user_profiles
+  wj_pages:
+    host: localhost
+    port: 5984
+    database: webjourney_dev_wj_pages
+
+test:
+  wj_user_profiles:
+    host: localhost
+    port: 5984
+    database: webjourney_test_wj_user_profiles
+  wj_pages:
+    host: localhost
+    port: 5984
+    database: webjourney_test_wj_pages
+
+
+production:
+  wj_user_profiles:
+    host: localhost
+    port: 5984
+    database: webjourney_production_wj_user_profiles
+  wj_pages:
+    host: localhost
+    port: 5984
+    database: webjourney_production_wj_pages

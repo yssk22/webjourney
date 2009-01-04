@@ -1,0 +1,36 @@
+<% if RAILS_ENV == "test" %>
+yssk22:
+  relationships:
+    ma:
+      - private
+    joe:
+      - friends
+    taro:
+      - collegues
+
+ma:
+  relationships:
+    yssk22:
+      - work
+    elly:
+      - fan
+    joe:
+      - friends
+
+elly:
+  relationships:
+    joe:
+      - friends
+
+taro:
+  relationships:
+    hanako:
+      - friends
+      - collegues
+
+hanako:
+  relationships:
+    taro:
+      - friends
+      - collegues
+<% end %>

@@ -1,0 +1,24 @@
+<table class="account">
+  <thead>
+    <tr>
+      <th>Login Name</th>
+      <th>Display Name</th>
+      <th>Type</th>
+      <th>Created</th>
+      <th>Status</th>
+      <th>Last Login</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @accounts.each do |account| %>
+    <tr>
+      <td class="login_name"><a><%=h account.login_name %></a></td>
+      <td class="display_name"><%=h account.display_name %></td>
+      <td class="type"><%=h account.type.underscore.split("/").last %></td>
+      <td class="created_at"><%=t account.created_at %></td>
+      <td class="status" ><%=h account.status_string %></td>
+      <td class="last_login_at"><%=t account.last_login_at %></td>
+    </tr>
+    <% end -%>
+  </tbody>
+</table>

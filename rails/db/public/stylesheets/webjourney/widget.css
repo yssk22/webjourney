@@ -1,0 +1,82 @@
+/**
+ *  Section1. Widget border
+ *  The border color has better to be the same as jquery-ui theme color,
+ *  which is defined in .ui-dialog-titlebar
+ */
+div.widget {
+    border-left: #0A60D6 solid 1px;
+    border-right: #0A60D6 solid 1px;
+    border-bottom: #0A60D6 solid 1px;
+}
+div.widget div.footer {
+    border-top: solid 1px #0A60D6;
+}
+/* hover border appears when the widget is dragging.*/
+.widget_hover {
+    border: #5292f1 dotted 3px;
+}
+
+
+/**
+ * Widget box margings
+ */
+div.widget {
+    margin-top: 10px;
+    font-size: 12px;
+    width: 100%;
+}
+
+div.widget div.header {
+/*
+   default style is ui-dialog-titlebar in jquery-ui
+   here are override styles
+*/
+}
+
+div.widget div.header span.title {
+/*
+   default style is ui-dialog-title in jquery-ui
+   here are override styles
+*/
+}
+div.widget div.header input.title {
+    width: 90%;
+}
+
+
+div.widget div.header span.buttons a {
+/*
+  default style is ui-dialog-title in jquery-ui
+  here are override styles
+*/
+    width: 16px;
+    height: 16px;
+    top: 0.5em;
+    cursor: pointer;
+}
+
+div.widget div.header span.buttons a.edit {
+    right: 5px;
+}
+
+div.widget div.header span.buttons a.delete {
+    right: 5px;
+}
+
+div.widget div.body {
+    margin-top: 0px;
+    min-height: 0px;
+}
+
+div.widget div.body div.content {
+    margin: 1em;
+}
+
+div.widget div.footer {
+    text-align: right;
+    padding: 3px 3px 3px 0;
+}
+
+div.widget div.footer input.button {
+    margin-left: 5px;
+}

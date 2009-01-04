@@ -1,0 +1,4 @@
+class <%= component_name.camelize %>::<%= page_name.camelize %>Controller < WebJourney::ComponentPageController
+  def index
+  end
+end

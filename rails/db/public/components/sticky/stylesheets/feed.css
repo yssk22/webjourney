@@ -1,0 +1,11 @@
+div.widget div.content div.feed {
+}
+
+div.widget div.content div.feed span.link {
+    margin-left: 5px;
+}
+
+div.widget div.content div.feed div.content{
+    background-color: #efeffc;
+    padding: 5px;
+}

@@ -1,0 +1,27 @@
+<%= message_from_flash_now(:info) %>
+<%= message_from_flash_now(:error) %>
+<%= error_messages_for 'config' %>
+<fieldset>
+  <legend>SMTP</legend>
+  <div>
+    <label style="width: 140px">Host:Port</label>
+    <%= text_field 'config', 'smtp_address', :size => 20 %> :
+    <%= text_field 'config', 'smtp_port', :size => 3 %>
+  </div>
+  <div>
+    <label style="width: 140px">Domain</label>
+    <%= text_field 'config', 'smtp_domain', :size => 20 %>
+  </div>
+  <div>
+    <label style="width: 140px">User Name</label
+    <%= text_field 'config', 'smtp_user_name', :size => 15 %>
+  </div>
+  <div>
+    <label style="width: 140px">Password</label>
+    <%= password_field 'config', 'smtp_password', :size => 15 %>
+  </div>
+  <div>
+    <label style="width: 140px">Authentication</label>
+  <%= select 'config', 'smtp_authentication', %w(plain login cram_md5).map(){ |m| [m,m] } %>
+  </div>
+</fieldset>

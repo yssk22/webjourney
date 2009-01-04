@@ -1,0 +1,22 @@
+<table style="width:100%;" class="settings">
+  <thead>
+    <tr>
+      <th class="title">Title</th>
+      <th class="description">Description</th>
+      <th class="edit">Edit</th>
+      <th class="delete">Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @settings.each do |setting| %>
+    <tr class="<%= cycle('even', 'odd') %>">
+      <td class="title">
+        <%= link_to h(setting.title), blog_setting_url(setting.id) %>
+      </td>
+      <td class="description"><%=sanitize(truncate(simple_format(setting.description), 50)) %></td>
+      <td class="edit">  <%= link_to image_tag("setting_edit.png"), edit_blog_setting_path(setting.id) %></td>
+      <td class="delete"><%= link_to image_tag("setting_delete.png"), blog_setting_url(setting.id, :_method => "delete") %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

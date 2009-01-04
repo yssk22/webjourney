@@ -1,0 +1,25 @@
+<table class="roles">
+  <thead>
+    <tr>
+      <th>Defaults</th>
+      <th>Name</th>
+      <th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @built_in_roles.each do |role| %>
+    <tr id="role_<%= role.id %>" class="<%=cycle(:even, :odd)%>">
+      <td class="default"><%= check_box_tag "defaults[]", role.id, role.is_default? %></td>
+      <td><%=h role.name %></td>
+      <td><%=h role.type %></td>
+    </tr>
+    <% end -%>
+    <% @component_roles.each do |role| %>
+    <tr id="role_<%= role.id %>" class="<%=cycle(:even, :odd)%>">
+      <td><%= check_box_tag "defaults[]", role.id, role.is_default? %></td>
+      <td><%=h role.name %></td>
+      <td><%=h role.type %></td>
+    </tr>
+    <% end -%>
+  </tbody>
+</table>

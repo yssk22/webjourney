@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta http-equiv="Content-Script-Type" content="text/javascript" />
+    <meta name="generator"   content="WebJourney Component Page Generator" />
+    <title>[Edit] <%=h @page.title %> - WebJourney</title>
+    <%= render_file File.join(RAILS_ROOT, "/app/views/share/stylesheets.html.erb"), false %>
+    <%= render_file File.join(RAILS_ROOT, "/app/views/share/javascripts.html.erb"), false %>
+    <style type="text/css">
+      div#widgets         { width: <%= WjConfig.container_width %>; }
+      div#left_container  { width: <%= WjConfig.left_container_width %>; }
+      div#right_container { width: <%= WjConfig.right_container_width %>; }
+    </style>
+    <script type="text/javascript">
+      Page = new WebJourney.EditPage(<%= @page.to_json %>, <%= page_url(@page._id).to_json %>);
+      $(document).ready(function(){
+        Page.adjustGrid();
+        Page.setRootPath(<%= root_path.to_json %>);
+        Page.setAuthToken(<%= form_authenticity_token.to_json %>);
+        Page.setCurrentLoginName(<%= current_user.login_name.to_json %>);
+        Page.prepareDialogs();
+        Page.prepareWidgets();
+        Page.initWidgetInstances(<%= @widget_instances.to_json %>)
+      });
+    </script>
+  </head>
+  <body>
+    <div id="header" class="header">
+      <div id="logo"><a href="."><%= image_tag("default_logo.png") %></a></div>
+      <div id="login">
+        <%= mypage_link(current_user) %>
+        <%= user_link(current_user) %>
+        <%= login_link %>
+      </div>
+      <div id="widget_selection">
+        <%= render :partial => "widget_selection" %>
+      </div>
+      <div id="navigation">
+        <div id="edit_navigation">
+          <%= page_settings_link %>
+          <%= page_permissions_link %>
+        </div>
+        <div id="page_navigation">
+          <span id="page_saving"  class="icon_page-saving with_inline_icon" style="display:none"></span>
+          <span id="page_changed" class="icon_page-changed with_inline_icon" style="display:none"></span>
+          <%= save_link %>
+          <%= back_link %>
+        </div>
+      </div>
+    </div><!-- end of header -->
+    <div id="body" class="body">
+      <div id="widgets" class="widgets edit">
+        <div id="top_container" class="widget_container"></div><!-- end of top_container -->
+        <div id="wrapper">
+          <div id="main">
+            <div id="center_container" class="widget_container"></div><!-- end of center_container -->
+          </div>
+          <div id="left_container" class="widget_container"></div><!-- end of left_container -->
+        </div><!-- end of wrapper -->
+        <div id="right_container" class="widget_container"></div><!-- end of right_container -->
+        <div id="bottom_container" class="widget_container"></div><!-- end of bottom_container -->
+      </div>
+    </div><!-- end of body -->
+    <div id="page_settings" title="Settings">
+      <div class="form-container">
+        <form id="page_settings_form">
+          <%= render :partial => "page_settings_form" %>
+        </form>
+      </div>
+    </div>
+    <div id="page_permissions" title="Permissions">
+      <p>
+        This feature has not been implemented yet!
+      </p>
+    </div>
+
+
+    <div id="footer" class="footer">
+      <div class="powered-by">
+        <span>Powered by <a href="http://project.webjourney.org/webjourney/trac">WebJourney</a> &copy; 2006-2008 webjourney.org </span>
+      </div>
+    </div><!-- end of footer -->
+  </body>
+</html>
+

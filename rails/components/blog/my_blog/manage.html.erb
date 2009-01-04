@@ -1,0 +1,97 @@
+<div id="<%= page.dom_id('content_container') %>"
+     class="content blog blog_my_home_manage">
+  <div class="navigation">
+    <div style="float:right">
+      <%= link_to "Back to My Blog List", :action => "index" %>
+    </div>
+    <div>
+      <%= link_to "View Entries", { :controller => "home", :action => "view_entries", :id => @setting.id }, :class => "with_inline_icon blog_entries_view" %>
+    </div>
+  </div>
+  <div class="blog_setting">
+    <div class="description">
+      <div>
+        <%= simple_format @setting.description %>
+      </div>
+    </div>
+    <div class="bookmarklet">
+      bookmarklet to create a new entry with a link to the viewing site:</p>
+      <pre>
+      javascript:(function(){
+        window.location.href=
+       "<%= url_for({:only_path => false}) %>?ref="+encodeURIComponent(window.location.href);
+      })()</pre>
+    </div>
+  </div>
+  <div class="navigation">
+    <div style="float:right">
+      <a class="with_inline_icon blog_entry_add"
+         href="javascript:void(0)" onclick="ManageEntry.switchContainer('create_blog_entry_form_container')" >
+        Create New Entry
+      </a>
+      <a class="with_inline_icon blog_entry_reload"
+         href="javascript:void(0)" onclick="ManageEntry.loadBlogEntries('reload')" >
+        Reload
+      </a>
+    </div>
+    <div>
+      <a class="with_inline_icon blog_entry_previous"
+         href="javascript:void(0)" onclick="ManageEntry.loadBlogEntries('previous')" >
+        Previous
+      </a>
+      <a class="with_inline_iconr blog_entry_next"
+         href="javascript:void(0)" onclick="ManageEntry.loadBlogEntries('next')" >
+        Next
+      </a>
+    </div>
+  </div>
+  <div id="<%= page.dom_id('blog_entries_table') %>" style="clear:both">
+  </div>
+</div>
+<div id="<%= page.dom_id('create_blog_entry_form_container') %>"
+     style="display:none">
+  <div class="form-container blog_entry_form" style="padding: 0 5px 10px 5px">
+    <% form_remote_tag(:url      => formatted_blog_setting_entries_path(@setting.id, "json"),
+                       :loading  => disable_submit_button(page.dom_id("create_blog_entry_form_submit")),
+                       :complete => enable_submit_button(page.dom_id("create_blog_entry_form_submit")),
+                       :success  => "ManageEntry.onCreateBlogEntrySuccess(request);",
+                       :failure  => "ManageEntry.onCreateBlogEntryFailure(request);"
+    ) do -%>
+    <div id="<%= page.dom_id('create_blog_entry_form') %>">
+      <%= render :partial => "blog/entries/form" %>
+    </div>
+    <div style="margin-left:130px;">
+      <%= submit_tag "Create", :id => page.dom_id("create_blog_entry_form_submit"), :class => "submit"%>
+      <input type="button" class="button" value="Cancel" onclick="ManageEntry.switchContainer('content_container')"></input>
+    </div>
+    <% end %>
+  </div>
+  <div class="blog_entry_link_frame">
+    <a class="with_inline_icon blog_entry_link"
+       href="javascript:void(0)"
+       onclick="ManageEntry.updateCreateBlogEntryLink()">Linked Content</a> (Click to update)
+    <iframe style="display:none"></iframe>
+  </div>
+</div>
+<div id="<%= page.dom_id('update_blog_entry_form_container') %>"
+     style="display:none">
+  <div class="form-container blog_entry_form" style="padding: 0 5px 10px 5px">
+    <form>
+    <div id="<%= page.dom_id('update_blog_entry_form') %>"></div>
+    <div style="margin-left:130px;">
+      <%= submit_tag "Update", :id => page.dom_id("update_blog_entry_form_submit"), :class => "submit"%>
+      <input type="button" class="button" value="Cancel" onclick="ManageEntry.switchContainer('content_container')"></input>
+    </div>
+    </form>
+  </div>
+</div>
+
+<script type="text/javascript">
+jQuery(document).ready(function(){
+   ManageEntry.setBlogSettingId(<%= @setting.id.to_json %>);
+   ManageEntry.initializeCreateBlogEntryEditor();
+   ManageEntry.loadBlogEntries();
+   $("div.blog_setting div.description").corner();
+   <%= @init_script if @init_script %>
+});
+</script>

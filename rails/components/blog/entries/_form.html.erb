@@ -1,0 +1,29 @@
+<%= message_from_flash_now(:info) %>
+<%= message_from_flash_now(:error) %>
+<%= error_messages_for 'entry' %>
+<fieldset>
+  <legend>Blog Entry</legend>
+  <div>
+    <label style="width: 100px">Post Date</label>
+    <%= date_select 'entry', 'post_date', :class => "date"%>
+  </div>
+  <div>
+    <label style="width: 100px">Title</label>
+    <%= text_field 'entry', 'title', :size => 60, :class => "textfield" %>
+  </div>
+  <div>
+    <label style="width: 100px">Link</label>
+    <%= text_field 'entry', 'link', :size => 60, :class => "textfield" %>
+  </div>
+  <div>
+    <label style="width: 100px">Tags</label>
+    <%= text_field 'entry', 'tag_list', :size => 60, :class => "textfield" %>
+  </div>
+  <div>
+    <label style="width: 100px">Draft</label>
+    <%= check_box 'entry', 'is_draft', :size => 60, :class => "checkbox" %>
+  </div>
+  <div>
+    <%= text_area 'entry', 'content', :size => "50x8", :class => "textarea" %>
+  </div>
+</fieldset>

@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta http-equiv="Content-Script-Type" content="text/javascript" />
+    <meta name="generator"   content="WebJourney Component Page Generator" />
+    <title><%=h @_title || page.display_name %> - WebJourney</title>
+    <%= render_file File.join(RAILS_ROOT, "/app/views/share/stylesheets.html.erb"), false %>
+    <%= render_file File.join(RAILS_ROOT, "/app/views/share/javascripts.html.erb"), false %>
+    <style type="text/css">
+      div#left_container  { width: <%= has_navigation? ? WjConfig.left_container_width : 0 %>; }
+    </style>
+    <script type="text/javascript">
+      Page = new WebJourney.ComponentPage();
+      $(document).ready(function(){
+      Page.adjustGrid();
+      Page.setAuthToken(<%= form_authenticity_token.to_json %>);
+      Page.setRootPath(<%= root_path.to_json %>);
+      Page.setCurrentLoginName(<%= current_user.login_name.to_json %>);
+      });
+    </script>
+    <%# component page specified stylesheets/javascripts loading -%>
+    <%= stylesheet_link_tag page.stylesheet_path if File.exist?(File.join(RAILS_ROOT, "public", page.stylesheet_path))   %>
+    <%= javascript_include_tag page.javascript_path if File.exist?(File.join(RAILS_ROOT, "public", page.javascript_path)) %>
+  </head>
+  <body>
+    <div id="header" class="header">
+      <div id="logo"><%= link_to "<img src=\"#{image_path_org("default_logo.png")}\" />", page_url("top") %></a></div>
+      <div id="login">
+        <%= mypage_link(current_user) %>
+        <%= user_link(current_user) %>
+        <%= login_link %>
+      </div>
+      <div id="navigation">
+        <div id="menu_navigation">
+          <%= render_file File.join(RAILS_ROOT, "/app/views/share/component_menu.html.erb"), false %>
+        </div>
+        <div id="page_navigation" style="display:none">
+        </div>
+      </div>
+    </div><!-- end of header -->
+    <div id="body" class="body">
+      <div id="widgets" class="widgets">
+        <div id="top_container" class="widget_container" style="display:none">
+        </div><!-- end of top_container -->
+        <div id="wrapper">
+          <div id="main">
+            <div id="center_container" class="widget_container">
+              <div id="cpm" class="widget">
+                <div id="cpm_header" class="ui-dialog-titlebar header">
+                  <span id="cpm_title" class="ui-dialog-title title"><%=h @_title || page.display_name %></span>
+                </div>
+                <div id="cpm_body" class="body">
+                  <%= yield %>
+                </div>
+              </div>
+            </div>
+          </div><!-- end of center_container -->
+          <div id="left_container" class="widget_container">
+            <% if has_navigation? %>
+            <div id="cpn" class="widget">
+              <div id="cpn_header" class="ui-dialog-titlebar header">
+                <span id="cpn_title" class="ui-dialog-title title">Navigation</span>
+              </div>
+              <div id="cpn_body" class="body component_navigation">
+                <%= render :partial => "navigation" %>
+              </div>
+              <% end %>
+            </div>
+          </div><!-- end of left_container -->
+        </div><!-- end of wrapper -->
+
+        <div id="right_container" class="widget_container" style="display:none">
+        </div><!-- end of right_container -->
+        <div id="bottom_container">
+        </div><!-- end of bottom_container -->
+      </div>
+    </div><!-- end of body -->
+    <div id="footer" class="footer">
+      <div class="powered-by">
+        <span>Powered by <a href="http://project.webjourney.org/webjourney/trac">WebJourney</a> &copy; 2006-2008 webjourney.org </span>
+      </div>
+    </div><!-- end of footer -->
+</body>
+</html>

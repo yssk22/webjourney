@@ -1,0 +1,1 @@
+# add Component original routing

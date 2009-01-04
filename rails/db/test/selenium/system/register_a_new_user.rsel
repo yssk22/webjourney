@@ -1,0 +1,21 @@
+include_partial 'setup'
+
+open "/"
+wait
+assert_path "/pages/top"
+
+click_link "Login"
+wait
+
+click_link "Register"
+wait
+assert_path "/components/system/login/register_with_password"
+
+type 'account_login_name', 'test_register'
+type 'account_email', "test_register@example.com"
+
+click_button 'Register'
+
+set_timeout 5000
+
+# TODO test code to confirm registeration

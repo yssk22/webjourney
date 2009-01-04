@@ -1,0 +1,23 @@
+# specify component specific databases for your CouchResources
+# CouchResource applications support multi databases
+#
+# see also http://...
+#
+
+development:
+  test:
+    host: localhost
+    port: 5984
+    database: webjourney_dev_test
+
+test:
+  test:
+    host: localhost
+    port: 5984
+    database: webjourney_test_test
+
+production:
+  test:
+    host: localhost
+    port: 5984
+    database: webjourney_production_test

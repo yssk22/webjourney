@@ -1,0 +1,5 @@
+<% if params[:type] == "open_id" %>
+<%= render :partial => "open_id_form" %>
+<% else %>
+<%= render :partial => "password_form" %>
+<% end %>

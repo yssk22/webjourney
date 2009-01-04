@@ -1,0 +1,19 @@
+<!-- OpenID authentication -->
+<div class="form-container">
+  <% form_tag :action => "with_open_id" do -%>
+  <%= message_from_flash_now(:error) %>
+  <fieldset>
+    <legend>Login with OpenID</legend>
+    <div>
+      <label style="width: 100px">OpenID</label>
+      <input class="textfield" id="account_open_id_uri" name="account[open_id_uri]" size="40" type="text" />
+    </div>
+    <div style="margin-left: 120px">
+      <%= submit_tag "Login",
+          :id => "openid_submit",
+      :class => "submit"
+      %>
+    </div>
+  </fieldset>
+  <% end %>
+</div>

@@ -1,0 +1,90 @@
+<div id="<%= page.dom_id('entry_permalink') %>"
+     class="content blog">
+  <div class="entry">
+    <div class="doc">
+      <div class="header">
+        <h3 class="title"><%=h @entry.title %></h3>
+        <div class="links">
+          <span class="with_inline_icon blog_entry_post_date">
+            <%= @entry.post_date.strftime("%Y-%m-%d") %>
+          </span>
+          <% if @entry.tags %>
+          <span class="with_inline_icon blog_entry_tags">
+            <% @entry.tags.map do |t| -%>
+            <a><%=h t %></a>
+            <% end -%>
+          </span>
+          <% end -%>
+          <% if @entry.link %>
+          <%= link_to "Refer", @entry.link, :class => "with_inline_icon blog_entry_link" %>
+          <% end %>
+        </div>
+      </div>
+      <div class="content">
+        <%= @entry.content %>
+      </div>
+    </div>
+    <div class="footer">
+      <div class="links">
+        <span class="updated_at">
+          <%= @entry.updated_at.strftime("%Y-%m-%d %H:%M") %>
+        </span>
+        <%= link_to "Permalink",        {}, :class => "with_inline_icon blog_entry_view" %>
+        <% if @setting.allow_manage?(current_user) -%>
+        <%= link_to "Edit", {:controller => "my_blog", :action => "manage", :id => @setting.id, :edit => @entry.id}, :class => "with_inline_icon blog_entry_edit" %>
+        <% end -%>
+        /
+        <%= link_to h(@setting.title) , {:action => "view_entries", :id => @setting.id}, :class => "with_inline_icon blog_entry_view" %>
+      </div>
+    </div>
+  </div>
+  <% if @comment %>
+  <div class="comments">
+    <%= toggle_button(page.dom_id('blog_comment_form_container'),
+        "Add New Comment") %>
+    <div id="<%= page.dom_id('blog_comment_form_container') %>"
+         class="form-container blog_comment_form"
+         style="padding: 0 5px 10px 5px; clear:both;display:none"
+         >
+      <% form_remote_tag(:url      => formatted_blog_setting_entry_comments_path(@setting.id, @entry.id, "json"),
+                         :loading  => disable_submit_button(page.dom_id("create_blog_entry_form_submit")),
+                         :complete => enable_submit_button(page.dom_id("create_blog_entry_form_submit")),
+                         :success  => "BlogHome.onPostBlogCommentSuccess(request);",
+                         :failure  => "BlogHome.onPostBlogCommentFailure(request);"
+      ) do -%>
+      <%= render :partial => "blog/comments/form" %>
+      <div style="margin-left:130px;">
+        <%= submit_tag "Post", :id => page.dom_id("blog_comment_form_submit"), :class => "submit"%>
+      </div>
+      <% end -%>
+    </div>
+    <div class="list">
+      <% @comments[:rows].each do |comment| %>
+      <div class="comment <%= cycle('even', 'odd') %>">
+        <div class="header">
+          <% if comment.login_name == WjUser::BuiltIn::Anonymous.me.login_name %>
+          <span class="with_inline_icon blog_anonymous"><%=h comment.name %></span>
+          <% else %>
+          <span class="with_inline_icon blog_user"><%=h comment.name %></span>
+          <% end %>
+          <% if comment.url %>
+          <span class="url"><%= link_to "URL", comment.url, :class => "with_inline_icon blog_entry_link" %></span>
+          <% end %>
+          <span class="created_at"><%=h comment.created_at.strftime("%Y-%m-%d %H:%M:%S") %></span>
+        </div>
+        <div class="text">
+          <%= simple_format(comment.text) %>
+        </div>
+      </div>
+      <% end %>
+    </div>
+  </div>
+  <% end %>
+</div>
+<script type="text/javascript">
+jQuery(document).ready(function(){
+   ViewEntry.setSettingId(<%= @setting.id.to_json %>);
+   ViewEntry.setEntryId(<%= @entry.to_json %>);
+   Page.getDom("entry_permalink").find("div.doc").corner("doc tr");
+});
+</script>

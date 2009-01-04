@@ -1,0 +1,2 @@
+module WebJourney::ComponentHelper
+end

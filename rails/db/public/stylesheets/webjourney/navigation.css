@@ -1,0 +1,58 @@
+/** for component navigation widget **/
+div.widget div.component_navigation ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+div.widget div.component_navigation li {
+    margin: 0;
+    padding: 0;
+    border-bottom: #cccccc solid 1px;
+}
+
+div.widget div.component_navigation li a {
+    display: block;
+    width: 100%;
+    height: 20px;
+    padding: 0;
+    margin: 0;
+    text-decoration: none;
+    padding-top: 10px;
+}
+
+div.widget div.component_navigation li span.label {
+    display: block;
+    text-align:center;
+    width: 100%;
+    height: 15px;
+    padding-left: 0;
+    margin: 0;
+    text-decoration: none;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background-color: #eeeeee;
+    font-weight: bold;
+}
+
+
+div.widget div.component_navigation li a:visited {
+    color: #6262f1;
+}
+
+div.widget div.component_navigation li a:hover {
+    background-color: #fcc2a1;
+    color: #1212f1;
+    font-weight: bold;
+}
+
+
+div.widget div.component_navigation li a span {
+    padding-left: 10px;
+}
+
+div.widget div.component_navigation li a.current {
+    background-color: #fcfc92;
+    color: #1212f1;
+    font-weight: bold;
+}

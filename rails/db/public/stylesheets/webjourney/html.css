@@ -1,0 +1,33 @@
+body {
+    background-image: url("./images/default_wallpaper.png");
+    background-position: 100% 0%;
+    background-repeat: repeat-y;
+    padding-right: 50px;
+    font-size: 0.8em;
+}
+
+img {
+    border: none;
+}
+
+h2 {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+
+div.error {
+    background-image: url("./images/error.png");
+    background-position: 0% 50%;
+    background-repeat: no-repeat;
+    padding: 5px 5px 5px 20px;
+    background-color: #f6caf0;
+}
+
+div.info {
+    background-image: url("./images/info.png");
+    background-position: 0% 50%;
+    background-repeat: no-repeat;
+    padding: 5px 5px 5px 20px;
+    background-color: #cAf0f6;
+}

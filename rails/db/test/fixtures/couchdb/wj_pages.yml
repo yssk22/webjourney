@@ -1,0 +1,47 @@
+top:
+  title: "Top Page"
+  owner_login_name: <%= WjUser::BuiltIn::Administrator.me.login_name %>
+  created_at : <%= DateTime.now %>
+  updated_at : <%= DateTime.now %>
+  relationship_keys:
+    show:
+      all: true
+    edit:
+      all: false
+  widgets:
+    top    : []
+    left   : []
+    right  : []
+    center : []
+    bottom : []
+
+<% if RAILS_ENV == "test" %>
+test_page1:
+  title: "Test Page1"
+  owner_login_name: yssk22
+  created_at : <%= DateTime.new(2008,1,1) %>
+  updated_at : <%= DateTime.new(2008,10,1) %>
+  relationship_keys:
+    show:
+      all: true
+    edit:
+      all: false
+      tags:
+        - private
+        - friends
+
+test_page2:
+  title: "Test Page2"
+  owner_login_name: yssk22
+  created_at : <%= DateTime.new(2008,2,1) %>
+  updated_at : <%= DateTime.new(2008,10,1) %>
+  relationship_keys:
+    show:
+      all: true
+    edit:
+      all: false
+      tags:
+        - private
+        - friends
+
+<% end %>

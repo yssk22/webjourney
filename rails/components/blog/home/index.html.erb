@@ -1,0 +1,10 @@
+<%= javascript_include_tag "/components/blog/javascripts/entry_loader" %>
+<div class="content blog">
+  <div id="<%= page.dom_id('recent_entries') %>"></div>
+</div>
+<script type="text/javascript">
+jQuery(document).ready(function(){
+   var loader = new Blog.EntryLoader(Page.getDom("recent_entries"));
+   loader.loadPublicEntries();
+});
+</script>

@@ -1,0 +1,112 @@
+administrator:
+  id: 1
+  login_name: <%= WjUser::BuiltIn::Administrator::NAME %>
+  display_name: "Administrator"
+  type: "WjUser::BuiltIn::Administrator"
+  email: "administrator@example.com"
+  password_hash: <%= WjUser::LocalDatabaseAuth.hash_password('password') %>
+  status: <%= WjUser::Status[:active] %>
+  wj_roles: administrator, user
+
+anonymous:
+  id: 2
+  login_name: <%= WjUser::BuiltIn::Anonymous::NAME %>
+  display_name: "Anonymous"
+  type: "WjUser::BuiltIn::Anonymous"
+  status: <%= WjUser::Status[:active] %>
+
+<% if RAILS_ENV != "production" %>
+yssk22:
+   id: 3
+   type: "WjUser::LocalDB"
+   login_name: "yssk22"
+   display_name: "yssk22"
+   email: "yssk22@example.com"
+   password_hash: <%= WjUser::LocalDatabaseAuth.hash_password('password') %>
+   status: <%= WjUser::Status[:active] %>
+   wj_roles: user, committer
+
+ma:
+   id: 4
+   type: "WjUser::LocalDB"
+   login_name: "ma"
+   display_name: "ma"
+   email: "ma@example.com"
+   password_hash: <%= WjUser::LocalDatabaseAuth.hash_password('password') %>
+   status: <%= WjUser::Status[:active] %>
+   wj_roles: user
+
+elly:
+   id: 5
+   type: "WjUser::LocalDB"
+   login_name: "elly"
+   display_name: "elly"
+   email: "elly@example.com"
+   password_hash: <%= WjUser::LocalDatabaseAuth.hash_password('password') %>
+   status: <%= WjUser::Status[:active] %>
+   wj_roles: user
+
+joe:
+   id: 6
+   type: "WjUser::LocalDB"
+   login_name: "joe"
+   display_name: "joe"
+   email: "joe@example.com"
+   password_hash: <%= WjUser::LocalDatabaseAuth.hash_password('password') %>
+   status: <%= WjUser::Status[:active] %>
+   wj_roles: user
+
+taro:
+   id: 7
+   type: "WjUser::LocalDB"
+   login_name: "taro"
+   display_name: "taro"
+   email: "taro@example.com"
+   password_hash: <%= WjUser::LocalDatabaseAuth.hash_password('password') %>
+   status: <%= WjUser::Status[:active] %>
+   wj_roles: user
+
+hanako:
+   id: 8
+   type: "WjUser::LocalDB"
+   login_name: "hanako"
+   display_name: "hanako"
+   email: "hanako@example.com"
+   password_hash: <%= WjUser::LocalDatabaseAuth.hash_password('password') %>
+   status: <%= WjUser::Status[:active] %>
+   wj_roles: user
+
+yssk22_openid:
+   id: 9
+   type: "WjUser::OpenId"
+   login_name: "yssk22_openid"
+   display_name: "yssk22(openid)"
+   open_id_uri: "http://www.hatena.ne.jp/yssk22/"
+   status: <%= WjUser::Status[:active] %>
+   wj_roles: user
+
+dead_open_id:
+   id: 10
+   type: "WjUser::OpenId"
+   login_name: "dead_open_id"
+   display_name: "Dead OpenID"
+   open_id_uri: "http://localhost/dead_open_id"
+   status: <%= WjUser::Status[:active] %>
+   wj_roles: user
+
+#
+# folloings are used for just a status test
+# *****************************************
+<% WjUser::Status.each do |status, value| %>
+<%= status %>_user:
+   type: "WjUser::LocalDB"
+   login_name: "<%= status %>_test_user"
+   display_name: "<%= status %>_test_user"
+   email: "<%= status %>_test_user@example.com"
+   password_hash: <%= WjUser::LocalDatabaseAuth.hash_password('password') %>
+   status: <%= value %>
+   wj_roles: user
+<% end %>
+# *****************************************
+
+<% end %>

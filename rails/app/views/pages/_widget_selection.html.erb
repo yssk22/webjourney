@@ -1,0 +1,18 @@
+<div>
+  Component: <%= select_tag "components_of_widget_selections", options_for_select(@widget_selections.map { |component, widgets|
+      [h(component.display_name), component.id]
+      }) , :id => "components_of_widget_selections" -%>
+  Location: <%= select_tag "location_of_widget_selections", options_for_select([:top, :left, :center, :right, :bottom].map {|l| [l, "#{l}_container"]} ),
+                :id => "location_of_widget_selections" -%>
+</div>
+<!-- widgets -->
+<% @widget_selections.each do |component, widgets| -%>
+<div id="widget_selections_<%= component.id %>" class="widget_list" style="display:none">
+  <% widgets.each do |widget| %>
+  <a href="javascript:void(0)" title="<%=h widget.display_name %>"
+     onclick="Page.addWidget(<%=h widget.json_for_new_widget %>)">
+    <%= image_tag widget.link_path(:image), :alt => h(widget.display_name) %>
+  </a>
+  <% end -%>
+</div>
+<% end -%>

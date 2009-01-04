@@ -1,0 +1,5 @@
+display_name: <%= component_name.titleize.inspect %>
+license     : <%= license.inspect %>
+url         : <%= url.inspect %>
+author      : <%= author.inspect %>
+description : <%= description.inspect %>

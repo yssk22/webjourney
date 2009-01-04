@@ -1,0 +1,134 @@
+/**
+ * WebJourney Default Stylesheet for Page.
+ */
+div.header {
+
+}
+
+div.header a {
+    text-decoration: none;
+}
+
+div.header div#logo {
+    float:left;
+}
+
+div.header div#login {
+    text-align: right;
+}
+
+div.header div#widget_selection div.widget_list {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+div.header div#widget_selection div.widget_list a {
+    margin-right: 15px;
+}
+
+div.header div#navigation {
+    font-family: sans-serif;
+    clear: both;
+    width: 100%;
+    height: 24px;
+    border-top: solid 1px #3465ff;
+    border-bottom: solid 1px #3465ff;
+    padding-top: 3px;
+}
+
+div.header div#navigation div#menu_navigation {
+    float: left;
+    text-align:left;
+}
+
+div.header div#navigation div#edit_navigation {
+    float: left;
+    text-align:left;
+    padding-top: 3px;
+}
+
+
+div.header div#navigation div#page_navigation {
+    text-align:right;
+    padding-top: 3px;
+}
+
+
+div.footer {
+    border-top: #5252f1 double 3px;
+    padding-top: 3px;
+    font-size: x-small;
+    color: #5252f1;
+    text-align:center;
+}
+
+
+div.body {
+    clear:both;
+    min-height: 100px;
+    width: 100%;
+}
+
+div.widgets {
+    clear:both;
+    width: 96%;
+    overflow:hidden;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+
+div#top_container {
+    margin-bottom: 10px;
+}
+
+div#wrapper {
+    width: 100%;
+    float: left;
+    margin-bottom: 10px;
+}
+
+div#main {
+    width: 100%;
+    float: right;
+}
+
+div#center_container {
+}
+
+div#left_container {
+    float: right;
+}
+
+div#right_container {
+    float:left;
+}
+
+div#bottom_container {
+    clear: left;
+}
+
+div#top_container,
+div#center_container,
+div#left_container,
+div#right_container,
+div#bottom_container {
+    padding: 5px 5px 0 5px;
+}
+
+div.edit div#top_container,
+div.edit div#center_container,
+div.edit div#left_container,
+div.edit div#right_container,
+div.edit div#bottom_container {
+    border: solid 1px #3465ff;
+    min-height: 150px;
+    padding: 5px 5px 0 5px;
+}
+
+
+
+.page_settings_dialog{
+    min-width: 500px;
+    min-height: 410px;
+}

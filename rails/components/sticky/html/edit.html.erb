@@ -1,0 +1,35 @@
+<div class="form-container">
+  <% form_tag do -%>
+  <%# insert your widget parameter form here -%>
+  <textarea name="html" class="wymeditor"></textarea>
+  <% end -%>
+</div>
+<script type="text/javascript">
+  $(document).ready(function(){
+  $(".wymeditor").wymeditor({
+  html: <%= (widget.parameters[:html] || "").to_json %>,
+  updateSelector : <%= dom_id_selector("save").to_json %>,
+  updateEvent : "focus",
+  boxHtml:   "<div class='wym_box'>"
+    + "<div class='wym_area_top'>"
+      + WYMeditor.TOOLS
+      + WYMeditor.CONTAINERS
+      + WYMeditor.CLASSES
+      + "</div>"
+    + "<div class='wym_area_left'></div>"
+    + "<div class='wym_area_right'>"
+      + "</div>"
+    + "<div class='wym_area_main'>"
+      + WYMeditor.HTML
+      + WYMeditor.IFRAME
+      + WYMeditor.STATUS
+      + "</div>"
+    + "<div class='wym_area_bottom'>"
+      + "</div>"
+    + "</div>",
+  postInit : function(wym){
+  $(wym._box).find(".wym_containers").css("float", "left");
+  }
+  })});
+
+</script>

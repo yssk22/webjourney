@@ -1,0 +1,14 @@
+<h2>Account:<%= @account.login_name %> is prepared.</h2>
+<% if @account.is_a?(WjUser::OpenId) -%>
+<!-- OpenID Account -->
+<p>
+  You can activate this account to
+  <%= link_to "login", :controller => "login", :action => "index" %>
+  with the OpenID(<%=h @account.open_id_uri %>).
+</p>
+<% else %>
+<p>
+  The confirmation mail has been delivered to the address of this account.
+  You can activate this account to click the link in the confirmation mail.
+</p>
+<% end -%>

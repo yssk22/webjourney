@@ -1,0 +1,4 @@
+
+jquery-autocomplete
+URL : http://jqueryjs.googlecode.com/svn/trunk/plugins/autocomplete/
+Revision: 6018

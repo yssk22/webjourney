@@ -1,0 +1,21 @@
+<div class="content">
+  <ul class="page_list">
+  <% @pages[:rows].each do |page| %>
+  <li>
+    <%=h page.updated_at.strftime("%Y-%m-%d") %>: <%=link_to h(page.title), page_url(page.id) %>
+  </li>
+  <% end %>
+  </ul>
+  <div class="paginate_navigation">
+    <% if @pages[:previous] -%>
+    <%= link_to_load "&laquo; Previous", {:params => @pages[:previous]} %>
+    <% else -%>
+    <span>&laquo; Previous</span>
+    <% end -%>
+    <% if @pages[:next] -%>
+    <%= link_to_load "Next &raquo;", {:params => @pages[:next]} %>
+    <% else -%>
+    <span>Next &raquo;</span>
+    <% end -%>
+  </div>
+</div>

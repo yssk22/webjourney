@@ -1,0 +1,14 @@
+<%= message_from_flash_now(:info) %>
+<%= message_from_flash_now(:error) %>
+<%= error_messages_for 'config' %>
+<fieldset>
+  <legend>Account</legend>
+  <div>
+    <label style="width: 120px">Local DB Register</label>
+    <%= check_box 'config', 'account_allow_local_db_register' %>
+  </div>
+  <div>
+    <label style="width: 120px">OpenID Register</label>
+    <%= check_box 'config', 'account_allow_open_id_register' %>
+  </div>
+</fieldset>
