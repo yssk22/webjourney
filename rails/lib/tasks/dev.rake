@@ -1,40 +1,12 @@
 require 'rake'
 require 'rake/testtask'
 require 'rake/rdoctask'
+require File.dirname(__FILE__) + '/../../config/boot'
+require File.dirname(__FILE__) + '/../../config/environment'
+include RakeUtil
+
 namespace :wj do
   namespace :dev do
-    require File.dirname(__FILE__) + '/../../config/boot'
-    require File.dirname(__FILE__) + '/../../config/environment'
-
-    def create_couchdb_for_component(component)
-      begin
-        CouchConfig.get(component).each do |env, config|
-          if env == RAILS_ENV
-            config.each do |target, config2|
-              create_db(env, File.join(component, target))
-            end
-          end
-        end
-      rescue Errno::ENOENT => e
-        puts "[Skip] The database configuration (components/#{component}/_config/couchdb.yml) is not found)."
-      end
-    end
-
-    def drop_couchdb_for_component(component)
-      begin
-        CouchConfig.get(component).each do |env, config|
-          if env == RAILS_ENV
-            config.each do |target, config2|
-              drop_db(env, File.join(component, target))
-            end
-          end
-        end
-      rescue Errno::ENOENT => e
-        puts "[Skip] The database configuration (components/#{component}/_config/couchdb.yml) is not found)."
-      end
-    end
-
-
     desc("Reset all databases used in development")
     task :reset do
       WjComponent.find(:all).map do |component|

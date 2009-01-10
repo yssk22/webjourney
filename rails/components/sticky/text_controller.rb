@@ -7,7 +7,6 @@ class Sticky::TextController < WebJourney::WidgetController
 
   # GET /widgets/{:instance_id}/sticky/text/edit/
   def edit
-
   end
 
   # POST /widgets/{:instance_id}/sticky/text/update/

@@ -3,11 +3,19 @@ top:
   owner_login_name: <%= WjUser::BuiltIn::Administrator.me.login_name %>
   created_at : <%= DateTime.now %>
   updated_at : <%= DateTime.now %>
+  width: 100
+  width_unit: "%"
+  lwidth: 200
+  lwidth_unit: "px"
+  rwidth: 200
+  rwidth_unit: "px"
   relationship_keys:
     show:
       all: true
+      tags: []
     edit:
       all: false
+      tags: []
   widgets:
     top    : []
     left   : []
@@ -43,5 +51,4 @@ test_page2:
       tags:
         - private
         - friends
-
 <% end %>

@@ -7,6 +7,7 @@ include RakeUtil
 namespace :wj do
   desc("Install base platform for WebJourney")
   task :install do
+    puts "Configure databases ... "
     Rake::Task["db:create"].invoke
     Rake::Task["db:migrate"].invoke
     Rake::Task["couchdb:create"].invoke
@@ -17,6 +18,8 @@ namespace :wj do
     install_components("system", "sticky")
 
     # componse top page
+    puts "Composing the top page ... "
+
     initial_widgets = []
     initial_widgets << {:component => "sticky", :widget => "html"}
     initial_widgets << {:component => "sticky", :widget => "text"}

@@ -4,12 +4,14 @@ class CouchFixture
       # resolve class
       file = f.gsub(/^#{basedir}\//, '').gsub(/\.yml$/, '')
       klass = file.singularize.camelize.constantize
+
       # reset a database
       uri = klass.database
       Net::HTTP.start(uri.host, uri.port) { |http|
         http.delete(uri.path)
         http.put(uri.path, nil)
       }
+
       # load yaml file
       content = YAML.load(ERB.new(File.read(f)).result)
       if content
