@@ -240,7 +240,7 @@ EOS
   # <tt>target</tt> value should be possible as follows::
   #   <tt>:all</tt>     - widget instances both current and old.
   #   <tt>:current</tt> - widget instances currently layouted in this page.
-  #   <tt>:current</tt> - widget instances past layouted in this page.
+  #   <tt>:old</tt>     - widget instances past layouted in this page.
   #
   def get_widget_instances(target = :all)
     case target
@@ -259,8 +259,8 @@ EOS
   def get_all_widget_instances
     # by_page?startkey=["top", 0]&endkey=["top",1]&group=true&descending=false
     result = self.class.find_widget_instances_all_by_page(:return_raw_hash => false,
-                                                          :key         => [self._id, 1],
-                                                          :descending  => false)
+                                                          :key             => [self._id, 1],
+                                                          :descending      => false)
     result[:rows]
   end
 
