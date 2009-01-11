@@ -10,7 +10,14 @@ div.widget div.body div.content a:visited {
     color: #3A90f6;
 }
 
+/* paragraph */
+div.widget div.body div.content p{
+    margin-bottom: 1em;
+}
 
+
+
+/** table **/
 div.widget div.body div.content table{
     border-collapse : collapse;
 }
