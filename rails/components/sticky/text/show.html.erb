@@ -1,6 +1,6 @@
 <div class="content">
 <% if widget.parameters[:text] %>
-<%= simple_format widget.parameters[:text] %>
+<%= sanitize(auto_link(simple_format(widget.parameters[:text]))) %>
 <% else %>
 <p>No text is configured.</p>
 <% end %>
