@@ -34,13 +34,17 @@ table.settings tbody tr {
 
 table.settings td.manage,
 table.settings td.edit,
-table.settings td.delete{
+table.settings td.delete,
+table.blog_entries td.edit,
+table.blog_entries td.delete{
     text-align:center;
 }
 
 table.settings td.manage img,
 table.settings td.edit img,
-table.settings td.delete img{
+table.settings td.delete img,
+table.blog_entries td.edit img,
+table.blog_entries td.delete img{
     vertical-align: middle;
 }
 
