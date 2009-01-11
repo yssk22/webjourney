@@ -15,6 +15,11 @@ div.widget div.body div.content p{
     margin-bottom: 1em;
 }
 
+div.widget div.body div.content strong{
+    color: #0000ff;
+    font-weight: bold;
+}
+
 
 
 /** table **/
