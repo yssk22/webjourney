@@ -26,16 +26,17 @@ namespace :wj do
     top = WjPage.top
     top.compose_widget_instance_layout({:center => initial_widgets})
     top.save!
-    instances = top.get_current_widget_instances()
-    # puts instances.inspect
+    ids = top.widgets[:center].map{ |w| w[:instance_id] }
+    instances = WjWidgetInstance.find(ids)
     welcome = instances.first
+    license = instances.last
+    # puts instances.inspect
     welcome.title = "Welcome to WebJourney"
     welcome.parameters[:html] = <<-EOS
 <p>WebJourney has been installed successfully!!</p>
 EOS
     welcome.save
     # LICENSE NOTE
-    license = instances.last
     license.title = "LICENSE"
     license.parameters[:text] = File.open(File.join(RAILS_ROOT, "MIT_LICENSE"), "r") { |f| f.read }
     license.save

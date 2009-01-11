@@ -286,8 +286,6 @@ EOS
     instantize_widget_instances_result(result)
   end
 
-
-
   # Compose WjWidgetInstances following to <tt>layout_hash</tt>
   # The <tt>layout_hash</tt> parameters ::
   #
