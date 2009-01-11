@@ -136,7 +136,8 @@ var ManageEntry = {
       if( this._requestUrlCache ){ url = this._requestUrlCache; }
       break;
     case "next":
-      if( this._entriesCache.next.expected_offset < 0 ){
+      if( this._entriesCache.next === null ||
+          this._entriesCache.next.expected_offset < 0 ){
         // STOP!!
         return;
       }else{
@@ -144,7 +145,8 @@ var ManageEntry = {
       }
       break;
     case "previous":
-      if( this._entriesCache.previous.expected_offset < 0 ){
+      if( this._entriesCache.previous === null ||
+          this._entriesCache.previous.expected_offset < 0 ){
         // STOP!!
         return;
       }else{
@@ -176,14 +178,16 @@ var ManageEntry = {
     dom.setTemplate(jt);
     dom.processTemplate(entries);
     // next, previous
-    if( entries.previous.expected_offset < 0){
+    if( entries.previous === null ||
+        entries.previous.expected_offset < 0){
       page.find("a.blog_entry_previous")
       .addClass("disabled");
     }else{
       page.find("a.blog_entry_previous")
       .removeClass("disabled");
     }
-    if( entries.next.expected_offset < 0 ){
+    if( entries.next === null ||
+        entries.next.expected_offset < 0 ){
       page.find("a.blog_entry_next")
       .addClass("disabled");
     }else{

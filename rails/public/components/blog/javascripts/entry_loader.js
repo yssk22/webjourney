@@ -100,19 +100,24 @@ if(!Blog.EntryLoader){
 
     _updatePageNavigationLink : function(){
       var self = this;
-      if( self._nextLink ){
-        if( self._entriesCache.next.expected_offset < 0 ){
-          self._nextLink.addClass("disabled");
-        }else{
-          self._nextLink.removeClass("disabled");
-        }
+      if( self._hasLink(self._entriesCache.next)) {
+        self._nextLink.removeClass("disabled");
+      }else{
+        self._nextLink.addClass("disabled");
       }
-      if( self._previousLink ){
-        if( self._entriesCache.previous.expected_offset < 0 ){
-          self._previousLink.addClass("disabled");
-        }else{
-          self._previousLink.removeClass("disabled");
-        }
+      if( self._hasLink(self._entriesCache.previous)) {
+        self._previousLink.removeClass("disabled");
+      }else{
+        self._previousLink.addClass("disabled");
+      }
+    },
+    _hasLink : function(linkObj){
+      if( linkObj === null ||
+          linkObj.expected_offset < 0 ){
+        false;
+      }
+      else{
+        true;
       }
     }
   }
