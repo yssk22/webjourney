@@ -185,7 +185,7 @@ EOS
     u = user.is_a?(WjUser) ? user : WjUser.find_by_login_name(user.to_s)
     page = self.find_by_owner_and_created_at_all(:first, :startkey => [u.login_name], :count => 1)
     unless page
-      page = self.new
+      page = self.default
       page.owner_login_name = u.login_name
       page.title = "#{u.display_name}'s home"
       page.description = "this page is #{u.display_name}'s home page."
