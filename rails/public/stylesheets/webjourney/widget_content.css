@@ -12,12 +12,20 @@ div.widget div.body div.content a:visited {
 
 /* paragraph */
 div.widget div.body div.content p{
-    margin-bottom: 1em;
+    margin-top:    0.4em;
+    margin-bottom: 0.4em;
 }
 
 div.widget div.body div.content strong{
     color: #0000ff;
     font-weight: bold;
+}
+
+div.widget div.body div.content blockquote{
+    margin-left: 1em;
+    padding: 0.3em;
+    border: dotted 1px #999999;
+    background-color: #eef;
 }
 
 
