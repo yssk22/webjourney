@@ -103,22 +103,25 @@ EOS
         end
       end
 
+      def get_design_document_from_server(design)
+        path = design_path(design)
+        logger.debug "CouchResource::Connection#get #{path}"
+        connection.get(path) rescue nil
+      end
+
       # define design document if it does not exist on the server.
       def define_design_document(design)
+        path = design_path(design)
         design_document = read_inheritable_attribute(:design_documents)[design]
         if self.check_view_every_access
-          path = design_path(design)
-          logger.debug "CouchResource::Connection#get #{path}"
-          current_doc = connection.get(path) rescue nil
+          current_doc = get_design_document_from_server(design)
           # already exists
           if current_doc
             logger.debug current_doc.to_json
-            program = Digest::MD5.digest(design_document[:views].to_s)
-            server  = Digest::MD5.digest(current_doc[:views].to_s)
-            if program != server
-              logger.debug "Design document should be updated."
-              logger.debug "(server_md5, program_md5) = (#{server}, #{program})"
-              logger.debug "(server_rev, program_rev) = (#{current_doc['_rev']}, #{design_document[:_rev]})"
+            if match_views?(design_document[:views], current_doc[:views])
+              logger.debug "Design document(#{path}) is the latest."
+            else
+              logger.debug "Design document(#{path}) is not the latest, should be updated."
               design_document[:_rev] = current_doc[:_rev]
               logger.debug "CouchResource::Connection#put #{path}"
               hash = connection.put(path, design_document.to_json)
@@ -126,7 +129,7 @@ EOS
               design_document[:_rev] = hash[:rev]
             end
           else
-            logger.debug nil.to_json
+            logger.debug "Design document not found so to put."
             design_document.delete(:_rev)
             logger.debug "CouchResource::Connection#put #{path}"
             logger.debug design_document.to_json
@@ -145,6 +148,22 @@ EOS
             end
           end
         end
+      end
+
+      private
+      def match_views?(views1, views2)
+        # {
+        #   :view_name => {:map => ..., :reduce => ...},
+        #   ...
+        # }
+        views1.each do |key, mapred1|
+          return false unless views2.has_key?(key)
+          mapred2 = views2[key]
+          redhex = [Digest::MD5.hexdigest(mapred1[:reduce].to_s), Digest::MD5.hexdigest(mapred2[:reduce].to_s)]
+          return false  unless Digest::MD5.hexdigest(mapred1[:map].to_s) == Digest::MD5.hexdigest(mapred2[:map].to_s)
+          return false  unless Digest::MD5.hexdigest(mapred1[:reduce].to_s) == Digest::MD5.hexdigest(mapred2[:reduce].to_s)
+        end
+        true
       end
     end
 

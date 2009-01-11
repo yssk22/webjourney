@@ -89,10 +89,8 @@ EOS
       :map => JS_WIDGET_INSTANCES_MAP,
       :reduce => <<-EOS
 function(keys, values, rr){
-
 #{JS_FIND_JOIN_KEYS}
 #{JS_FILTER_INSTANCES}
-
   if( values.length > 0 ){
      var joinkeys = findJoinKeys(values);
      if( joinkeys ){

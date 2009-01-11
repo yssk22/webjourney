@@ -146,10 +146,19 @@ module CouchResource
         if response.body.blank?
           nil
         else
-          HashWithIndifferentAccess.new(JSON(response.body))
+          hash = JSON(response.body)
+          normalize_hash(hash)
         end
       rescue JSON::ParserError => e
         raise(ConnectionError.new(request, response, "Invalid json response: #{e.body}"))
+      end
+    end
+
+    def normalize_hash(hash)
+      hash.inject(HashWithIndifferentAccess.new({})) do |normalized, (k, v)|
+        v = normalize_hash(v) if v.is_a?(Hash)
+        normalized[k.to_sym] = v
+        normalized
       end
     end
 
