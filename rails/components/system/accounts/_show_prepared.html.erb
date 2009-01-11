@@ -3,7 +3,7 @@
 <!-- OpenID Account -->
 <p>
   You can activate this account to
-  <%= link_to "login", :controller => "login", :action => "index" %>
+  <%= link_to "login", :controller => "login", :action => "with_open_id" %>
   with the OpenID(<%=h @account.open_id_uri %>).
 </p>
 <% else %>
