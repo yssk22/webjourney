@@ -104,7 +104,15 @@ module CouchResource
       end
 
       def query_string(query_options=nil)
-        "?#{query_options.to_query}" unless query_options.nil? || query_options.empty?
+        # compatibility :count and :limit
+        if query_options.nil? || query_options.empty?
+          nil
+        else
+          q = query_options.dup
+          q[:limit] = q.delete(:count) if q.has_key?(:count)
+          "?#{q.to_query}"
+        end
+
       end
 
       # Get whether the document specified by <tt>id</tt> exists or not
