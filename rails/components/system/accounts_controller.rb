@@ -1,5 +1,5 @@
 class System::AccountsController < WebJourney::ComponentController
-  before_filter :load_account, :only => [:show, :edit, :update, :mypage] # , :reset_password_form, :activation_form]
+  before_filter :load_account, :only => [:show, :edit, :update, :mypage, :activation_form] # , :reset_password_form, :activation_form]
   before_filter :check_type_parameter, :only => [:new, :create]
 
   module Msg
@@ -37,6 +37,12 @@ class System::AccountsController < WebJourney::ComponentController
   def show
     @title = "Account: #{@account.login_name}"
   end
+
+  # GET /components/system/accounts/{account_id}/activation_form
+  def activation_form
+    
+  end
+
 
   # GET /components/system/accounts/{account_id}/my_page
   def mypage
