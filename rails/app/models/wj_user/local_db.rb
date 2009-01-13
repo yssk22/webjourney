@@ -43,7 +43,7 @@ class WjUser::LocalDB < WjUser
 
   # Prepare to reset password
   def request_to_reset_password()
-    raise WjUser::InvalidStatusError.new unless self.active?
+    raise WjUser::InvalidStatusError.new("This account is not active.") unless self.active?
     self.set_request('reset_password', nil)
     self.save
   end
