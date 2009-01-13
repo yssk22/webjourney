@@ -126,7 +126,7 @@ class System::LoginController < WebJourney::ComponentPageController
       rescue => e
         logger.wj_error "Failed to begin OpenID Authentication : #{uri}"
         logger.wj_error "(#{$!})"
-        logger.wj_error e.backrace
+        logger.wj_error e.backrace.join("\n")
         set_flash_now(:error, Msg::OPENID_NEGOTIATION_FAILED)
         render :status => 400
       end
@@ -153,7 +153,7 @@ class System::LoginController < WebJourney::ComponentPageController
       System::Mailer.deliver_reset_password_confirmation(@account, url_for_reset_password_confirmation(@account))
       set_flash_now(:info, "Reset password confirmation mail has been sent to #{@account.email}")
     rescue WebJourney::ApplicationError => e
-      logger.wj_error e.backtrace
+      logger.wj_error e.backtrace.join("\n")
       set_flash_now(:error, e.message)
     end
   end
