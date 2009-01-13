@@ -112,6 +112,31 @@ module WebJourney
           @authenticated_open_id = open_id
         end
 
+        # standard resource responders
+        def respond_to_success(resource, status=200)
+          return respond_to_nothing(status) if resource.blank?
+          respond_to_resource(resource, status)
+        end
+
+        def respond_to_error(resource, status=400)
+          return respond_to_nothing(status) if resource.blank?
+          respond_to_resource(resource, status)
+        end
+
+        def respond_to_nothing(status=200)
+          respond_to do |format|
+            format.xml  { render :text => res.to_xml,  :status => status }
+            format.json { render :text => res.to_json, :status => status }
+          end
+        end
+        
+        def respond_to_resource(resource, status)
+          respond_to do |format|
+            format.xml  { render :text => resource.to_xml,  :status => status }
+            format.json { render :text => resource.to_json, :status => status }
+          end
+        end
+
         protected
         def rescue_action(e)
           if e.is_a?(WebJourney::ApplicationError)

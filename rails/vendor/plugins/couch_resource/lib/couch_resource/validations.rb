@@ -136,6 +136,7 @@ module CouchResource
 
       options[:builder].instruct! unless options.delete(:skip_instruct)
       options[:builder].errors do |e|
+        
         full_messages.each { |msg| e.error(msg) }
       end
     end
