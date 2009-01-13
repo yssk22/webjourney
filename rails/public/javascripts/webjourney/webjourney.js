@@ -9,6 +9,6 @@ jQuery(document).ajaxSend(function(event, request, settings) {
        settings.contentType == "application/x-www-form-urlencoded"){
     settings.data = settings.data || "";
     settings.data += (settings.data ? "&" : "") + "authenticity_token=" + encodeURIComponent(AUTH_TOKEN);
-    request.setRequestHeader("Content-Type", settings.contentType)
+    request.setRequestHeader("Content-Type", settings.contentType);
   }
 });

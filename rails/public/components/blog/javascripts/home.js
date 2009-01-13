@@ -1,5 +1,5 @@
 ViewEntry = {
-  setSettingId : function(val){ this._setting_id = val; },
+    setSettingId : function(val){ this._setting_id = val; },
   setEntryId   : function(val){ this._entry_id = val; },
 
   loadComment : function(){

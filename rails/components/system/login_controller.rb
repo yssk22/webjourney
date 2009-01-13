@@ -33,18 +33,21 @@ class System::LoginController < WebJourney::ComponentPageController
   # [Page]
   # Register with password(LocalDB)
   def register_with_password
+    set_title "Register With Password"
     forbidden! unless WjConfig.instance.account_allow_local_db_register
   end
 
   # [Page]
   # Register with Open ID
   def register_with_open_id
+    set_title "Register With OpenID"
     forbidden! unless WjConfig.instance.account_allow_open_id_register
   end
 
   # [Page]
   # Reset password
   def reset_password
+    set_title "Reset Password"
     request_account_to_reset_password if request.method == :post
   end
 

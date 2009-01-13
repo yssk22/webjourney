@@ -7,7 +7,7 @@
     // jQuery.wjParam(a); // => arr[]=1&arr[]=2&arr[]=3  // treated perfectly on rails server
     wjParam : function(a){
       if ( a.constructor == Array || a.jquery ){
-        jQuery.param(a);
+        return jQuery.param(a);
       }else{ // key value pairs
         var s = [];
         for(var j in a){
@@ -26,7 +26,7 @@
         return s.join("&").replace(/%20/g, "+");
       }
     }
-  })
+  });
 
   // wapper for jQuery#load method
   jQuery.fn.wjLoad = function(url, data, callback){
@@ -56,20 +56,36 @@
     target.attr("disabled", null);
     target.attr("class", "submit");
   };
-  jQuery.fn.wjDisplayErrors = function(name, errors){
+
+  jQuery.fn.wjDisplayErrors = function(name, errors, option){
+    option = jQuery.extend({}, option);
+    var message_list = "";
     for(var i=0; i<errors.length; i++){
       var err = errors[i];
       if( err.attr ){
-        var obj = this.find("input[name='"    + name + "[" + err.attr + "]']").addClass("with_error");
-        var obj = this.find("textarea[name='" + name + "[" + err.attr + "]']").addClass("with_error");
-        var obj = this.find("select[name='"   + name + "[" + err.attr + "]']").addClass("with_error");
+        this.find("input[name='"    + name + "[" + err.attr + "]']").addClass("with_error");
+        this.find("textarea[name='" + name + "[" + err.attr + "]']").addClass("with_error");
+        this.find("select[name='"   + name + "[" + err.attr + "]']").addClass("with_error");
       }
+      message_list += "<li class='error'>" + err.message + "</li>";
+    }
+    if( option.message ){
+      var dom = jQuery(option.message);
+      dom.css("display", "block");
+      dom.html("<ul class='errors'>" + message_list + "</ul>");
     }
   };
-  jQuery.fn.wjClearErrors = function(name){
+
+  jQuery.fn.wjClearErrors = function(name, option){
+    option = jQuery.extend({}, option);
     this.find("input.with_error").removeClass("with_error");
     this.find("textarea.with_error").removeClass("with_error");
     this.find("select.with_error").removeClass("with_error");
+    if( jQuery(option.message) ){
+      var dom = jQuery(option.message);
+      dom.css("display", "none");
+      dom.html("");
+    }
   };
 
 })(jQuery);

@@ -26,10 +26,9 @@ class System::AccountsController < WebJourney::ComponentController
   # POST /components/system/accounts
   def create
     if send "create_with_#{params[:type]}"
-      redirect_to(system_account_path(@account.login_name))
+      respond_to_success(nil, 201)
     else
-      set_flash_now(:error, Msg::ACCOUNT_CREATION_FAILURE)
-      render :action => "new", :status => 400
+      respond_to_success(@account.errors, 400)
     end
   end
 
