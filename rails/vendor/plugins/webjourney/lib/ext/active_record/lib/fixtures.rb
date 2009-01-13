@@ -1,3 +1,0 @@
-class Fixtures
-
-end
