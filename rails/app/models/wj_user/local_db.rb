@@ -7,7 +7,7 @@ class WjUser::LocalDB < WjUser
   validates_format_of :email,
   :with => /^([a-zA-Z0-9_\.\-]+)@([A-Za-z0-9_\.\-]+.[a-z]{2,})$/i,
   :allow_nil => false,
-  :message => "Your email format is not supported."
+  :message => "format is not supported."
 
   # the length of request_passcode auto generated string
   PASSCODE_LENGTH = 32
