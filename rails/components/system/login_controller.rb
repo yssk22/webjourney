@@ -61,6 +61,7 @@ class System::LoginController < WebJourney::ComponentPageController
   # Reset password page for LocalDB user
   def reset_password_form
     check_account_status(:active)
+    set_title "Reset password"
   end
 
   # [Action]
@@ -147,20 +148,6 @@ class System::LoginController < WebJourney::ComponentPageController
     not_found! unless @account.status == WjUser::Status[status]
     @account
   end
-
-  def request_account_to_reset_password
-    begin
-      @account = WjUser::LocalDB.find_by_login_name_and_email(params[:login_name], params[:email])
-      client_error!("Invalid 'Login Name' or 'Email'") unless @account
-      @account.request_to_reset_password
-      System::Mailer.deliver_reset_password_confirmation(@account, url_for_reset_password_confirmation(@account))
-      set_flash_now(:info, "Reset password confirmation mail has been sent to #{@account.email}")
-    rescue WebJourney::ApplicationError => e
-      logger.wj_error e.backtrace.join("\n")
-      set_flash_now(:error, e.message)
-    end
-  end
-
 
   def consumer
     unless @consumer

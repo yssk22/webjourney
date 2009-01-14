@@ -67,7 +67,9 @@
         this.find("textarea[name='" + name + "[" + err.attr + "]']").addClass("with_error");
         this.find("select[name='"   + name + "[" + err.attr + "]']").addClass("with_error");
       }
-      message_list += "<li class='error'>" + err.message + "</li>";
+      if( err.message ){
+        message_list += "<li class='error'>" + err.message + "</li>";
+      }
     }
     if( option.message ){
       var dom = jQuery(option.message);

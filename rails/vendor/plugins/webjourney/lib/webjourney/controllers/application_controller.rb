@@ -125,11 +125,11 @@ module WebJourney
 
         def respond_to_nothing(status=200)
           respond_to do |format|
-            format.xml  { render :text => res.to_xml,  :status => status }
-            format.json { render :text => res.to_json, :status => status }
+            format.xml  { render :nothing => true, :status => status }
+            format.json { render :nothing => true, :status => status }
           end
         end
-        
+
         def respond_to_resource(resource, status)
           respond_to do |format|
             format.xml  { render :text => resource.to_xml,  :status => status }
@@ -140,12 +140,17 @@ module WebJourney
         protected
         def rescue_action(e)
           if e.is_a?(WebJourney::ApplicationError)
+            logger.wj_error "ApplicationError handled in global controller."
+            logger.wj_error " - #{e.message} (HTTP #{e.http_status})"
+            logger.wj_error " - #{e.backtrace.first}"
+            err = {:errors => [{ :message => e.message }]}
             respond_to do |format|
               format.html {
                 # TODO layout negotiation
-                render :text => "", :status => e.http_status
+               render :text => e.message, :status => e.http_status
               }
-              format.xml  { render :text => e.to_xml, :status => e.http_status}
+              format.xml  { render :text => err.to_xml,  :status => e.http_status}
+              format.json { render :text => err.to_json, :status => e.http_status}
             end
           else
             if ENV["RAILS_ENV"] == "development"
