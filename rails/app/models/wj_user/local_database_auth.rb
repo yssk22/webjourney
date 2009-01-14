@@ -26,7 +26,7 @@ module WjUser::LocalDatabaseAuth
   protected
   def verify_password(password)
     result = true
-    raise PasswordVerificationError.new("too short") unless (password.length > MINIMUM_PASSWORD_LENGTH)
+    raise PasswordVerificationError.new("Password is too short") unless (password.length > MINIMUM_PASSWORD_LENGTH)
   end
 
   def process_authenticate(credentials)

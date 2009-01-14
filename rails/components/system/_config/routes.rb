@@ -1,8 +1,9 @@
 # add Component original routing
 WebJourney::Routing::ComponentRoutes.draw do |map|
   map.resources :accounts, :member => {
-    :mypage   => :get,
-    :password => :post
+    :mypage     => :get,
+    :password   => :post,
+    :activation => :post
   }, :collection => {
     :reset_password => :post,
     :current => :any

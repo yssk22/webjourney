@@ -1,5 +1,5 @@
 class System::AccountsController < WebJourney::ComponentController
-  before_filter :load_account, :only => [:show, :edit, :update, :password, :mypage, :activation_form] # , :reset_password_form, :activation_form]
+  before_filter :load_account, :only => [:show, :edit, :update, :password, :activation, :mypage] # , :reset_password_form, :activation_form]
   before_filter :check_type_parameter, :only => [:new, :create]
 
   module Msg
@@ -32,6 +32,7 @@ class System::AccountsController < WebJourney::ComponentController
     end
   end
 
+
   # POST /components/system/accounts/reset_password
   def reset_password
     @account = WjUser::LocalDB.find_by_login_name_and_email(params[:account][:login_name], params[:account][:email])
@@ -52,6 +53,17 @@ class System::AccountsController < WebJourney::ComponentController
     end
   end
 
+  # POST /components/system/accounts/{account_id}/activation
+  def activation
+    begin
+      @account.activate(params[:account][:request_passcode], params[:account][:password])
+      respond_to_nothing()
+    rescue WjUser::LocalDatabaseAuth::PasswordVerificationError => e
+      respond_to_resource({ :errors => [{ :attr    => :password,
+                                          :message => e.message }]}, 400)
+    end
+  end
+
   # POST /components/system/accounts/{account_id}/password
   def password
     begin
@@ -67,12 +79,6 @@ class System::AccountsController < WebJourney::ComponentController
   def show
     @title = "Account: #{@account.login_name}"
   end
-
-  # GET /components/system/accounts/{account_id}/activation_form
-  def activation_form
-
-  end
-
 
   # GET /components/system/accounts/{account_id}/my_page
   def mypage

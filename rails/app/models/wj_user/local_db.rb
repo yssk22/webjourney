@@ -90,7 +90,7 @@ class WjUser::LocalDB < WjUser
 
   private
   def verify_request(status, key, passcode, wait = 30)
-    raise RequestConfirmationError.new("invalid status")           unless self.status == status
+    raise RequestConfirmationError.new("invalid account status")           unless self.status == status
     raise RequestConfirmationError.new("request key mismatched")   unless self.request_key == key
     raise RequestConfirmationError.new("invalid request passcode") unless self.request_passcode == passcode
     raise RequestConfirmationError.new("passcode timeout")         unless Time.now < wait.minutes.since(self.request_at)

@@ -54,6 +54,7 @@ class System::LoginController < WebJourney::ComponentPageController
   # [Page][Not In Navigation]
   # Activation page for LocalDB user
   def activation_form
+    set_title "Activate Account"
     check_account_status(:prepared)
   end
 
