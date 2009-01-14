@@ -76,8 +76,12 @@ class System::AccountsController < WebJourney::ComponentController
 
   # GET /components/system/accounts/{account_id}/my_page
   def mypage
-    page = WjPage.my_page_for(@account.login_name)
-    redirect_to page_url(page._id)
+    page = WjPage.my_page_for(@account.login_name, current_user.login_name == @account.login_name)
+    if page
+      redirect_to page_url(page._id)
+    else
+      not_found!
+    end
   end
 
   # GET /components/system/accounts/{account_id}/edit

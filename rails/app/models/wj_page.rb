@@ -181,24 +181,31 @@ EOS
   end
 
   # Get the my page which is the oldest page created by the <tt>user</tt>
-  def self.my_page_for(user)
+  def self.my_page_for(user, create = false)
     u = user.is_a?(WjUser) ? user : WjUser.find_by_login_name(user.to_s)
     page = self.find_by_owner_and_created_at_all(:first, :startkey => [u.login_name], :count => 1)
     unless page
-      page = self.default
-      page.owner_login_name = u.login_name
-      page.title = "#{u.display_name}'s home"
-      page.description = "this page is #{u.display_name}'s home page."
-      # [TODO] robustness: following statements should be executed in one transaction!
-      # assign page id
-      page.save!
-      # assign new widgets
-      page.compose_widget_instance_layout({:center => [{
-                                                         :component => "sticky", :widget => "html",
-                                                       }]
-                                          })
-      # update widget instances layout
-      page.save!
+      if create
+        page = self.default
+        page.owner_login_name = u.login_name
+        page.title = "#{u.display_name}'s home"
+        page.description = "this page is #{u.display_name}'s home page."
+        # [TODO] robustness: following statements should be executed in one transaction!
+        # assign page id
+        page.save!
+        # assign new widgets
+        page.compose_widget_instance_layout({:center => [{
+                                                           :component => "sticky", :widget => "html",
+                                                         }]
+                                            })
+        # update widget instances layout
+        page.save!
+        # set initial message
+        display = page.widget_instances(:center).first
+        display.title = "#{u.display_name}'s home"
+        display.parameters[:html] = "This page is automatically generated. Click edit to conpose widgets."
+        display.save!
+      end
     end
     page
   end
@@ -234,6 +241,15 @@ EOS
     self.class.bulk_docs(bulk)
   end
 
+  def widget_instances(position = :center)
+    case position
+    when :top, :left, :right, :center, :bottom
+      WjWidgetInstance.find(self.widgets[:center].map{ |w| w[:instance_id] })
+    else
+      raise ArgumentError.new("position must be one of :top, :left, :center, right, or :bottom.")
+    end
+  end
+
   # Get widget instances associated in the page.
   # <tt>target</tt> value should be possible as follows::
   #   <tt>:all</tt>     - widget instances both current and old.
@@ -255,7 +271,6 @@ EOS
 
   # Get all widget instances associated in the page
   def get_all_widget_instances
-    # by_page?startkey=["top", 0]&endkey=["top",1]&group=true&descending=false
     result = self.class.find_widget_instances_all_by_page(:return_raw_hash => false,
                                                           :key             => [self._id, 1],
                                                           :descending      => false)
@@ -264,7 +279,6 @@ EOS
 
   # Get all widget instances layout in the page.
   def get_current_widget_instances()
-    # by_page?startkey=["top", 0]&endkey=["top",1]&group=true&descending=false
     result = self.class.find_widget_instances_current_by_page(:return_raw_hash => true,
                                                               :startkey    => [self._id, 0],
                                                               :endkey      => [self._id, 1],
@@ -276,7 +290,6 @@ EOS
 
   # Get all widget instances no longer associated to the old version of this page.
   def get_old_widget_instances()
-    # by_page?startkey=["top", 0]&endkey=["top",1]&group=true&descending=false
     result = self.class.find_widget_instances_old_by_page(:return_raw_hash => true,
                                                           :startkey    => [self._id, 0],
                                                           :endkey      => [self._id, 1],
