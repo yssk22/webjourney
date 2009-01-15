@@ -38,7 +38,7 @@ WebJourney.PageBase.prototype = {
 
   getAbsoluteUrl : function(path){
     if( this._rootPath.match(/\/$/) && path.match(/^\// )){
-      return this._rootPath.substr(1, this._rootPath.length - 1) + path;
+      return this._rootPath.substr(0, this._rootPath.length - 1) + path;
     }else{
       return this._rootPath + path;
     }
