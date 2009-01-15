@@ -44,7 +44,7 @@ WebJourney.ShowPage.prototype = jQuery.extend(new WebJourney.WjPage, {
     $("#new_page_form").submit();
   },
 
-  delete : function(){
+  destroy : function(){
     if(confirm("Are you sure?")){
       var self = this;
       jQuery("#page_deleting").css("display", "inline");
@@ -60,7 +60,7 @@ WebJourney.ShowPage.prototype = jQuery.extend(new WebJourney.WjPage, {
         complete: function (request, textStatus) {
           jQuery("#page_deleting").css("display", "none");
         }
-      })
+      });
     }else{
       alert("Canceled.");
     }

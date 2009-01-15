@@ -79,7 +79,7 @@ module PagesHelper
     if @page.deleted_by?(current_user)
       link_to "Delete", "javascript:void(0);",
       :class => "icon_page-delete with_inline_icon",
-      :onclick => "Page.delete();"
+      :onclick => "Page.destroy();"
     else
       nil
     end

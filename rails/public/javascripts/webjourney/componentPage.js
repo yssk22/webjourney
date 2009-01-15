@@ -22,7 +22,7 @@ WebJourney.ComponentPage.prototype = jQuery.extend(new WebJourney.PageBase,{
           $(this).addClass("current");
         }else{
           $(this).removeClass("current");
-        };
+        }
       }
     );
   }

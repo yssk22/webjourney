@@ -1,6 +1,7 @@
 WebJourney.WidgetInstance = function(){
   this.initialize.apply(this, arguments);
 };
+
 WebJourney.WidgetInstance.prototype = {
   initialize : function(page, object){
     this._object = object;
@@ -54,7 +55,7 @@ WebJourney.WidgetInstance.prototype = {
       complete : function(request, textStatus){
         if( callbacks.complete ) { callbacks.complete(request, textStatus); }
       }
-    })
+    });
   },
 
   show : function(){
@@ -130,9 +131,7 @@ WebJourney.WidgetInstance.prototype = {
 
   setNowLoading : function(){
     var body = $("#" + this.getDomId("body"));
-    body.html(
-      '<div class="content"><span class="with_inline_icon icon_now_loading"> Now loading ... </div>'
-    )
+    body.html('<div class="content"><span class="with_inline_icon icon_now_loading"> Now loading ... </div>');
   },
 
   getPath : function(url_options){
@@ -173,7 +172,7 @@ WebJourney.WidgetInstance.prototype = {
     // building body
     var body = $(document.createElement("div"));
     body.attr("id", this.getDomId("body"));
-    body.addClass("body")
+    body.addClass("body");
 
     block.append(this._buildShowHeader());
     block.append(this._buildEditHeader());
@@ -260,4 +259,4 @@ WebJourney.WidgetInstance.prototype = {
     dom.attr("id", this.getDomId(suffix));
     return dom;
   }
-}
+};

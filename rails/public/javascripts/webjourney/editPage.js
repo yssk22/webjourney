@@ -92,7 +92,7 @@ WebJourney.EditPage.prototype = jQuery.extend(new WebJourney.WjPage, {
       function(a){
         return $.trim(a);
       }), function(a){
-        return a != "";
+        return a !== "";
       });
     this.setChanged(true);
     return true;
@@ -116,7 +116,7 @@ WebJourney.EditPage.prototype = jQuery.extend(new WebJourney.WjPage, {
         OK     : function(btn, evt){ $('#page_permissions').dialog("close"); },
         Cancel : function(btn, evt){ $('#page_permissions').dialog("close"); }
       }
-    })
+    });
   },
 
   _prepareSettingsDialog : function(){
@@ -126,10 +126,14 @@ WebJourney.EditPage.prototype = jQuery.extend(new WebJourney.WjPage, {
       dialogClass: "page_settings_dialog",
       autoOpen : false,
       buttons: {
-        OK     : function(btn, evt){ if( Page.setSettingsDialogValues() ){$('#page_settings').dialog("close");}; },
+        OK     : function(btn, evt){
+          if( Page.setSettingsDialogValues() ){
+            $('#page_settings').dialog("close");
+          }
+        },
         Cancel : function(btn, evt){ $('#page_settings').dialog("close"); }
       }
-    })
+    });
     $("#page_settings_description").val(this._object.description);
     $("#page_settings_copyright").val(this._object.copyright);
     $("#page_settings_robots_index").val(this._object.robots_index   ? ["1"] : []);
@@ -224,14 +228,14 @@ WebJourney.EditPage.prototype = jQuery.extend(new WebJourney.WjPage, {
 
     // building body
     var body = $(document.createElement("div"));
-    body.addClass("body")
+    body.addClass("body");
     body.html("<img src='" + this.getImagePath(args.component, args.widget) + "' />");
 
     // building data
     var data = { title : args.title,
       component : args.component,
       widget : args.widget
-               }
+    };
     if( args._id ){
       data.instance_id = args._id;
     }

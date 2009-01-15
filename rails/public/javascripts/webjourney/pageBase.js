@@ -3,7 +3,7 @@ WebJourney.PageBase = function(){
 };
 WebJourney.PageBase.prototype = {
   initialize : function(name){
-    this._title = name
+    this._title = name;
   },
 
   adjustGrid : function(){
@@ -31,7 +31,7 @@ WebJourney.PageBase.prototype = {
 
   setAuthToken : function(token){ this._authToken = token; },
   getAuthToken : function(){ return this._authToken;  },
-  getAuthTokenObject : function(){ return { authenticity_token: this.getAuthToken() } },
+  getAuthTokenObject : function(){ return { authenticity_token: this.getAuthToken() }; },
 
   setRootPath    : function(path){ this._rootPath = path ; },
   getRootPath    : function(){ return this._rootPath; },
