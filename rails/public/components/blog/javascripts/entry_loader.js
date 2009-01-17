@@ -24,11 +24,11 @@ if(!Blog.EntryLoader){
       // register click event handler for paging links
       if( option.previousLink ){
         this._previousLink = jQuery(option.previousLink);
-        this._previousLink.bind("click", function(){ self.loadPrevious() });
+        this._previousLink.bind("click", function(){ self.loadPrevious(); });
       }
       if( option.nextLink  ){
         this._nextLink     = jQuery(option.nextLink);
-        this._nextLink.bind("click",     function(){ self.loadNext()     });
+        this._nextLink.bind("click",     function(){ self.loadNext(); });
       }
     },
 
@@ -52,7 +52,7 @@ if(!Blog.EntryLoader){
       var dom = this._target;
       var url = Page.getAbsoluteUrl("/components/blog/settings/" + this._setting.id + "/entries.json?include_content=true");
       //  url direction handler
-      url = this._resolvePageUrl(url, direction)
+      url = this._resolvePageUrl(url, direction);
       if( url === null ){
         return;
       }
@@ -94,7 +94,6 @@ if(!Blog.EntryLoader){
         }
       default:
         return baseUrl;
-        break;
       }
     },
 
@@ -111,14 +110,15 @@ if(!Blog.EntryLoader){
         self._previousLink.addClass("disabled");
       }
     },
+
     _hasLink : function(linkObj){
       if( linkObj === null ||
           linkObj.expected_offset < 0 ){
-        false;
+          return false;
       }
       else{
-        true;
+        return true;
       }
     }
-  }
+  };
 } // !Blog.EntryLoader

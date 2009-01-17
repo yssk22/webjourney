@@ -1,5 +1,5 @@
 ViewEntry = {
-    setSettingId : function(val){ this._setting_id = val; },
+  setSettingId : function(val){ this._setting_id = val; },
   setEntryId   : function(val){ this._entry_id = val; },
 
   loadComment : function(){
@@ -8,7 +8,7 @@ ViewEntry = {
                                   "/entries/" + this._entry_id +
                                   "/comments.json");
     dom.wjLoad(url, function(comments){
-    });;
+    });
   },
 
   onPostBlogCommentSuccess : function(request){
@@ -24,4 +24,4 @@ ViewEntry = {
       dom.wjDisplayErrors('comment', json.errors);
     }
   }
-}
+};

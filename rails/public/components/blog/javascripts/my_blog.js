@@ -102,7 +102,7 @@ var MyBlog = {
 
   onDeleteBlogSettingFailure : function(){
   }
-}
+};
 
 var ManageEntry = {
   setBlogSettingId : function(val){ this._blog_setting_id = val; },
@@ -180,19 +180,15 @@ var ManageEntry = {
     // next, previous
     if( entries.previous === null ||
         entries.previous.expected_offset < 0){
-      page.find("a.blog_entry_previous")
-      .addClass("disabled");
+      page.find("a.blog_entry_previous").addClass("disabled");
     }else{
-      page.find("a.blog_entry_previous")
-      .removeClass("disabled");
+      page.find("a.blog_entry_previous").removeClass("disabled");
     }
     if( entries.next === null ||
         entries.next.expected_offset < 0 ){
-      page.find("a.blog_entry_next")
-      .addClass("disabled");
+      page.find("a.blog_entry_next").addClass("disabled");
     }else{
-      page.find("a.blog_entry_next")
-      .removeClass("disabled");
+      page.find("a.blog_entry_next").removeClass("disabled");
     }
   },
 
@@ -245,8 +241,10 @@ var ManageEntry = {
 
   onCreateBlogEntrySuccess : function(){
     ManageEntry.switchContainer('content_container');
-    Page.getDom("create_blog_entry_form").wjLoad("/components/blog/settings/" + ManageEntry.getBlogSettingId() + "/entries/new", null,
-                                                 function(){ ManageEntry.initializeCreateBlogEntryEditor() });
+    Page.getDom("create_blog_entry_form").wjLoad(
+      "/components/blog/settings/" + ManageEntry.getBlogSettingId() + "/entries/new", null,
+      function(){ ManageEntry.initializeCreateBlogEntryEditor(); }
+    );
     ManageEntry.loadBlogEntries();
   },
 
@@ -267,7 +265,7 @@ var ManageEntry = {
 
   initializeCreateBlogEntryEditor : function(){
     var container = Page.getDom("create_blog_entry_form_container");
-    var textarea  = container.find("div.form-container textarea:first")
+    var textarea  = container.find("div.form-container textarea:first");
     var input_tag_list = container.find("input[name='entry[tag_list]']");
     ManageEntry.initializeBlogEntryEditor(textarea, "#" + Page.getDomId("create_blog_entry_form_submit"));
     ManageEntry.initializeAutoComplete(input_tag_list);
@@ -288,7 +286,7 @@ var ManageEntry = {
 
   initializeUpdateBlogEntryEditor : function(){
     var container = Page.getDom("update_blog_entry_form_container");
-    var textarea  = container.find("div.form-container textarea:first")
+    var textarea  = container.find("div.form-container textarea:first");
     var input_tag_list = container.find("input[name='entry[tag_list]']");
     ManageEntry.initializeBlogEntryEditor(textarea, "#" + Page.getDomId("update_blog_entry_form_submit"));
     ManageEntry.initializeAutoComplete(input_tag_list);
@@ -299,27 +297,26 @@ var ManageEntry = {
       updateSelector : selector,
       updateEvent : "focus",
       stylesheet: Page.getAbsoluteUrl('/components/blog/stylesheets/entry_editor.css'),
-      boxHtml:   "<div class='wym_box'>"
-        + "<div class='wym_area_top'>"
-        + WYMeditor.TOOLS
-        + "</div>"
-        + "<div class='wym_area_left'></div>"
-        + "<div class='wym_area_right'>"
-        + WYMeditor.CONTAINERS
-        + WYMeditor.CLASSES
-        + "</div>"
-        + "<div class='wym_area_main'>"
-        + WYMeditor.HTML
-        + WYMeditor.IFRAME
-        + WYMeditor.STATUS
-        + "</div>"
-        + "<div class='wym_area_bottom'>"
-        + "</div>"
-        + "</div>",
+      boxHtml:   "<div class='wym_box'>" +
+        "<div class='wym_area_top'>" +
+        WYMeditor.TOOLS +
+        "</div>" +
+        "<div class='wym_area_left'></div>" +
+        "<div class='wym_area_right'>" +
+        WYMeditor.CONTAINERS +
+        WYMeditor.CLASSES +
+        "</div>" +
+        "<div class='wym_area_main'>" +
+        WYMeditor.HTML +
+        WYMeditor.IFRAME +
+        WYMeditor.STATUS +
+        "</div>" +
+        "<div class='wym_area_bottom'>" +
+        "</div>" +
+        "</div>",
       postInit : function(wym){
-        //$(wym._box).find(".wym_containers").css("float", "left");
       }
-    })
+    });
   },
 
   initializeAutoComplete : function(input_tag_list){
@@ -341,4 +338,4 @@ var ManageEntry = {
      }
    });
   }
-}
+};
