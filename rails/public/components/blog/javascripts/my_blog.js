@@ -237,14 +237,14 @@ var ManageEntry = {
         failure    : function(request){ ManageEntry.onDeleteBlogEntryFailure(); },
         dataType   : 'script',
         type       : 'delete',
-        url        :  Page.getAbsoluteUrl(deleteUrl +
-                                          "?authenticity_token=" + encodeURIComponent(Page.getAuthToken()))
-      });
+        url        :  deleteUrl +
+                      "?authenticity_token=" + encodeURIComponent(Page.getAuthToken())
+        });
     }
   },
 
   onCreateBlogEntrySuccess : function(){
-    ManageEntry.switchContainer('content_container')
+    ManageEntry.switchContainer('content_container');
     Page.getDom("create_blog_entry_form").wjLoad("/components/blog/settings/" + ManageEntry.getBlogSettingId() + "/entries/new", null,
                                                  function(){ ManageEntry.initializeCreateBlogEntryEditor() });
     ManageEntry.loadBlogEntries();
