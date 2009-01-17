@@ -5,10 +5,11 @@ require File.dirname(__FILE__) + '/../../config/boot'
 require File.dirname(__FILE__) + '/../../config/environment'
 include RakeUtil
 
-YUICOMPRESSOR = File.join(RAILS_ROOT, "vendor/tools/yuicompressor-2.4.2/build/yuicompressor-2.4.2.jar")
-JS_TEMPLATE   = File.join(RAILS_ROOT, "app/views/share/javascripts.html.erb")
-CSS_TEMPLATE  = File.join(RAILS_ROOT, "app/views/share/stylesheets.html.erb")
-JSL_CONFIG    = File.join(RAILS_ROOT, "config/jsl.conf")
+YUICOMPRESSOR  = File.join(RAILS_ROOT, "vendor/tools/yuicompressor-2.4.2/build/yuicompressor-2.4.2.jar")
+JS_TEMPLATE    = File.join(RAILS_ROOT, "app/views/share/javascripts.html.erb")
+CSS_TEMPLATE   = File.join(RAILS_ROOT, "app/views/share/stylesheets.html.erb")
+JSL_CONFIG     = File.join(RAILS_ROOT, "config/jsl.conf")
+TMP_JSL_CONFIG = File.join(RAILS_ROOT, "tmp/webjourney/.jsl.conf")
 
 def js_fullpath(src)
   public_fullpath(src, "javascripts", ".js")
@@ -71,7 +72,17 @@ namespace :misc do
   namespace :js do
     desc("Execute JavaScript Lint")
     task :lint do
-      command = "jsl -conf #{JSL_CONFIG} +recurse"
+      targets = if ENV["COMPONENT"]
+                  File.join(RAILS_ROOT, "public/components", ENV["COMPONENT"], "javascripts/*.js")
+                else
+                  File.join(RAILS_ROOT, "public/javascripts/webjourney/*.js")
+                end
+      File.open(TMP_JSL_CONFIG, "w") do |f|
+        f.puts File.read(JSL_CONFIG)
+        f.puts "+process " + targets
+      end
+      # make a temporary configuration
+      command = "jsl -conf #{TMP_JSL_CONFIG} +recurse"
       begin
         sh(command)
       rescue => e
@@ -99,6 +110,7 @@ namespace :misc do
       end
     end
   end
+
   namespace :css do
     namespace :cache do
       desc("Generate compressed stylesheet caches for the production environment.")
