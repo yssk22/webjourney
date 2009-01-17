@@ -1,6 +1,7 @@
 WebJourney.WjPage = function(){
   this.initialize.apply(this, arguments);
 };
+
 WebJourney.WjPage.prototype = jQuery.extend(new WebJourney.PageBase, {
   initialize : function(object, uri){
     if( object ){
@@ -16,6 +17,11 @@ WebJourney.WjPage.prototype = jQuery.extend(new WebJourney.PageBase, {
 
   getPagePath  : function(){
     return this.getRootPath() + "pages/" + this._object._id;
-  }
+  },
 
+  getWidgetInstanceTemplate : function(){
+    return jQuery.createTemplateURL(this.getAbsoluteUrl("/javascripts/webjourney/widgetInstanceTemplate.html",
+                                                        null,
+                                                        {filter_data: false, filter_params : false, cache:true}));
+  }
 });

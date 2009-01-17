@@ -20,14 +20,14 @@
     <script type="text/javascript">
       Page = new WebJourney.ShowPage(<%= @page.to_json %>, <%= page_url(@page._id).to_json %>);
       $(document).ready(function(){
-         $('#component_menu').jdMenu();
-         Page.adjustGrid();
-         Page.setRootPath(<%= root_path.to_json %>);
-         Page.setAuthToken(<%= form_authenticity_token.to_json %>);
-         Page.setEditable(<%= @page.permit_relationship_of?(current_user, :edit).to_json %>);
-         Page.setCurrentLoginName(<%= current_user.login_name.to_json %>);
-         Page.prepareDialogs();
-         Page.initWidgetInstances(<%= @widget_instances.to_json %>)
+      $('#component_menu').jdMenu();
+      Page.adjustGrid();
+      Page.setRootPath(<%= root_path.to_json %>);
+      Page.setAuthToken(<%= form_authenticity_token.to_json %>);
+      Page.setEditable(<%= @page.permit_relationship_of?(current_user, :edit).to_json %>);
+      Page.setCurrentLoginName(<%= current_user.login_name.to_json %>);
+      Page.prepareDialogs();
+      Page.initWidgetInstances(<%= @widget_instances.to_json %>)
       });
     </script>
     <!-- widget specified stylesheets/javascripts loading -->
@@ -61,6 +61,9 @@
         <div id="wrapper">
           <div id="main">
             <div id="center_container" class="widget_container">
+              <% @page.widgets["center"].each do |widget| %>
+              <%= render :partial => "widget_instance", :locals => {:instance => @widget_instances[widget["instance_id"]] } %>
+              <% end %>
             </div>
           </div><!-- end of center_container -->
           <div id="left_container" class="widget_container">

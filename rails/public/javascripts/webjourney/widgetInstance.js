@@ -17,9 +17,6 @@ WebJourney.WidgetInstance.prototype = {
   },
 
   deploy : function(domId){
-    var block = this._buildBlock();
-    $(domId).append(block);
-    var self = this;
     this.setNowLoading();
     this.show();
   },
@@ -92,9 +89,10 @@ WebJourney.WidgetInstance.prototype = {
     var body = this.getDom("body");
     var url = this.getPath({ action : "update"});
     var postData = $("#" + this.getDomId("body") + " form").serializeArray();
+    var newTitle = this.getDom("edit_title").val();
     postData.push({name : "title",
-                   value : this.getDom("edit_title").val() });
-    this.getDom("saving").css("display", "inline");
+                   value : newTitle});
+    this.getDom("save").wjDisableSubmit();
     $.ajax({
       type : "POST",
       url : url,
@@ -104,14 +102,14 @@ WebJourney.WidgetInstance.prototype = {
         self.getDom("show_header").show();
         self.getDom("edit_header").hide();
         self.getDom("edit_footer").hide();
-        self.getDom("title").text(self.getDom("edit_title").val());
+        self.getDom("title").text(newTitle);
         body.html(data);
       },
       error : function(request, textStatus, errorThrown){
         body.html(request.responseText);
       },
       complete : function(request, textStatus){
-        self.getDom("saving").css("display", "none");
+        self.getDom("save").wjEnableSubmit();
       }
     });
   },
@@ -130,8 +128,7 @@ WebJourney.WidgetInstance.prototype = {
   },
 
   setNowLoading : function(){
-    var body = $("#" + this.getDomId("body"));
-    body.html('<div class="content"><span class="with_inline_icon icon_now_loading"> Now loading ... </div>');
+    var body = jQuery("#" + this.getDomId("body")).wjNowLoading();
   },
 
   getPath : function(url_options){
@@ -159,104 +156,8 @@ WebJourney.WidgetInstance.prototype = {
       return this._object._id;
     }
   },
+
   getDom : function(suffix){
     return $("#" + this.getDomId(suffix));
-  },
-
-  _buildBlock : function(){
-    var self = this;
-    var block = $(document.createElement("div"));
-    block.attr("id", this.getDomId());
-    block.addClass("widget");
-
-    // building body
-    var body = $(document.createElement("div"));
-    body.attr("id", this.getDomId("body"));
-    body.addClass("body");
-
-    block.append(this._buildShowHeader());
-    block.append(this._buildEditHeader());
-    block.append(body);
-    block.append(this._buildEditFooter());
-    return block;
-  },
-
-  _buildShowHeader : function(){
-    var self = this;
-    var header = this._createElement("div", "show_header");
-    header.addClass("ui-dialog-titlebar");
-    header.addClass("header");
-
-    var title    = this._createElement("div", "title");
-    title.addClass("ui-dialog-title");
-    title.addClass("title");
-    title.text(this._object.title);
-
-    var buttons = $(document.createElement("span"));
-    buttons.attr("id", this.getDomId("buttons"));
-    buttons.addClass("buttons");
-    if( this._page.isEditable() ){
-      var edit_anchor = $(document.createElement("a"));
-      //edit_anchor.addClass("edit");
-      edit_anchor.addClass("ui-dialog-titlebar-close");
-      edit_anchor.addClass("edit");
-      edit_anchor.bind("click",function(e){ self.edit(); });
-      buttons.prepend(edit_anchor);
-    }
-
-    header.prepend(buttons);
-    header.prepend(title);
-    return header;
-  },
-
-  _buildEditHeader : function(){
-    var self = this;
-
-    var header = this._createElement("div", "edit_header");
-    header.addClass("ui-dialog-titlebar");
-    header.addClass("header");
-
-    var title    = this._createElement("input", "edit_title");
-    title.addClass("ui-dialog-title");
-    title.addClass("title");
-    title.val(this._object.title);
-
-    header.prepend(title);
-    header.hide();
-    return header;
-  },
-
-  _buildEditFooter : function(){
-    var self = this;
-    // building footer
-    var footer = this._createElement("div", "edit_footer");
-    footer.addClass("footer");
-
-    var saving = this._createElement("span", "saving");
-    saving.addClass("with_inline_icon");
-    saving.addClass("icon_saving");
-
-
-    var save = this._createElement("button", "save");
-    save.text("Save");
-    save.addClass("submit");
-    save.bind("click", function(e){ self.update(); });
-    var cancel = this._createElement("button", "cancel");
-    cancel.attr("type", "button");
-    cancel.text("Cancel");
-    cancel.bind("click", function(e){ self.cancel(); });
-    saving.css("display", "none");
-    footer.append(saving);
-    footer.append(save);
-    footer.append(cancel);
-
-    footer.hide();
-    return footer;
-  },
-
-  _createElement : function(tag, suffix){
-    var dom = $(document.createElement(tag));
-    dom.attr("id", this.getDomId(suffix));
-    return dom;
   }
 };

@@ -25,7 +25,8 @@ WebJourney.ShowPage.prototype = jQuery.extend(new WebJourney.WjPage, {
         var instance_args = collection[pointer.instance_id];
         if( instance_args ){
           var widgetInstance = new WebJourney.WidgetInstance(this, instance_args);
-          widgetInstance.deploy("#" + l + "_container");
+          widgetInstance.setNowLoading();
+          widgetInstance.show();
           this._registerWidgetInstance(widgetInstance);
         }
       }
