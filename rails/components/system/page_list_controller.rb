@@ -19,12 +19,12 @@ class System::PageListController < WebJourney::WidgetController
     @pages = case widget.parameters[:sort_by]
              when "updated_at"
                options[:descending] = true unless options.has_key?(:descending)
-               WjPage.list_all(:by_updated_at, options)
+               WjPage.find_list_by_updated_at(options)
              when "title"
-               WjPage.list_all(:by_title, options)
+               WjPage.find_list_by_title(options)
              else
                options[:descending] = true unless options.has_key?(:descending)
-               WjPage.list_all(:by_updated_at, options)
+               WjPage.find_list_by_updated_at(options)
              end
   end
 
