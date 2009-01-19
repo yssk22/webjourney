@@ -31,8 +31,12 @@
       });
     </script>
     <!-- widget specified stylesheets/javascripts loading -->
-    <%= stylesheet_link_tag *(@page.get_current_widget_instances.map(&:stylesheet_path)) %>
-    <%= javascript_include_tag *(@page.get_current_widget_instances.map(&:javascript_path)) %>
+    <% @page.get_current_widget_instances.each do |instance| %>
+    <%= stylesheet_link_tag(instance.stylesheet_path) if instance.has_stylesheet? %>
+    <% end %>
+    <% @page.get_current_widget_instances.each do |instance| %>
+    <%= javascript_include_tag(instance.javascript_path) if instance.has_javascript? %>
+    <% end %>
   </head>
   <body>
     <div id="header" class="header">
@@ -57,6 +61,9 @@
     <div id="body" class="body">
       <div id="widgets" class="widgets">
         <div id="top_container" class="widget_container">
+          <% @page.widgets["top"].each do |widget| %>
+          <%= render :partial => "widget_instance", :locals => {:instance => @widget_instances[widget["instance_id"]] } %>
+          <% end %>
         </div><!-- end of top_container -->
         <div id="wrapper">
           <div id="main">
@@ -67,14 +74,21 @@
             </div>
           </div><!-- end of center_container -->
           <div id="left_container" class="widget_container">
+            <% @page.widgets["left"].each do |widget| %>
+            <%= render :partial => "widget_instance", :locals => {:instance => @widget_instances[widget["instance_id"]] } %>
+            <% end %>
           </div><!-- end of left_container -->
         </div><!-- end of wrapper -->
-
         <div id="right_container" class="widget_container">
+          <% @page.widgets["right"].each do |widget| %>
+          <%= render :partial => "widget_instance", :locals => {:instance => @widget_instances[widget["instance_id"]] } %>
+          <% end %>
         </div><!-- end of right_container -->
 
         <div id="bottom_container">
-
+          <% @page.widgets["bottom"].each do |widget| %>
+          <%= render :partial => "widget_instance", :locals => {:instance => @widget_instances[widget["instance_id"]] } %>
+          <% end %>
         </div><!-- end of bottom_container -->
       </div>
     </div><!-- end of body -->

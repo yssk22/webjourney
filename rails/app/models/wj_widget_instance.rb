@@ -20,8 +20,17 @@ class WjWidgetInstance < CouchResource::Base
     "/components/#{component}/javascripts/#{widget}.js"
   end
 
+  def has_javascript?
+    File.exist?(File.join(RAILS_ROOT, self.javascript_path))
+  end
+
   def stylesheet_path
     "/components/#{component}/stylesheets/#{widget}.css"
   end
+
+  def has_stylesheet?
+    File.exist?(File.join(RAILS_ROOT, self.javascript_path))
+  end
+
 
 end
