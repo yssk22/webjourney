@@ -53,7 +53,7 @@ module WebJourney
           rescue URI::InvalidURIError
             raise FeedFetchError.new(nil, "Invalid URI (#{uri.to_s})")
           end
-          response = get_response(uri, options)
+          response = Http.get_response(uri, options)
           case response
           when Net::HTTPNotModified
             # parse is not needed.
@@ -72,31 +72,6 @@ module WebJourney
             # HTTPClientError, HTTPServerError, HTTPUnknownResponse, HTTPInformation
             raise FeedFetchError.new(response)
           end
-        end
-      end
-
-      private
-      def self.get_response(uri, options = {})
-        http_class = WjConfig.instance.http_class
-        http = http_class.new(uri.host, uri.port)
-        http.open_timeout = options[:open_timeout] || 60
-        http.read_timeout = options[:read_timeout] || 60
-        case uri.scheme
-        when "http"
-          # nothing to do
-        when "https"
-          http.use_ssl = true
-          http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-        else
-          raise FeedFetchError.new(nil, "Invalid URI scheme: #{uri.to_s}")
-        end
-        req = Net::HTTP::Get.new(uri.request_uri)
-        req["Accept"] = HTTP_ACCEPT
-        req["User-Agent"] = options[:user_agent] || HTTP_USER_AGENT
-        req['If-Modified-Since'] = options[:if_modified_since] if options[:if_modified_since]
-        req.basic_auth(options[:user] || uri.user, options[:password] || user.password) if options[:user] or uri.user
-        http.start do
-          http.request(req)
         end
       end
     end
