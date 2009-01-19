@@ -30,6 +30,11 @@ div.widget div.body div.content blockquote{
 }
 
 
+/** list **/
+div.widget div.body div.content ul,
+div.widget div.body div.content ol {
+    margin-left: 1em;
+}
 
 /** table **/
 div.widget div.body div.content table{
