@@ -45,8 +45,28 @@ module CouchResource
         return design_doc[:views][view]
       end
 
-      # Define view on the server
+      # Define view on the server  access method for this class
+      # example)
+      # define a view in a class definition.
+      #
+      #   class SomeDocument
+      #     view :design, :view => {
+      #       :map    => "function(doc){emit(null,null);}",
+      #       :reduce => "function(keys,values, rr){...}",
+      #     }
+      #   end
+      #
+      # This example defines 4 methods as folowings:
+      #
+      #   SomeDocument.find_design_view()
+      #   SomeDocument.find_design_view_first()
+      #   SomeDocument.find_design_view_last()
+      #   SomeDocument.find_design_view_all()
+      #
+      #
       def view(design, views)
+        # TODO allow duplicate view declarations.
+
         # append prefix to design
         # Klass_design is a proper design document name
         design_fullname = get_design_fullname(design)
