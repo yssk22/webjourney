@@ -31,7 +31,7 @@ class Sticky::FeedController < WebJourney::WidgetController
 
   private
   def load_feed
-    response, @feed = WebJourney::FeedReader.fetch(widget.parameters[:url])
+    response, @feed = WebJourney::Util::FeedReader.fetch(widget.parameters[:url])
     @items = @feed.items[0..(widget.parameters[:list_items] - 1)]
   end
 end
