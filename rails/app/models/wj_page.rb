@@ -1,6 +1,14 @@
+#
+# WjPage represents the metadata model of the page and its widgets.
+#
+# All the objects are stored in wj_pages database specified in config/couchdb.yml
+#
 class WjPage < CouchResource::Base
   set_database CouchConfig.database_uri_for(:db => :wj_pages)
+  # Special <tt>_id</tt> value for the top page.
   TopPageId = "top"
+
+
   acts_as_relationship_permittable({
                                      :show => {:all => true,  :tags => []},
                                      :edit => {:all => false, :tags => []}

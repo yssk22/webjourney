@@ -1,0 +1,24 @@
+= WebJourney - widgets on rails
+
+WebJourney is a widget based application platform with social network features using Ruby on Rails.
+You can develop your community site combining mini-rails applications with WebJourney.
+
+WebJourney is an open source software released under MIT license.
+
+== Overview
+
+In short, WebJourney is iGoogle alternative for small team members.
+
+* Share iGoogle-like portal pages with your friends and partners.
+  * Contents access controls based on user relationship models.
+  * Function access controls based on user role models.
+* Develop custom gadgets(with your local resources) in the way of Ruby on Rails in addition to google gadgets.
+  * Application data models are powered by Apache CouchDB, a powerful document oriented database.
+
+== Links
+
+* source http://github.com/yssk22/webjourney/tree/master
+* wiki http://www.webjourney.org/wiki
+* demo http://www.webjourney.org/demo
+* API http://www.webjourney.org/api
+
