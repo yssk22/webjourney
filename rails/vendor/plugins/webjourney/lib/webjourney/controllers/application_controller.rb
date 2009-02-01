@@ -7,12 +7,6 @@ class ApplicationController < ActionController::Base
   else
     protect_from_forgery
   end
-  before_filter { |ctrl|
-    if defined?(SLEEP_BEFORE_FILTER) &&
-        SLEEP_BEFORE_FILTER > 0
-      sleep SLEEP_BEFORE_FILTER
-    end
-  }
 end
 
 module WebJourney

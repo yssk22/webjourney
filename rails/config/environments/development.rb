@@ -18,7 +18,4 @@ config.action_mailer.raise_delivery_errors = false
 
 
 # WebJourney original configuration
-# WebJourney::ApplicationController.sleep_before_response = 1
-SLEEP_BEFORE_FILTER = 0.5
-
 CouchResource::Base.check_view_every_access = true
