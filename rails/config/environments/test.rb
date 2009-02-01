@@ -21,4 +21,10 @@ config.action_controller.allow_forgery_protection    = false
 # ActionMailer::Base.deliveries array.
 config.action_mailer.delivery_method = :test
 
-CouchResource::Base.check_view_every_access = true
+# profiling options
+# Don't check template timestamps - once again this
+# is to avoid IO times overwhelming profile results
+config.action_view.cache_template_loading   = true
+
+
+CouchResource::Base.check_view_every_access = false
