@@ -1,4 +1,13 @@
+#
+# = Experimental loader for CouchDB fixture data
+#
+# CouchDB fixture is an experimental module for Testing. Fixture data is stored in test/fixtures/couchdb/*.yml in YAML format.
+# Some useful features in ActiveRecord fixture such as transactional data cannot not supported in CouchDB.
+#
 class CouchFixture
+  #
+  # Load all fixtures in the <tt>basedir</tt>. If the fixture data is already stored in database, it'll be destroyed and newly created.
+  #
   def self.load(basedir = File.join(RAILS_ROOT, "test/fixtures/couchdb/"))
     Dir.glob("#{basedir}/**/*.yml") do |f|
       # resolve class

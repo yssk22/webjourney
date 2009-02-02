@@ -12,6 +12,13 @@ namespace :wj do
     rdoc.rdoc_files.include('lib/**/*.rb')
     rdoc.rdoc_files.include('vendor/plugins/couch_resource/**/*.rb')
     rdoc.rdoc_files.include('vendor/plugins/webjourney/**/*.rb')
-    rdoc.template = "kilmer"#`kilmer --path`.chop
+    rdoc.template = "jamis"
   }
+
+  namespace :doc do
+    task :update do
+      Rake::Task["wj:doc"].invoke
+      sh "rsync -avze ssh doc www:~/webjourney_doc"
+    end
+  end
 end
