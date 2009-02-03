@@ -124,19 +124,16 @@ class WjComponentPage < ActiveRecord::Base
   end
 
   # Returns the absolute image path of the page.
-  # It should be <tt>/components/{component_name}/images/{controller_name}.png</tt>.
   def image_path
     "/components/#{self.wj_component.directory_name}/images/#{self.controller_name}.png"
   end
 
   # Returns the absolute javascript file path of the page.
-  # It should be <tt>/components/{component_name}/images/{controller_name}.png</tt>.
   def javascript_path
     "/components/#{self.wj_component.directory_name}/javascripts/#{self.controller_name}.js"
   end
 
   # Returns the absolute stylesheet file path of the page.
-  # It should be <tt>/components/{component_name}/images/{controller_name}.png</tt>.
   def stylesheet_path
     "/components/#{self.wj_component.directory_name}/stylesheets/#{self.controller_name}.css"
   end
