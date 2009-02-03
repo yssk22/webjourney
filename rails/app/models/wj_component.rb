@@ -1,3 +1,39 @@
+#
+# WjComponent class is an ActiveRecord model for the component meta data.
+# The data is stored or updated when a component installing/upgrading task is invoked.
+# The original data is defined in each of components metadata yaml file located
+# in RAILS_ROOT/components/{component_name}/_db/define/wj_component.yml.
+#
+# == wj_component.yml file specification
+#
+# The yaml file is a flat property list, all of which are :
+#
+# - <tt>display_name</tt> : the name displayed on the site.
+# - <tt>license</tt> : the license name such as MIT, GPL, LGPL, BSD, ... .
+# - <tt>url</tt> : the publisher url of the component.
+# - <tt>author</tt> : the author of the component.
+# - <tt>description</tt> : the short description(within 255 chars) of the component.
+#
+# Properties except display_name are not used in the current framework. They are reserved properties in the future use.
+# The <tt>display_name</tt> is used for the label to be displayed on the site.
+#
+# To create a new component and the definition yaml file of it,
+# use <tt>wj_component</tt> generator.
+#
+# == Relationships and Properties
+# === Relationships
+#
+# <tt>wj_component_pages</tt>:: has_many for WjComponentPage
+# <tt>wj_widgets</tt>::         has_many for WjWidget
+#
+# === Properties
+#
+# <tt>directory_name</tt>::     (rw) should be matched with the directory name of the component.
+# <tt>display_name</tt>::       (rw)
+# <tt>license</tt>::            (rw)
+# <tt>url</tt>::                (rw)
+# <tt>author</tt>::             (rw)
+#
 class WjComponent < ActiveRecord::Base
   has_many :wj_component_pages, :dependent => :destroy, :order => "menu_order"
   has_many :wj_widgets,         :dependent => :destroy
@@ -12,8 +48,12 @@ class WjComponent < ActiveRecord::Base
   validates_length_of   :url,         :within => 1..255, :allow_nil => true
   validates_length_of   :author,      :within => 1..64,  :allow_nil => true
 
-  # Returns the all components and its pages list if the component has one or more accessible pages.
-  # The return object is a array list, each of which is [component, [page1, page2, ...]]
+  # Returns the all components and its pages list, which can be accessible
+  # for the <tt>user</tt>(see WjComponentPage#accessible?).
+  # Comopnents which have no accessible pages are not included in the return value.
+  #
+  # The return value is a array list, each of which is <tt>[component, [page1, page2, ...]]</tt>.
+  #
   def self.component_menu_list(user)
     self.find(:all, :include => :wj_component_pages).map { |component|
       [component, component.wj_component_pages.select{|page| page.accessible?(user)} ]
@@ -22,6 +62,12 @@ class WjComponent < ActiveRecord::Base
     }
   end
 
+  # Returns the all components and its widgets list, which can be available
+  # for the <tt>user</tt>(see WjWidget#available_for?).
+  # Comopnents which have no available widgets are not included in the return value.
+  #
+  # The return value is a array list, each of which is <tt>[component, [widget1, widget2, ...]]</tt>.
+  #
   def self.widget_selection_list(user)
     self.find(:all, :include => :wj_widgets).map { |component|
       [component, component.wj_widgets.select{|widget| widget.available_for?(user)} ]
