@@ -17,8 +17,15 @@
 # Properties except display_name are not used in the current framework. They are reserved properties in the future use.
 # The <tt>display_name</tt> is used for the label to be displayed on the site.
 #
-# To create a new component and the definition yaml file of it,
-# use <tt>wj_component</tt> generator.
+# To create a new component and the definition yaml file of it, use <tt>wj_component</tt> generator.
+#
+# === Example of wj_component_pages.yml
+#
+#    display_name: "Sticky"
+#    license     : "MIT"
+#    url         : "http://www.webjourney.org/wiki/components/sticky"
+#    author      : "yssk22"
+#    description : "Sticky is a built-in component for adding various simple widgets"
 #
 # == Relationships and Properties
 # === Relationships
@@ -56,7 +63,7 @@ class WjComponent < ActiveRecord::Base
   #
   def self.component_menu_list(user)
     self.find(:all, :include => :wj_component_pages).map { |component|
-      [component, component.wj_component_pages.select{|page| page.accessible?(user)} ]
+      [component, component.get_accessible_pages_for(user)]
     }.select { |component, pages|
       pages.length != 0
     }
@@ -70,10 +77,21 @@ class WjComponent < ActiveRecord::Base
   #
   def self.widget_selection_list(user)
     self.find(:all, :include => :wj_widgets).map { |component|
-      [component, component.wj_widgets.select{|widget| widget.available_for?(user)} ]
+      [component, component.get_available_widgets_for(user)]
     }.select { |component, widgets|
       widgets.length != 0
     }
   end
 
+
+  # Returns the related WjComponentPage objects each of which is accessible.
+  #
+  def get_accessible_pages_for(user)
+    self.wj_component_pages.select{|page| page.accessible?(user)}
+  end
+
+  # Returns the related WjWidget objects each of which is available.
+  def get_available_widgets_for(user)
+    self.wj_widgets.select{|widget| widget.available_for?(user)}
+  end
 end

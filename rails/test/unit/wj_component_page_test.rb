@@ -1,5 +1,10 @@
 require File.join(File.dirname(__FILE__), '../test_helper')
 
+#
+# The fixture data is shared with the definition files
+# stored in RAILS_ROOT/components/{component}/_db/define/*.yml
+#
+
 class WjComponentPageTest < ActiveSupport::TestCase
   def test_get
     assert_not_nil WjComponentPage.get("system", "login")
@@ -10,16 +15,6 @@ class WjComponentPageTest < ActiveSupport::TestCase
     login_page = WjComponentPage.get("system", "login")
     assert_equal 'cpm_body',     login_page.dom_id()
     assert_equal 'cpm_body_abc', login_page.dom_id("abc")
-  end
-
-  def test_shortcuts
-    login_page = WjComponentPage.get("system", "login")
-    assert_equal "system/login", login_page.controller
-    assert_equal "system/login_controller", login_page.controller_fullname
-    assert_equal System::LoginController,   login_page.controller_class
-    assert_equal "/components/system/images/login.png", login_page.image_path
-    assert_equal "/components/system/javascripts/login.js",  login_page.javascript_path
-    assert_equal "/components/system/stylesheets/login.css", login_page.stylesheet_path
   end
 
   def test_accesssible?

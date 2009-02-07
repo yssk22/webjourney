@@ -2,7 +2,7 @@
 # WjComponent class is an ActiveRecord model for the component pages. It represents the page list included in the WjComponent.
 # The data is stored or updated when a component installing/upgrading task is invoked.
 # The original data is defined in each of components metadata yaml file located
-# in <tt>RAILS_ROOT/components/{component_name}/_db/define/wj_component.yml</tt>.
+# in <tt>RAILS_ROOT/components/{component_name}/_db/define/wj_component_pages.yml</tt>.
 #
 # WjComponent object can be referred in your original component page controller/view by <tt>page</tt> method.
 #
@@ -42,24 +42,14 @@
 # <tt>controller_name</tt>::    (rw) should be matched with the controller name (without the '_controller' suffix).
 # <tt>display_name</tt>::       (rw)
 #
-# == Examples of shortcut methods
-#
-#   # <tt>login</tt> page defined in <tt>system</tt> component
-#   page = WjComponentPage.get("system", "login")
-#
-#   page.controller           #=> "system/login"
-#   page.controller_fullname  #=> "system/login_controller"
-#   page.controller_class     #=> System::LoginController
-#   page.image_path           #=> "/components/system/images/login.png"
-#   page.javascript_path      #=> "/components/system/javascripts/login.js"
-#   page.stylesheet_path      #=> "/components/system/stylesheets/login.css"
-#
-#
 class WjComponentPage < ActiveRecord::Base
   belongs_to :wj_component
 
   validates_length_of :controller_name, :within => 1..64, :allow_nil => false
   validates_length_of :display_name, :within => 1..64,    :allow_nil => false
+
+  include WjComponentShortcuts
+
 
   # Returns the specified component page object
   def self.get(component_name, page_name)
@@ -95,47 +85,12 @@ class WjComponentPage < ActiveRecord::Base
     end
   end
 
-  # Returns true when the <tt>user</tt> has permission to access this page, otherwise returns false. assess to the page
+  # Returns true when the <tt>user</tt> has permission to access this page, otherwise returns false.
   def accessible?(user)
     required_roles = self.controller_class.read_inheritable_attribute(:require_roles_for_menu_item) || []
     required_roles.length > 0 ? user.has_roles?(*required_roles) : true
   end
   alias :allow? :accessible?
 
-  # --
-  #
-  # * The methods belows are shortcut methods
-  #
-  # ++
-
-  # Returns the controller short name (<tt>'component/page'</tt> style) of the page.
-  def controller
-    "#{self.wj_component.directory_name}/#{self.controller_name}"
-  end
-
-  # Returns the controller long name (<tt>'component/page_controller'</tt> style) of the page,
-  def controller_fullname
-    "#{self.wj_component.directory_name}/#{self.controller_name}_controller"
-  end
-
-  # Returns the controller class object for the page
-  def controller_class
-    self.controller_fullname.camelize.constantize
-  end
-
-  # Returns the absolute image path of the page.
-  def image_path
-    "/components/#{self.wj_component.directory_name}/images/#{self.controller_name}.png"
-  end
-
-  # Returns the absolute javascript file path of the page.
-  def javascript_path
-    "/components/#{self.wj_component.directory_name}/javascripts/#{self.controller_name}.js"
-  end
-
-  # Returns the absolute stylesheet file path of the page.
-  def stylesheet_path
-    "/components/#{self.wj_component.directory_name}/stylesheets/#{self.controller_name}.css"
-  end
 
 end
