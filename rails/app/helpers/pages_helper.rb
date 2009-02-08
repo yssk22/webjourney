@@ -66,7 +66,7 @@ module PagesHelper
   end
 
   def create_link
-    if WjPage.created_by?(current_user)
+    if WjPage.allow_to_create?(current_user)
       link_to "New", "javascript:void(0);",
       :class => "icon_page-create with_inline_icon",
       :onclick => "Page.createNew();"

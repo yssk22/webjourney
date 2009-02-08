@@ -6,7 +6,7 @@ require File.join(File.dirname(__FILE__), 'connection')
 module CouchResource
   class Base
     cattr_accessor :logger, :instance_writer => false
-    cattr_accessor :check_view_every_access, :instance_writer => false
+    cattr_accessor :check_design_revision_every_time, :instance_writer => false
 
     class << self
       # Get the URI of the CouchDB database to map for this class
@@ -98,7 +98,12 @@ module CouchResource
         "#{File.join(database.path, id)}#{query_string(query_options)}"
       end
 
-      # Get the bulk docs path
+      # Returns the path of _all_docs API
+      def all_docs_path(query_options=nil)
+        "#{database.path}#{query_string(query_options)}"
+      end
+
+      # Returns the path of _bulk_docs
       def bulk_docs_path
         document_path("_bulk_docs")
       end

@@ -7,6 +7,117 @@ class WjPageTest < ActiveSupport::TestCase
   def teardown
   end
 
+  def test_top
+    assert_not_nil WjPage.top
+  end
+
+  def test_create_new
+    page = WjPage.create_new("administrator")
+    assert_not_nil page
+    assert_false page.new?
+    assert_equal "administrator", page.owner_login_name
+  end
+
+  def test_my_page_for
+    # ma has no page.
+    page =  WjPage.my_page_for("ma")
+    assert_nil page
+
+    # ma has no page and create new one.
+    page = WjPage.my_page_for("ma", true)
+    assert_not_nil page
+    assert_false page.new?
+    assert_equal 1, page.widget_instances(:center).length
+    display = page.widget_instances(:center).first
+    assert_not_nil display.id
+    assert_equal "ma's home", display.title
+
+    # next time, page and page2 is the same
+    page2 = WjPage.my_page_for("ma", true)
+    assert_equal page.id, page2.id
+  end
+
+  def test_allow_to_create?
+    assert_true WjPage.allow_to_create?("administrator")
+    assert_true WjPage.allow_to_create?("yssk22")
+    assert_false WjPage.allow_to_create?("prepared_test_user")
+    assert_false WjPage.allow_to_create?("anonymous")
+  end
+
+  def test_owner
+    assert_equal WjUser::BuiltIn::Administrator.me, WjPage.top.owner
+  end
+
+  def test_shown_to?
+    page = WjPage.find("test_page2")
+    assert_false page.shown_to?(wj_users(:anonymous))
+    assert_false page.shown_to?(wj_users(:taro))
+    assert_true page.shown_to?(wj_users(:ma))
+    assert_true page.shown_to?(wj_users(:yssk22))
+  end
+
+  def test_updated_by?
+    page = WjPage.find("test_page1")
+    assert_false page.updated_by?(wj_users(:anonymous))
+    assert_false page.updated_by?(wj_users(:taro))
+    assert_true page.updated_by?(wj_users(:ma))
+    assert_true page.updated_by?(wj_users(:yssk22))
+  end
+
+  def test_deleted_by?
+    page = WjPage.top
+    assert_false page.deleted_by?(wj_users(:anonymous))
+    assert_false page.deleted_by?(wj_users(:yssk22))
+    assert_true  page.deleted_by?(wj_users(:administrator))
+  end
+
+  def test_left_container_width
+    page = WjPage.find("test_page1")
+    assert_equal "200px", page.left_container_width
+  end
+
+  def test_right_container_width
+    page = WjPage.find("test_page1")
+    assert_equal "200px", page.right_container_width
+  end
+
+  def test_widget_instances
+    page = WjPage.top
+    instances = page.widget_instances
+    assert_not_nil instances
+    assert_equal 0, instances[:top].length
+    assert_equal 2, instances[:center].length
+    assert_equal 0, instances[:left].length
+    assert_equal 0, instances[:right].length
+    assert_equal 0, instances[:bottom].length
+
+    instances = page.widget_instances(:top)
+    assert_equal 0, instances.length
+    instances = page.widget_instances(:center)
+    assert_equal 2, instances.length
+  end
+
+  def test_get_old_widget_instances
+    page = WjPage.top
+    instances = page.widget_instances
+    assert_equal 2, instances[:center].length
+
+    page.compose_widget_instance_layout(:top    => [],
+                                        :left   => [],
+                                        :center => [],
+                                        :right  => [],
+                                        :bottom => [])
+    page.save
+    instances = page.widget_instances
+    assert_equal 0, instances[:center].length
+
+    old = page.get_old_widget_instances
+    assert_equal 2, old.length
+  end
+
+
+
+=begin
   def test_my_page_for
     page =  WjPage.my_page_for("yssk22")
     assert_not_nil page
@@ -140,4 +251,5 @@ class WjPageTest < ActiveSupport::TestCase
     rows = page.get_old_widget_instances()
     assert_equal 0, rows.length
   end
+=end
 end

@@ -1,19 +1,104 @@
 #
-# WjPage represents the metadata model of the page and its widgets.
+# WjPage is a CouchResource model that represents the metadata of the page and the included widgets.
+# WjPage objects are stored in wj_pages database specified in config/couchdb.yml
 #
-# All the objects are stored in wj_pages database specified in config/couchdb.yml
+# == Widget Instances Pointer and Instructions.
+#
+# The <tt>widgets</tt> property is a hash with (position, pointer arrays) pairs
+# The pointer arrays specify the identifier of WjWidgetInstance.
+# Each eleemnt in the pointer array specify the widget instance of the page, which has tree keys.
+#
+# <tt>:component</tt>::   a component name of the widget instance
+# <tt>:widget</tt>::      a controller name of the widget instance
+# <tt>:instnace_id</tt>:: an instance id of WjWidgetInstance
+#
+# To add/update/delete widget from the page, compose_widget_layout_hash method should be used.
+#
+# For example::
+#
+#   # create a new page
+#   page = WjPage.create_new(WjUser.find_by_login_name("yssk22")
+#
+#   # a new widget (sticky/text) is added.
+#   page.compose_widget_instance({ :center => [{:component => "sticky", :widget => "text"}] })
+#   ## page.widgets[:center]
+#   ## => [[{:component => "sticky", :widget => "text", :instance_id => "abcdefg" }]
+#
+#   page.save
+#
+#   # one more widget (stikey/html) is added.
+#   # It is not supported to push pointer into widgets property so that
+#   # recompose_widget_instance should be called.
+#   page.widgets[:center] << {:component => "sticky", :widget => "html"}
+#   page.recompose_widget_instance
+#   ## page.widgets[:center]
+#   ## => [{:component => "sticky", :widget => "text", :instance_id => "abcdefg"},
+#   ##     {:component => "sticky", :widget => "html", :instance_id => "1234567"}]
+#
+#   page.save
+#
+#   # delete pointer
+#   page.compose_widget_instance({})
+#   page.save
+#
+#   # widget instances ("abcdefg" and "1234567") still remain in the database.
+#   # To get them, use get_old_widget_instances.
+#   # To clean them up, use clean_up_old_widget_instances
+#   page.cleanup_old_widget_instances
+#
+# == BuiltIn Page
+#
+# The top page is configured when WebJourney is installed. It can be accessed by the identifier, 'top'.
+#
+# == Relationship Permission
+#
+# Each page has relationship keys for actions, which are 'show' and 'edit'.
+# See also acts_as_relationship_permittable.
+#
+# == Properties
+#
+# === for head tags
+#
+# Following properties is to be used for head tags.
+#
+# <tt>title</tt>::         (rw) used for <title>.
+# <tt>robots_index</tt>::  (rw) if flase, then <meta name="robots" content="noindex" /> is pushed.
+# <tt>robots_follow</tt>:: (rw) if flase, then <meta name="robots" content="nofollow" /> is pushed.
+# <tt>description</tt>::   (rw) used for the content attribute value of <meta name="description" />.
+# <tt>keywords</tt>::      (rw) used for the content attribute value of <meta name="keywords" />. This property can be Array.
+# <tt>copyright</tt>::     (rw) used for the content attribute value of <meta name="copyright" />.
+#
+# === for design
+#
+# <tt>width</tt>::        (rw) page width.
+# <tt>width_unit</tt>::   (rw) unit string for <tt>width</tt>. one of WjConfig::DesignWidthUnits.
+# <tt>lwidth</tt>::       (rw) left container width.
+# <tt>lwidth_unit</tt>::  (rw) unit string for <tt>lwidth</tt>. one of WjConfig::DesignWidthUnits.
+# <tt>rwidth</tt>::       (rw) right container width.
+# <tt>rwidth_unit</tt>::  (rw) unit string for <tt>rwidth</tt>. one of WjConfig::DesignWidthUnits.
+#
+# === other properties
+#
+# <tt>created_at</tt>::       (r)  first time when the page is created.
+# <tt>updated_at</tt>::       (r)  latest time when the page is updated.
+# <tt>owner_login_name</tt>:: (rw) the owner login name of the page.
+#
+# === widgets
+#
+# <tt>widgets</tt>::          (r)  (position, pointer array) Hash
 #
 class WjPage < CouchResource::Base
-  set_database CouchConfig.database_uri_for(:db => :wj_pages)
-  # Special <tt>_id</tt> value for the top page.
+  # The built-in identifier (<tt>_id</tt> value) for the top page.
   TopPageId = "top"
+  JS_MAP_WIDGET_INSTANCES   = include_js("wj_page/map_widget_instances.js")
+  JS_FUN_FILTER_INSTANCES   = include_js("wj_page/fun_filter_instances.js")
+  JS_FUN_FIND_JOIN_KEYS     = include_js("wj_page/fun_find_join_keys.js")
 
-
+  set_database CouchConfig.database_uri_for(:db => :wj_pages)
   acts_as_relationship_permittable({
                                      :show => {:all => true,  :tags => []},
                                      :edit => {:all => false, :tags => []}
                                    })
-
   # define width, :lwidth, :rwidth, and these units .
   [:width, :lwidth, :rwidth].each do |attr|
     number attr, :default => Proc.new { WjConfig["design_#{attr}"] },
@@ -33,210 +118,211 @@ class WjPage < CouchResource::Base
   boolean :robots_follow,  :default => Proc.new { WjConfig[:site_robots_follow] }
 
   array  :keywords,        :default => Proc.new { (WjConfig[:site_keywords] || "").split(",") }
-  object :widgets
   string :owner_login_name, :validates => [:presense_of]
   datetime :created_at
   datetime :updated_at
 
-  # inner JS function used in widget_instances view
-  JS_WIDGET_INSTANCES_MAP = <<-EOS
-function(doc) {
-   if( doc.class == "WjPage") {
-     var joinkeys =  {};
-     if( doc.widgets ){
-        for(var l in doc.widgets){
-          for(var i in doc.widgets[l] ){
-             joinkeys[doc.widgets[l][i].instance_id] = true;
-          }
-        }
-     }
-     emit([doc._id, 0], {joinkeys : joinkeys});
-   }
-   if( doc.class == "WjWidgetInstance") {
-     emit([doc.wj_page_id, 1], doc);
-   }
-}
-EOS
-
-  JS_FIND_JOIN_KEYS = <<-EOS
-  function findJoinKeys(list){
-    for(var i in list){
-       if( list[i].joinkeys ){
-          return list[i];
-       }
-    }
-    return null;
-  }
-EOS
-  JS_FILTER_INSTANCES = <<-EOS
-  function filterInstances(list, joinkeys, include){
-     var matched = [];
-     for(var i=0; i<list.length; i++){
-       var instance = values[i];
-       if( instance._id ){
-         if( include ){
-           if( joinkeys.joinkeys[instance._id] ){
-             matched.push(instance);
-           }
-         }else{
-           if( !joinkeys.joinkeys[instance._id] ){
-             matched.push(instance);
-           }
-         }
-       }
-     }
-     return matched;
-  }
-EOS
+  object :widgets
 
   view :widget_instances, {
     :all_by_page => {
-      :map => JS_WIDGET_INSTANCES_MAP
+      :map    => JS_MAP_WIDGET_INSTANCES
     },
     :current_by_page => {
-      :map => JS_WIDGET_INSTANCES_MAP,
-      :reduce => <<-EOS
-function(keys, values, rr){
-#{JS_FIND_JOIN_KEYS}
-#{JS_FILTER_INSTANCES}
-  if( values.length > 0 ){
-     var joinkeys = findJoinKeys(values);
-     if( joinkeys ){
-        var matched = filterInstances(values, joinkeys, true);
-        matched.unshift(joinkeys);
-        return matched;
-     }
-     else{
-       return values;
-     }
-  }
-  else{
-     return [];
-  }
-}
-EOS
-    }, # end of :by_page
+      :map    => JS_MAP_WIDGET_INSTANCES,
+      :reduce => include_js("wj_page/widget_instances_current_by_page.reduce.js")
+    },
     :old_by_page => {
-      :map => JS_WIDGET_INSTANCES_MAP,
-      :reduce => <<-EOS
-function(keys, values, rr){
-#{JS_FIND_JOIN_KEYS}
-#{JS_FILTER_INSTANCES}
-  if( values.length > 0 ){
-     var joinkeys = findJoinKeys(values);
-     if( joinkeys ){
-        var matched = filterInstances(values, joinkeys, false);
-        matched.unshift(joinkeys);
-        return matched;
-     }
-     else{
-       return values;
-     }
-  }
-  else{
-     return [];
-  }
-}
-EOS
-    }, # end of :deads_by_page
-  } # end of :widget_instances
-
-  view :by_owner_and_created_at, :all => {
-    :map => <<-EOS
-function(doc) {
-  if(doc.class == "WjPage"){
-    emit([doc.owner_login_name, doc.created_at], doc)
-  }
-}
-EOS
+      :map    => JS_MAP_WIDGET_INSTANCES,
+      :reduce => include_js("wj_page/widget_instances_old_by_page.reduce.js")
+    }
   }
 
-  view :list, :by_updated_at => {
-    :map => <<-EOS
-function(doc){
-   if( doc.class == "WjPage"){
-    emit(doc.updated_at, doc)
-   }
-}
-EOS
-  }, :by_title => {
-    :map => <<-EOS
-function(doc){
-   if( doc.class == "WjPage"){
-    emit(doc.title, doc)
-   }
-}
-EOS
-  }
+  view :list,
+  :by_owner_and_created_at => { :map => include_js("wj_page/list_by_owner_and_created_at.map.js") },
+  :by_updated_at           => { :map => include_js("wj_page/list_by_updated_at.map.js") },
+  :by_title                => { :map => include_js("wj_page/list_by_title.map.js") }
 
+  # Returns the top page object.
   def self.top
     self.find(TopPageId)
   end
 
-  def self.create_new_page(user)
-    u = user.is_a?(WjUser) ? user : WjUser.find_by_login_name(user.to_s)
+  # Create a new page for the <tt>user</tt>
+  def self.create_new(user)
+    user = user.is_a?(WjUser) ? user : WjUser.find_by_login_name(user.to_s)
     page = self.default
-    page.owner_login_name = u.login_name
+    page.owner_login_name = user.login_name
     # [TODO] feature : template page
     # [TODO] robustness: following statements should be executed in one transaction!
     page.save!
+    page.compose_widget_instance_layout({:center => [{:component => "sticky", :widget => "html"}]})
+    page.save!
+    page
+  end
+
+  # Returns "my page" object for the <tt>user</tt>.
+  # "my page" means the oldest page which is created by the <tt>user</tt>.
+  # if "my page" is not found and the second argument, <tt>create</tt>, is true, then a new page is created.
+  def self.my_page_for(user, create = false)
+    user = user.is_a?(WjUser) ? user : WjUser.find_by_login_name(user.to_s)
+    page = self.find_list_by_owner_and_created_at(:first,
+                                                  :startkey => [user.login_name],
+                                                  :endkey   => [user.login_name, "\u0000"],
+                                                  :count    => 1)
+    return page if page
+    return nil  unless create
+    # create a new my page for the user.
+    page = self.default
+    page.owner_login_name = user.login_name
+    page.title       = "#{user.display_name}'s home"
+    page.description = "This page is #{user.display_name}'s home page."
+    # [TODO] robustness: following statements should be executed in one transaction!
+    # assign page id
+    page.save!
+    # assign new widgets
     page.compose_widget_instance_layout({:center => [{
                                                        :component => "sticky", :widget => "html",
                                                      }]
                                         })
+    # update widget instances layout_hash
     page.save!
+    # set initial message
+    display = page.widget_instances(:center).first
+    display.title = "#{user.display_name}'s home"
+    display.parameters[:html] = "<p>This page is automatically generated. Click edit to conpose widgets.</p>"
+    display.save!
     page
   end
 
-  # Get the my page which is the oldest page created by the <tt>user</tt>
-  def self.my_page_for(user, create = false)
-    u = user.is_a?(WjUser) ? user : WjUser.find_by_login_name(user.to_s)
-    page = self.find_by_owner_and_created_at_all(:first, :startkey => [u.login_name], :count => 1)
-    unless page
-      if create
-        page = self.default
-        page.owner_login_name = u.login_name
-        page.title = "#{u.display_name}'s home"
-        page.description = "this page is #{u.display_name}'s home page."
-        # [TODO] robustness: following statements should be executed in one transaction!
-        # assign page id
-        page.save!
-        # assign new widgets
-        page.compose_widget_instance_layout({:center => [{
-                                                           :component => "sticky", :widget => "html",
-                                                         }]
-                                            })
-        # update widget instances layout
-        page.save!
-        # set initial message
-        display = page.widget_instances(:center).first
-        display.title = "#{u.display_name}'s home"
-        display.parameters[:html] = "This page is automatically generated. Click edit to conpose widgets."
-        display.save!
-      end
-    end
-    page
-  end
-
-  # Return true if the <tt>user</tt> can create a WjPage instance
-  def self.created_by?(user)
+  # Returns true if the <tt>user</tt> can create a WjPage instance
+  def self.allow_to_create?(user)
+    user = user.is_a?(WjUser) ? user : WjUser.find_by_login_name(user.to_s)
     !user.is_anonymous? && user.is_active?
   end
 
-  # Get the WjUser object related to the <tt>:owner_login_name</tt> property.
+  # Returns the WjUser object related to the <tt>owner_login_name</tt> property.
   def owner
     @_owner ||= WjUser.find_by_login_name(self.owner_login_name)
-    @_owner
   end
 
-  # Get the width of the left container.
+  # Returns true if the <tt>user</tt> can read this page.
+  def shown_to?(user)
+    self.permit_relationship_of?(user, :show)
+  end
+  alias :allow_to_show? :shown_to?
+
+  # Returns true if the <tt>user</tt> can update this page.
+  def updated_by?(user)
+    self.permit_relationship_of?(user, :edit)
+  end
+  alias :allow_to_update? :updated_by?
+
+  # Returns true if the <tt>user</tt> can delete this page.
+  def deleted_by?(user)
+    self.owner_login_name == user.login_name
+  end
+  alias :allow_to_delete? :deleted_by?
+
+
+  # Returns the stylesheet string of the left container width.
   def left_container_width()
     "#{self[:lwidth]}#{self[:lwidth_unit]}"
   end
 
-  # Get the width of the right container.
+  # Returns the stylesheet string of the right container width.
   def right_container_width()
     "#{self[:rwidth]}#{self[:rwidth_unit]}"
+  end
+
+  # Returns the WjWidgetInstance objects in the page.
+  # The <tt>position</tt> parameter should be one of <tt>:top</tt>, <tt>:left</tt>, <tt>:center</tt>, <tt>:right</tt>, <tt>:bottom</tt>, or <tt>:all</tt>.
+  # When the <tt>:all</tt> is passed, the return value is a HashWithIndifferentAccess object as follows::
+  #
+  #   { :top    => [...],
+  #     :left   => [...],
+  #     :center => [...],
+  #     :right  => [...],
+  #     :bottom => [...] }
+  #
+  # Otherwise, the return value is an Array.
+  #
+  def widget_instances(position = :all)
+    case position
+    when :top, :left, :right, :center, :bottom
+      WjWidgetInstance.find(self.widgets[position].map{ |w| w[:instance_id] })
+    when :all
+      hash = HashWithIndifferentAccess.new({ :top => [], :left => [], :center => [], :right => [], :bottom => []})
+      instance_ids = hash.keys.inject([]){ |ids, pos| ids << self.widgets[pos].map{ |w| w[:instance_id] } }.flatten!
+      # if no instance ids are available, then return
+      return hash if instance_ids.length == 0
+      # some instance ids are found. get the (instance_id, instance) pairs.
+      instances = WjWidgetInstance.find(instance_ids).inject({}){ |hash, instance| hash[instance.id] = instance; hash}
+      self.widgets.inject(hash){ |hash, pos_widgets|
+        pos = pos_widgets.first.to_sym
+        if pos_widgets.last
+          hash[pos] = pos_widgets.last.map { |w| instances[w[:instance_id]]}
+        else
+          hash[pos] = []
+        end
+        hash
+      }
+    else
+      raise ArgumentError.new("position must be one of :top, :left, :center, right, :bottom, or :all.")
+    end
+  end
+
+
+  # Returns deleted widget instances which are no longer associated with the page.
+  # This method is to be used to clean up defunct widgtes.
+  def get_old_widget_instances()
+    result = self.class.find_widget_instances_old_by_page(:return_raw_hash => true,
+                                                          :startkey        => [self._id],
+                                                          :endkey          => [self._id, 1],
+                                                          :group           => true,
+                                                          :group_level     => 1,
+                                                          :descending      => false)
+    instantize_widget_instances_result(result)
+  end
+
+  # Compose <tt>widgets</tt> properties with creating new WjWidgetInstance objects if not exists.
+  # The <tt>layout_hash</tt> parameters ::
+  #
+  #   { :top    => [array of widget instance pointer],
+  #     :left   => [...],
+  #     :right  => [...],
+  #     :center => [...],
+  #     :bottom => [...] }
+  #
+  # And the widget instance <tt>pointer</tt> is as follows ::
+  #
+  #   # a instance created newly.
+  #   { :component => "component name", :widget => "widget name" }
+  #
+  # or
+  #
+  #   # a instance which already exists
+  #   { :instance_id => "XXXXXXX", :component => "component name", :widget => "widget name" }
+  #
+  # This method update the <tt>widgets</tt> property but it is not stored in the database.
+  # To save <tt>widgets</tt> in the database, use save method, otherwise, newly created widget instances will be defunct widgets.
+  def compose_widget_instance_layout(layout_hash)
+    wj_widget = {}  # widget definition record cache
+    widgets = {}
+    [:top, :center, :left, :right, :bottom].each do |l|
+      unless layout_hash.has_key?(l) # clean up
+        widgets[l] = []
+      else
+        widgets[l] = layout_hash[l].map {|p| verify_and_update_pointer(p, wj_widget)}
+      end
+    end
+    # update widgets parameter
+    self.widgets = widgets
+  end
+
+  # The same as compose_widget_instance_layout(self.widgets)
+  def recompose_widget_instance_layout
+    self.compose_widget_instance_layout(self.widgets)
   end
 
   # Clean up widget instances that is no longer layouted.
@@ -249,132 +335,12 @@ EOS
     self.class.bulk_docs(bulk)
   end
 
-  def widget_instances(position = :center)
-    case position
-    when :top, :left, :right, :center, :bottom
-      WjWidgetInstance.find(self.widgets[:center].map{ |w| w[:instance_id] })
-    else
-      raise ArgumentError.new("position must be one of :top, :left, :center, right, or :bottom.")
-    end
-  end
-
-  # Get widget instances associated in the page.
-  # <tt>target</tt> value should be possible as follows::
-  #   <tt>:all</tt>     - widget instances both current and old.
-  #   <tt>:current</tt> - widget instances currently layouted in this page.
-  #   <tt>:old</tt>     - widget instances past layouted in this page.
-  #
-  def get_widget_instances(target = :all)
-    case target
-      when :all
-        get_all_widget_instances
-      when :current
-        get_current_widget_instances
-      when :old
-        get_old_widget_instances
-      else
-        raise ArgumentError.new("target should be one of :all, :current or :old.")
-    end
-  end
-
-  # Get all widget instances associated in the page
-  def get_all_widget_instances
-    result = self.class.find_widget_instances_all_by_page(:return_raw_hash => false,
-                                                          :key             => [self._id, 1],
-                                                          :descending      => false)
-    result[:rows]
-  end
-
-  # Get all widget instances layout in the page.
-  def get_current_widget_instances()
-    result = self.class.find_widget_instances_current_by_page(:return_raw_hash => true,
-                                                              :startkey    => [self._id, 0],
-                                                              :endkey      => [self._id, 1],
-                                                              :group       => true,
-                                                              :group_level => 1,
-                                                              :descending  => false)
-    instantize_widget_instances_result(result)
-  end
-
-  # Get all widget instances no longer associated to the old version of this page.
-  def get_old_widget_instances()
-    result = self.class.find_widget_instances_old_by_page(:return_raw_hash => true,
-                                                          :startkey    => [self._id, 0],
-                                                          :endkey      => [self._id, 1],
-                                                          :group       => true,
-                                                          :group_level => 1,
-                                                          :descending  => false)
-    instantize_widget_instances_result(result)
-  end
-
-  # Compose WjWidgetInstances following to <tt>layout_hash</tt>
-  # The <tt>layout_hash</tt> parameters ::
-  #
-  #  { :top    => [array of widget instance pointer],
-  #    :left   => [...],
-  #    :right  => [...],
-  #    :center => [...],
-  #    :bottom => [...] }
-  #
-  # And the widget instance pointer is as follows ::
-  #
-  #  # a instance created newly.
-  #  { :component => "component name", :widget => "widget name" }
-  #
-  # or
-  #  # a instance which already exists
-  #  { :instance_id => "XXXXXXX", :component => "component name", :widget => "widget name" }
-  #
-  def compose_widget_instance_layout(layout_hash)
-    wj_widget = {}  # widget definition record cache
-    widgets = {}
-    [:top, :center, :left, :right, :bottom].each do |l|
-      if layout_hash[l]
-        widgets[l] = layout_hash[l].map do |pointer|
-          if pointer[:instance_id]
-            # nothing to do
-            pointer
-          else
-            # create a new instance
-            key = File.join(pointer[:component], pointer[:widget])
-            wj_widget[key] ||= WjWidget.get(pointer[:component], pointer[:widget])
-            instance = wj_widget[key].build_new_instance(self)
-            instance.save!
-            # and return a new pointer
-            {
-              :component   => instance.component,
-              :widget      => instance.widget,
-              :instance_id => instance._id
-            }
-          end
-        end
-      else
-        widgets[l] = []
-      end
-    end
-    # update widgets parameter
-    self.widgets = widgets
-  end
-
-  # Return true if the <tt>user</tt> can read this page.
-  def shown_to?(user)
-    self.permit_relationship_of?(user, :show)
-  end
-
-  # Return true if the <tt>user</tt> can update this page.
-  def updated_by?(user)
-    self.permit_relationship_of?(user, :edit)
-  end
-
-  # Return true if the <tt>user</tt> can delete this page.
-  def deleted_by?(user)
-    self.owner_login_name == user.login_name
-  end
-
 
   private
   def instantize_widget_instances_result(result)
-    if result[:rows].first
+    first = result[:rows].first
+    last  = result[:rows].last
+    if first
       list = result[:rows].first[:value] || []
       # initialize
       list.select { |row| row[:joinkeys].nil? }.map { |obj|
@@ -384,4 +350,44 @@ EOS
       []
     end
   end
+
+  def verify_and_update_pointer(pointer, wj_widget)
+    raise ArgumentError.new("missing key(:component) in the widget instance pointer") unless pointer.has_key?(:component)
+    raise ArgumentError.new("missing key(:component) in the widget instance pointer") unless pointer.has_key?(:widget)
+    return pointer if pointer.has_key?(:instance)
+    # create a new instance
+    key = File.join(pointer[:component], pointer[:widget])
+    wj_widget[key] ||= WjWidget.get(pointer[:component], pointer[:widget])
+    instance = wj_widget[key].build_new_instance(self)
+    instance.save!
+    # and return a new pointer
+    {
+      :component   => instance.component,
+      :widget      => instance.widget,
+      :instance_id => instance._id
+    }
+  end
+
+=begin
+  # Get all widget instances associated in the page
+  # def get_all_widget_instances
+  #   result = self.class.find_widget_instances_all_by_page(:return_raw_hash => false,
+  #                                                        :key             => [self._id, 1],
+  #                                                        :descending      => false)
+  #  result[:rows]
+  # end
+
+  # Get widget instances layout in the page. This method does NOT assure the order of widget instances.
+  # To get the instances by correct order, use WjPage#widget_instances(position)
+  #def get_current_widget_instances()
+  #  result = self.class.find_widget_instances_current_by_page(:return_raw_hash => true,
+  #                                                            :startkey    => [self._id, 0],
+  #                                                            :endkey      => [self._id, 1],
+  #                                                            :group       => true,
+  #                                                            :group_level => 1,
+  #                                                            :descending  => false)
+  #  instantize_widget_instances_result(result)
+  #end
+=end
+
 end

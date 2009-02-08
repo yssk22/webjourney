@@ -1,0 +1,13 @@
+<style type="text/css">
+  div#page             { <%= render_page_container_style(@page)   %> }
+  div#left_container   { <%= render_left_container_style(@page)   %> }
+  div#right_container  { <%= render_right_container_style(@page)  %> }
+  div#top_container    { <%= render_top_container_style(@page)    %> }
+  div#bottom_container { <%= render_bottom_container_style(@page) %> }
+  <% if @page.allow_edit?(current_user) -%>
+  div.widget div.header span.buttons a { display:none; }
+  <% end -%>
+</style>
+<% @widget_instances.map { |pos, instances| instances }.flatten.each do |instance| -%>
+<%= stylesheet_link_tag(instance.stylesheet_path) if instance.has_stylesheet? -%>
+<% end -%>

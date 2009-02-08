@@ -1,0 +1,19 @@
+<div id="header" class="header">
+  <div id="logo"><%= link_to image_tag("default_logo.png"), page_url("top") %></div>
+  <div id="login">
+    <%= mypage_link(current_user) %>
+    <%= user_link(current_user) %>
+    <%= login_link %>
+  </div>
+  <div id="navigation">
+    <div id="menu_navigation">
+      <%= render_file File.join(RAILS_ROOT, "/app/views/share/component_menu.html.erb"), false %>
+    </div>
+    <div id="page_navigation">
+      <%= create_link %>
+      <%= edit_link %>
+      <span id="page_deleting"  class="icon_page-deleting with_inline_icon" style="display:none"></span>
+      <%= delete_link %>
+    </div>
+  </div>
+</div>

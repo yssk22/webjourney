@@ -26,5 +26,5 @@ config.action_mailer.delivery_method = :test
 # is to avoid IO times overwhelming profile results
 config.action_view.cache_template_loading   = true
 
-
-CouchResource::Base.check_view_every_access = false
+# WebJourney original configuration
+CouchResource::Base.check_design_revision_every_time = false

@@ -2,21 +2,29 @@ require 'digest/md5'
 require 'rubygems'
 require 'active_support'
 require 'json'
+
+#
+# == Synchronization of design documents
+#
+# Synchronization mechanism of design documents is controlled by <tt>check_design_revision_every_time</tt>.
+# The value is true, the finder methods of views always check the revision of the design document.
+# When false, the finder methods only check at first time.
+#
 module CouchResource
   module View
     def self.included(base)
       base.send(:extend,  ClassMethods)
-      base.send(:include, InstanceMethods)
+      # base.send(:include, InstanceMethods)
     end
 
     module ClassMethods
-      # Get the design path specified by the <tt>design</tt> and <tt>view</tt> name.
+      # Returns the design path specified by the <tt>design</tt> and <tt>view</tt> name.
       def design_path(design, query_options=nil)
         design_fullname = get_design_fullname(design)
         document_path("_design%2F#{design_fullname}", query_options)
       end
 
-      # Get the view path specified by the <tt>design</tt> and <tt>view</tt> name.
+      # returns the view path specified by the <tt>design</tt> and <tt>view</tt> name.
       def view_path(design, view, query_options=nil)
         design_fullname = get_design_fullname(design)
         view_options = {}
@@ -34,10 +42,12 @@ module CouchResource
         document_path(File.join("_view", design_fullname, view.to_s), view_options)
       end
 
+      # Returns the full name of design document.
       def get_design_fullname(design)
         "#{self.to_s}_#{design}"
       end
 
+      # Returns the view definition hash which contains :map key and :reduce key (optional).
       def get_view_definition(design, view)
         design_documents = read_inheritable_attribute(:design_documents) || {}
         design_doc = design_documents[design.to_s]
@@ -45,28 +55,29 @@ module CouchResource
         return design_doc[:views][view]
       end
 
-      # Define view on the server  access method for this class
-      # example)
-      # define a view in a class definition.
+
+      # Define view on the server  access method for this class.
+      #
+      # for example, the following code defines a design_document at _design/SomeDocument_my_design ::
       #
       #   class SomeDocument
-      #     view :design, :view => {
-      #       :map    => "function(doc){emit(null,null);}",
-      #       :reduce => "function(keys,values, rr){...}",
+      #     view :my_design, :sample_view => {
+      #       :map    => include_js("path/to/map.js")
+      #       :reduce => include_js("path/to/reduce.js")
       #     }
       #   end
       #
-      # This example defines 4 methods as folowings:
+      # The design document include one view whose name is 'sample_view'.
+      # And following 4 methods will be available in SomeDocument class.
       #
-      #   SomeDocument.find_design_view()
-      #   SomeDocument.find_design_view_first()
-      #   SomeDocument.find_design_view_last()
-      #   SomeDocument.find_design_view_all()
+      #   SomeDocument.find_my_design_sample_view()
+      #   SomeDocument.find_my_design_sample_view_first()
+      #   SomeDocument.find_my_design_sample_view_last()
+      #   SomeDocument.find_my_design_sample_view_all()
       #
+      # The design document actually stored on the server at the first time when the above methods are invoked.
       #
       def view(design, views)
-        # TODO allow duplicate view declarations.
-
         # append prefix to design
         # Klass_design is a proper design document name
         design_fullname = get_design_fullname(design)
@@ -76,9 +87,11 @@ module CouchResource
           :language => "javascript",
           :views    => views
         }
-        # Get the design document revision if exists.
+        # Get the design document revision if already exists.
+        logger.debug "Design Doc: get the existance revision."
         rev = connection.get(design_path(design))[:_rev] rescue nil
         design_document[:_rev] = rev if rev
+        logger.debug "Design Doc: => #{rev}"
 
         # Update inheritable attribute for design_documents
         design_documents = read_inheritable_attribute(:design_documents) || {}
@@ -93,6 +106,23 @@ module CouchResource
         views.each do |viewname, functions|
           define_view_method(design, viewname)
         end
+      end
+
+      # Returns the string of the javascript file stored in the <tt>path</tt>
+      # The <tt>path</tt> is the relative path, root of which is the directory of the caller.
+      # The <tt>root</tt> can be also specified in the second argument.
+      def include_js(path, root = nil)
+        # set root the current directory of the caller.
+        if root.nil?
+          from = caller.first
+          if from =~ /^(.+?):(\d+)/
+            root = File.dirname($1)
+          else
+            root = RAILS_ROOT
+          end
+        end
+        fullpath = File.join(root, path)
+        ERB.new(File.read(fullpath)).result(binding)
       end
 
       def define_view_method(design, view)
@@ -129,11 +159,13 @@ EOS
         connection.get(path) rescue nil
       end
 
-      # define design document if it does not exist on the server.
+      # Define design document if it does not exist on the server.
       def define_design_document(design)
         path = design_path(design)
-        design_document = read_inheritable_attribute(:design_documents)[design]
-        if self.check_view_every_access
+        design_document         = read_inheritable_attribute(:design_documents)[design]
+        design_revision_checked = read_inheritable_attribute(:design_revision_checked) || false
+        #if self.check_view_every_access
+        if self.check_design_revision_every_time || !design_revision_checked
           current_doc = get_design_document_from_server(design)
           # already exists
           if current_doc
@@ -157,8 +189,9 @@ EOS
             logger.debug hash.to_json
             design_document[:_rev] = hash["rev"]
           end
+          design_revision_checked = true
         else
-          if  design_document[:_rev].nil?
+          if design_document[:_rev].nil?
             begin
               hash = connection.put(design_path(design), design_document.to_json)
               design_document[:_rev] = hash[:rev]
@@ -185,9 +218,6 @@ EOS
         end
         true
       end
-    end
-
-    module InstanceMethods
     end
   end
 end

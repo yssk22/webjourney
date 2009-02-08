@@ -1,0 +1,36 @@
+<div id="<%= instance.id %>" class="widget">
+  <div id="<%= instance.id %>_show_header"
+       class="ui-dialog-titlebar header">
+    <div id="<%= instance.id %>_title"
+         class="ui-dialog-title title">
+      <%=h instance[:title] %>
+    </div>
+    <span class="buttons">
+      <a href="#" class="ui-dialog-titlebar-close edit"
+         onclick="Page.getWidgetInstance(<%=h instance.id.to_json %>).edit();">
+      </a>
+    </span>
+  </div>
+  <div id="<%= instance.id %>_edit_header"
+       class="ui-dialog-titlebar header"
+       style="display:none">
+    <input id="<%= instance.id %>_edit_title"
+           type="text" class="ui-dialog-title title"
+           value="<%=h instance[:title] %>"/>
+  </div>
+  <div id="<%= instance.id %>_body"
+       class="body">
+  </div>
+  <div id="<%= instance.id %>_edit_footer"
+       class="footer" style="display:none">
+    <span id="<%= instance.id %>_saving"
+          class="saving with_inline_icon icon_saving"
+          style="display:none"></span>
+    <button id="<%= instance.id %>_save" class="submit"
+            type="button"
+            onclick="Page.getWidgetInstance(<%=h instance.id.to_json %>).update()">Save</button>
+    <button id="<%= instance.id %>_cancel" class="submit"
+            type="button"
+            onclick="Page.getWidgetInstance(<%=h instance.id.to_json %>).cancel()">Cancel</button>
+  </div>
+</div>

@@ -35,7 +35,10 @@ class Test::Unit::TestCase
   fixtures :all
 
   # Add more helper methods to be used by all tests here...
-  CouchFixture.load
+  setup :setup_couch_fixture
+  def setup_couch_fixture
+    CouchFixture.load
+  end
 end
 
 # My custom assertions for defining more human readable test case.

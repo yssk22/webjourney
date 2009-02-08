@@ -19,17 +19,14 @@ WebJourney.ShowPage.prototype = jQuery.extend(new WebJourney.WjPage, {
   },
 
   initWidgetInstances : function(collection){
-    for(var l in this._object.widgets){
-      for(var i in this._object.widgets[l]){
-        var pointer = this._object.widgets[l][i];
-        var instance_args = collection[pointer.instance_id];
-        if( instance_args ){
-          var widgetInstance = new WebJourney.WidgetInstance(this, instance_args);
-          widgetInstance.setNowLoading();
-          widgetInstance.show();
-          this._registerWidgetInstance(widgetInstance);
-        }
-      }
+    var self = this;
+    for(var l in collection){
+      jQuery.each(collection[l], function(){
+                    var widgetInstance = new WebJourney.WidgetInstance(self, this);
+                    widgetInstance.setNowLoading();
+                    widgetInstance.show();
+                    self._registerWidgetInstance(widgetInstance);
+                  });
     }
   },
 
@@ -39,6 +36,10 @@ WebJourney.ShowPage.prototype = jQuery.extend(new WebJourney.WjPage, {
 
   setEditable : function(value){
     this._editable = value;
+  },
+
+  editable : function(){
+    return this._editable == true;
   },
 
   createNew : function(){

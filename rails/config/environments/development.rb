@@ -18,4 +18,5 @@ config.action_mailer.raise_delivery_errors = false
 
 
 # WebJourney original configuration
-CouchResource::Base.check_view_every_access = true
+CouchResource::Base.check_design_revision_every_time = true
+

@@ -11,7 +11,7 @@
   <% widgets.each do |widget| %>
   <a href="javascript:void(0)" title="<%=h widget.display_name %>"
      onclick="Page.addWidget(<%=h widget.json_for_new_widget %>)">
-    <%= image_tag widget.link_path(:image), :alt => h(widget.display_name) %>
+    <%= image_tag widget.image_path, :alt => h(widget.display_name) %>
   </a>
   <% end -%>
 </div>

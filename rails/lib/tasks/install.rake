@@ -18,6 +18,7 @@ namespace :wj do
     install_components("system", "sticky")
 
     # componse top page
+=begin
     puts "Composing the top page ... "
 
     initial_widgets = []
@@ -40,7 +41,7 @@ EOS
     license.title = "LICENSE"
     license.parameters[:text] = File.open(File.join(RAILS_ROOT, "MIT_LICENSE"), "r") { |f| f.read }
     license.save
-
+=end
     puts "WebJourney has been installed successfully!!"
   end
 

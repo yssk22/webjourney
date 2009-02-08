@@ -1,7 +1,7 @@
 top:
   title: "Top Page"
   owner_login_name: <%= WjUser::BuiltIn::Administrator.me.login_name %>
-  created_at : <%= DateTime.now %>
+  created_at : <%= RAILS_ENV=="test" ? DateTime.new(2009,1,1) : DateTime.now %>
   updated_at : <%= DateTime.now %>
   width: 100
   width_unit: "%"
@@ -13,7 +13,15 @@ top:
     top    : []
     left   : []
     right  : []
-    center : []
+    center :
+      - component   : "sticky"
+        widget      : "html"
+        title       : "Welcome to WebJourney"
+        instance_id : "welcome_to_webjourney"
+      - cmponent    : "stikcy"
+        widget      : "text"
+        title       : "LICENSE"
+        instance_id : "license"
     bottom : []
   relationship_keys:
     show:
@@ -69,7 +77,10 @@ test_page2:
     bottom : []
   relationship_keys:
     show:
-      all: true
+      all: false
+      tags:
+        - private
+        - friends
     edit:
       all: false
       tags:

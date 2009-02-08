@@ -8,8 +8,8 @@ class PagesController < ApplicationController
   end
 
   def create
-    reject_access! unless WjPage.created_by?(current_user)
-    page = WjPage.create_new_page(current_user)
+    reject_access! unless WjPage.allow_to_create?(current_user)
+    page = WjPage.create_new(current_user)
     redirect_to page_url(page._id)
   end
 
@@ -44,15 +44,6 @@ class PagesController < ApplicationController
   end
 
   def load_widget_instances
-    @widget_instances = {}
-    @page.get_current_widget_instances.each do |instance|
-      @widget_instances[instance._id] = {
-        :_id  => instance._id,
-        :_rev => instance._rev,
-        :component => instance.component,
-        :widget    => instance.widget,
-        :title     => instance.title
-      }
-    end
+    @widget_instances = @page.widget_instances
   end
 end

@@ -9,7 +9,7 @@ WebJourney.WidgetInstance.prototype = {
   },
 
   getId : function(){
-    return this._object._id;
+    return this._object.id;
   },
 
   getPage : function(){
@@ -133,7 +133,7 @@ WebJourney.WidgetInstance.prototype = {
 
   getPath : function(url_options){
     var path = this._page.getRootPath() + "widgets/" +
-      this._object._id       + "/" +
+      this._object.id        + "/" +
       this._object.component + "/" +
       this._object.widget    + "/";
     if( url_options.action ){
@@ -150,10 +150,10 @@ WebJourney.WidgetInstance.prototype = {
 
   getDomId : function(suffix){
     if( suffix ){
-      return this._object._id + "_" + suffix;
+      return this._object.id + "_" + suffix;
     }
     else{
-      return this._object._id;
+      return this._object.id;
     }
   },
 
