@@ -1,5 +1,6 @@
-# Automatically Mailer Formatting Class
-# If your components mail to some users, define mail class by extending this class.
+#
+# ActionMailer wrapper class. Sub classes of this can use SMTP setting stored in WjConfg.
+#
 class WjMailer < ActionMailer::Base
   def create!(*)
     super
@@ -22,7 +23,7 @@ please contact the site administrator (#{WjUser::BuiltIn::Administrator.me.email
 EOS
   end
 
-  # Testing mail to an address
+  # Send a test mail to an <tt>address</tt>. Just use to test the WjConfig configuration.
   def test_mail(address)
     recipients address
     subject "test mail"
