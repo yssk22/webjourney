@@ -3,7 +3,6 @@ module WebJourney; end
 
 
 # Base Architecture Plugins
-require File.join(File.dirname(__FILE__), "webjourney/logger")
 require File.join(File.dirname(__FILE__), "webjourney/errors")
 require File.join(File.dirname(__FILE__), "webjourney/assertion")
 require File.join(File.dirname(__FILE__), "webjourney/routes")

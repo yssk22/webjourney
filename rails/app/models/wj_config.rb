@@ -1,3 +1,43 @@
+#
+# WjConfig class is an ActiveRecord model for the site level configuation stored in the database.
+#
+# == Relationships and Properties
+# === Relationships#
+# === Properties
+# ==== Default page design
+#
+# <tt>design_theme</tt>::       (rw)
+# <tt>design_width</tt>::       (rw)
+# <tt>design_width_unit</tt>::  (rw)
+# <tt>design_lwidth</tt>::      (rw)
+# <tt>design_lwidth_unit</tt>:: (rw)
+# <tt>design_rwidth</tt>::      (rw)
+# <tt>design_rwidth_unit</tt>:: (rw)
+#
+# ==== Default page head tag
+#
+# <tt>site_title</tt>:: (rw)
+# <tt>site_robots_index</tt>:: (rw)
+# <tt>site_robots_follow</tt>:: (rw)
+# <tt>site_keywords</tt>:: (rw)
+# <tt>site_description</tt>:: (rw)
+# <tt>site_copyright</tt>:: (rw)
+#
+# ==== SMTP settings
+#
+# <tt>smtp_address</tt>:: (rw)
+# <tt>smtp_domain</tt>:: (rw)
+# <tt>smtp_port</tt>:: (rw)
+# <tt>smtp_user_name</tt>:: (rw)
+# <tt>smtp_password</tt>:: (rw)
+# <tt>smtp_authentication</tt>:: (rw)
+#
+# ==== account control
+#
+# <tt>account_allow_local_db_register</tt>:: (rw)
+# <tt>account_allow_open_id_db_register</tt>:: (rw)
+#
+
 class WjConfig < ActiveRecord::Base
   DesignWidthUnits = %w(mm cm in pt pc em ex px %)
   Id = 1
