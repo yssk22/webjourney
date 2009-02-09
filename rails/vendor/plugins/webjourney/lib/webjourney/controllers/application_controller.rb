@@ -1,36 +1,36 @@
 #
-# WebJourney Application Controller base.
+# WebJourney Application Controller base. This class defines some utilities to standardize WebJourney applications.
+# In WebJourney component application, you can select three types of controllers as follows::
+#
+# - WebJourney::WidgetController
+# - WebJourney::ComponentPageController
+# - WebJourney::ResourceController
 #
 # == Application level features
 #
-# See WebJourney::Controllers::ApplicationFeatures
+# The declaratory methods is described at WebJourney::Controllers::ApplicationFeatures
 #
-# == Using standard responders
+# == Using errors
 #
-# In the WebJourney standard, all the resources except HTML page is responded by using following methods as possible.
+# Simplify to repsonse HTTP error, use following methods::
 #
-# - respond_to_success(resource)
-# - respond_to_error(resource)
-# - respond_to_nothing(status)
-# - respond_to_resource(resource, status)
+# - client_error!(msg)
+# - forbidden!(msg)
+# - reject_access!(msg)
+# - not_found!(msg)
+# - method_not_allowed!(msg)
 #
-# The <tt>resource</tt> should have two methods, to_xml and to_json.
-# The general responder instruction in the controller is as follows::
+# == Using flash
 #
-#   def show
-#     @resource = Resource.find(...)
-#     respond_to_success(@resource)
-#   end
+# As general rails applications, flash object is available to send a message to the user.
+# the flash messages can be logged with following methods ::
 #
-#   def update
-#     @resource = Resource.find(...)
-#     if @resource.save
-#       respond_to_success(@resource)
-#       # or respond_to_nothing()
-#     else
-#       respond_to_error(@resource)
-#     end
-#   end
+# - set_flash(key, str, *args)
+# - set_flash_now(key, str, *args)
+#
+# == Refer the access user
+#
+# You can refere the current access user object (kind of WjUser) using current_user method.
 #
 class ApplicationController < ActionController::Base
   helper :all
@@ -41,6 +41,8 @@ class ApplicationController < ActionController::Base
   else
     protect_from_forgery
   end
+
+
   # Set the flash string associated with the  <tt>key</tt>
   # This method logs the flash message into the log file.
   def set_flash(key, msg, *args)
@@ -86,7 +88,7 @@ class ApplicationController < ActionController::Base
   end
 
   # Raise WebJourney::MethodNotAllowedError
-  def method_not_acceptable!(msg=nil)
+  def method_not_allowed!(msg=nil)
     raise WebJourney::MethodNotAllowedError.new(msg)
   end
 
@@ -118,34 +120,6 @@ class ApplicationController < ActionController::Base
     @authenticated_open_id = open_id
   end
 
-  # standard resource responders
-  def respond_to_success(resource, status=200)
-    return respond_to_nothing(status) if resource.blank?
-    respond_to_resource(resource, status)
-  end
-
-  # standard resource responders
-  def respond_to_error(resource, status=400)
-    return respond_to_nothing(status) if resource.blank?
-    respond_to_resource(resource, status)
-  end
-
-  # standard "nothing" responders
-  def respond_to_nothing(status=200)
-    respond_to do |format|
-      format.xml  { render :nothing => true, :status => status }
-      format.json { render :nothing => true, :status => status }
-    end
-  end
-
-
-  # standard resource responders
-  def respond_to_resource(resource, status)
-    respond_to do |format|
-      format.xml  { render :text => resource.to_xml,  :status => status }
-      format.json { render :text => resource.to_json, :status => status }
-    end
-  end
 
   protected
   def rescue_action(e)
@@ -181,7 +155,7 @@ module WebJourney
       end
 
       #
-      # This module defines common class methods used in any controllers.
+      # This module defines role based access control mechanism used in any controllers.
       #
       # == Role based access control
       #

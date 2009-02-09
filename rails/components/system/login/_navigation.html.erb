@@ -1,9 +1,9 @@
-<ul>
-  <li><%= navigation_label "Password User" %></li>
-  <li><%= navigation_menu "Login",          {:action => "with_password"} %></li>
-  <li><%= navigation_menu "Register",       {:action => "register_with_password" } %></li>
-  <li><%= navigation_menu "Reset Password", {:action => "reset_password"} %></li>
-  <li><%= navigation_label "OpenID User" %></li>
-  <li><%= navigation_menu "Login",          {:action => "with_open_id" } %></li>
-  <li><%= navigation_menu "Register",       {:action => "register_with_open_id" } %></li>
-</ul>
+<% navigation do |n| -%>
+<%= n.label "Password User" %>
+<%= n.menu "Login",          {:action => "with_password"} %>
+<%= n.menu "Register",       {:action => "register_with_password" } %>
+<%= n.menu "Reset Password", {:action => "reset_password"} %>
+<%= n.label "OpenID User" %>
+<%= n.menu "Login",          {:action => "with_open_id" } %>
+<%= n.menu "Register",       {:action => "register_with_open_id" } %>
+<% end -%>
