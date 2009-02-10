@@ -1,3 +1,0 @@
-module WebJourney::ComponentPageHelper
-end
-

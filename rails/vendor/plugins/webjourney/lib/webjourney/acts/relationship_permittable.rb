@@ -1,4 +1,6 @@
 module WebJourney
+
+  # CouchResource model used in acts_as_relationship_permittable
   class RelationshipAllowList < CouchResource::SubResource
     boolean :all
     array   :tags
@@ -10,13 +12,83 @@ module WebJourney
     end
   end
 
-  module Acts
-    module RelationshipPermittable
+  module Acts # :nodoc:
+    module RelationshipPermittable # :nodoc:
       def self.included(base)
         base.extend(ClassMethods)
       end
 
       module ClassMethods
+        #
+        # Append the Relationship based ACL feature to CouchResource models.
+        # It is easy to hanle relationship based accesss control using <tt>acts_as_relationship_permittable</tt>
+        #
+        # === Relationship based ACL feature
+        #
+        # A CouchResource object can have a property named <tt>relationship_keys</tt> to manage access control whitelist.
+        # The <tt>relationship_keys</tt> is a (key, value) pairs as a list of
+        # Here is a json hash format example ::
+        #
+        #   relationship_keys : {
+        #      key1: {
+        #         all  : true
+        #         tags : []
+        #      },
+        #      key2: {
+        #         all  : false
+        #         tags : ["friend", "colleague"]
+        #      },
+        #      key3: {
+        #         all  : false
+        #         tags : ["family"]
+        #      },
+        #      ...
+        #   }
+        #
+        # <tt>key</tt> is a action name and <tt>value</tt> is a hash which contains <tt>all</tt> and <tt>tags</tt> values.
+        #
+        # - <tt>all</tt> means whether the action is permited to all users or not.
+        # - <tt>tags</tt> is a user tag list to whom the action is permited.
+        #
+        # These properties can be accessed via  WebJourney::RelationshipAllowList
+        # To check the ACL, use allow_key1(), allow_key2(), allow_key3(), ... methods.
+        # <tt>acts_as_relationship_permittable</tt> method defines allow_{keyname}?(user) method to check accessibility for the <tt>user</tt>.
+        #
+        # === Example
+        #
+        #   class WjPage < CouchResource::Base
+        #     acts_as_relationship_permittable({
+        #                             :show => {:all => true,  :tags => []},
+        #                             :edit => {:all => false, :tags => []}
+        #                           })
+        #     ...
+        #   end
+        #
+        # This example show you that:
+        #
+        # - WjPage has two relationship based access control keys, <tt>:show</tt> and <tt>:edit</tt>
+        # - The default ACL is as follows::
+        #   - allow <tt>:show</tt> to all users.
+        #   - deny  <tt>:edit</tt> to all users.
+        #
+        # The <tt>acts_as_relationship_permittable</tt> defines methods to check access control list. Here is this.
+        #
+        #   page = WjPage.create_new
+        #   page.allow_show?(user)
+        #   # => true
+        #   page.allow_edit?(user)
+        #   # => false
+        #
+        #   # change ACL
+        #   page.relationship_keys.show.all  = false
+        #   page.relationship_keys.show.tags = ["friends"]
+        #
+        #   page.allow_show?(user)
+        #   # => false
+        #
+        #   # allow_key=(option) method can be used to change ACL
+        #   page.allow_show(:all => true, :tags => [])
+        #
         def acts_as_relationship_permittable(defaults = {}, option = {})
           include WebJourney::Acts::RelationshipPermittable::InstanceMethods
           attr = :relationship_keys
