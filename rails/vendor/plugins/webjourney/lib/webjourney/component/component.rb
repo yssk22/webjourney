@@ -1,8 +1,8 @@
-require File.join(File.dirname(__FILE__), "component/package")
-require File.join(File.dirname(__FILE__), "component/file_tasks")
-require File.join(File.dirname(__FILE__), "component/register_tasks")
-require File.join(File.dirname(__FILE__), "component/migration_tasks")
+require File.join(File.dirname(__FILE__), "component/task/package")
+require File.join(File.dirname(__FILE__), "component/task/file_tasks")
+require File.join(File.dirname(__FILE__), "component/task/register_tasks")
+require File.join(File.dirname(__FILE__), "component/task/migration_tasks")
 
-WebJourney::Component::Package.send :include, WebJourney::Component::FileTasks
-WebJourney::Component::Package.send :include, WebJourney::Component::RegisterTasks
-WebJourney::Component::Package.send :include, WebJourney::Component::MigrationTasks
+WebJourney::Component::Task::Package.send :include, WebJourney::Component::Task::FileTasks
+WebJourney::Component::Task::Package.send :include, WebJourney::Component::Task::RegisterTasks
+WebJourney::Component::Task::Package.send :include, WebJourney::Component::Task::MigrationTasks

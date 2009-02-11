@@ -1,4 +1,4 @@
-class System::PageListController < WebJourney::WidgetController
+class System::PageListController < WebJourney::Component::WidgetController
 
   # GET /widgets/{:instance_id}/system/pages/show/
   def show

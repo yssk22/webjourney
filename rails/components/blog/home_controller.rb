@@ -1,4 +1,4 @@
-class Blog::HomeController < WebJourney::ComponentPageController
+class Blog::HomeController < WebJourney::Component::PageController
   RECENT_COUNT = 10
   before_filter :load_setting, :except => [:index]
 

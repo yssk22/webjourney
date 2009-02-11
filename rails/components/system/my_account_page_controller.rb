@@ -1,4 +1,4 @@
-class System::MyAccountPageController < WebJourney::ComponentPageController
+class System::MyAccountPageController < WebJourney::Component::PageController
   require_roles :user
   def index
     @partial = case current_user

@@ -1,5 +1,4 @@
-class WebJourney::WidgetController < WebJourney::ComponentController
-  helper WebJourney::WidgetHelper
+class WebJourney::Component::WidgetController < WebJourney::Component::ComponentController
   before_filter :load_widget
   before_filter :permission_check_general
   before_filter :permission_check_update, :only => [:update]
@@ -20,7 +19,7 @@ class WebJourney::WidgetController < WebJourney::ComponentController
   protected
   def load_widget
     @widget = WjWidgetInstance.find(params[:instance_id])
-    raise WebJourney::NotFoundError.new unless @widget
+    not_found! unless @widget
     @page   = @widget.page
   end
 

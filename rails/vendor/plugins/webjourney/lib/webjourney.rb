@@ -1,26 +1,23 @@
-module WebJourney; end
+module WebJourney # :nodoc:
+  module Component # :nodoc:
+  end
+end
 
-
-
-# Base Architecture Plugins
+# load framework libraries
 require File.join(File.dirname(__FILE__), "webjourney/errors")
 require File.join(File.dirname(__FILE__), "webjourney/assertion")
-require File.join(File.dirname(__FILE__), "webjourney/routes")
 
+# load framework MVC extension
+require File.join(File.dirname(__FILE__), "webjourney/models/features/relationship_based_access_control")
+require File.join(File.dirname(__FILE__), "webjourney/controllers/features/role_based_access_control")
 
-# Component Installer
-require File.join(File.dirname(__FILE__), "webjourney/component")
-
-# Helpers
-require File.join(File.dirname(__FILE__), "webjourney/helpers/widget_helper")
-require File.join(File.dirname(__FILE__), "webjourney/helpers/component_helper")
-require File.join(File.dirname(__FILE__), "webjourney/helpers/component_page_helper")
-
-# Controllers
 require File.join(File.dirname(__FILE__), "webjourney/controllers/application_controller")
-require File.join(File.dirname(__FILE__), "webjourney/controllers/component_controller")
-require File.join(File.dirname(__FILE__), "webjourney/controllers/component_page_controller")
-require File.join(File.dirname(__FILE__), "webjourney/controllers/widget_controller")
+require File.join(File.dirname(__FILE__), "webjourney/controllers/resource_controller")
 
-# CouchResource Extension (Acts)
-require File.join(File.dirname(__FILE__), "webjourney/acts/relationship_permittable")
+# load component libraries
+require File.join(File.dirname(__FILE__), "webjourney/component/routes")
+require File.join(File.dirname(__FILE__), "webjourney/component/task/package")
+require File.join(File.dirname(__FILE__), "webjourney/component/controllers/component_controller")
+require File.join(File.dirname(__FILE__), "webjourney/component/controllers/page_controller")
+require File.join(File.dirname(__FILE__), "webjourney/component/controllers/widget_controller")
+

@@ -11,7 +11,7 @@ ActionController::Routing::Routes.draw do |map|
     if dir != "." && dir != ".." &&
         File.exist?(File.join(RAILS_ROOT, "components", dir, "_config/routes.rb"))
       map.namespace(dir, :path_prefix =>"components/#{dir}") do |component_map|
-        WebJourney::Routing::ComponentRoutes.mapper = component_map
+        WebJourney::Component::Routes.mapper = component_map
         load File.join(RAILS_ROOT, "components", dir, "_config/routes.rb")
       end
     end

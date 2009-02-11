@@ -1,5 +1,4 @@
-# add Component original routing
-WebJourney::Routing::ComponentRoutes.draw do |map|
+WebJourney::Component::Routes.draw do |map|
   map.resources :accounts, :member => {
     :mypage     => :get,
     :password   => :post,

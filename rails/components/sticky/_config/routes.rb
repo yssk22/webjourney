@@ -1,1 +1,2 @@
-# add Component original routing
+WebJourney::Component::Routes.draw do |map|
+end

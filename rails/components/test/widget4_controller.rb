@@ -1,5 +1,4 @@
-class Test::Widget4Controller < WebJourney::WidgetController
-
+class Test::Widget4Controller < WebJourney::Component::WidgetController
   # GET /widgets/{:instance_id}/test/widget4/show/
   def show
   end

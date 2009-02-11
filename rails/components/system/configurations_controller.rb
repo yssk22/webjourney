@@ -1,4 +1,4 @@
-class System::ConfigurationsController < WebJourney::ComponentController
+class System::ConfigurationsController < WebJourney::Component::ComponentController
   require_roles :administrator
   before_filter :load_config
 
@@ -40,7 +40,7 @@ class System::ConfigurationsController < WebJourney::ComponentController
         flash.now[:error] = "Failed to update! Please check error messages."
       end
     when :delete
-      raise WebJourney::MethodNotAllowedError
+      raise WebJourney::Errors::MethodNotAllowedError
     end
   end
 end

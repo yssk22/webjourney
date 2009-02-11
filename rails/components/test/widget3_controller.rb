@@ -1,6 +1,4 @@
-class Test::Widget3Controller < ApplicationController
-  is_widget
-
+class Test::Widget3Controller < WebJourney::Component::WidgetController
   # GET /widgets/{:instance_id}/test/widget3/show/
   def show
   end

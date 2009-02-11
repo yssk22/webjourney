@@ -32,7 +32,8 @@
 #
 # You can refere the current access user object (kind of WjUser) using current_user method.
 #
-class ApplicationController < ActionController::Base
+class WebJourney::ApplicationController < ActionController::Base
+  include WebJourney::Features::RoleBasedAccessControl
   helper :all
   helper_method :current_user
   if RAILS_ENV == "test"
@@ -59,37 +60,37 @@ class ApplicationController < ActionController::Base
     logger.wj_debug "flash.now[:#{key}] = #{body}"
   end
 
-  # Raise WebJourney::AuthenticationRequiredError or WebJourney::ForbiddenError
+  # Raise WebJourney::Errors::AuthenticationRequiredError or WebJourney::Errors::ForbiddenError
   def reject_access!(msg=nil)
     logger.wj_error("Access Rejected! (#{current_user.login_name})")
     if current_user.anonymous?
-      raise WebJourney::AuthenticationRequiredError.new(msg) if msg
-      raise WebJourney::AuthenticationRequiredError.new
+      raise WebJourney::Errors::AuthenticationRequiredError.new(msg) if msg
+      raise WebJourney::Errors::AuthenticationRequiredError.new
     else
-      raise WebJourney::ForbiddenError.new(msg) if msg
-      raise WebJourney::ForbiddenError.new
+      raise WebJourney::Errors::ForbiddenError.new(msg) if msg
+      raise WebJourney::Errors::ForbiddenError.new
     end
   end
 
-  # Raise WebJourney::ForbiddenError
+  # Raise WebJourney::Errors::ForbiddenError
   def forbidden!(msg=nil)
-    raise WebJourney::ForbiddenError.new(msg)
+    raise WebJourney::Errors::ForbiddenError.new(msg)
   end
 
-  # Raise WebJourney::ClientError
+  # Raise WebJourney::Errors::ClientError
   def client_error!(msg=nil)
-    raise WebJourney::ClientRequestError.new(msg)
+    raise WebJourney::Errors::ClientRequestError.new(msg)
   end
   alias :client_request_error! :client_error!
 
-  # Raise WebJourney::NotFoundError
+  # Raise WebJourney::Errors::NotFoundError
   def not_found!(msg=nil)
-    raise WebJourney::NotFoundError.new(msg)
+    raise WebJourney::Errors::NotFoundError.new(msg)
   end
 
-  # Raise WebJourney::MethodNotAllowedError
+  # Raise WebJourney::Errors::MethodNotAllowedError
   def method_not_allowed!(msg=nil)
-    raise WebJourney::MethodNotAllowedError.new(msg)
+    raise WebJourney::Errors::MethodNotAllowedError.new(msg)
   end
 
   # Returns an WjUser object on the current session.
@@ -123,7 +124,7 @@ class ApplicationController < ActionController::Base
 
   protected
   def rescue_action(e)
-    if e.is_a?(WebJourney::ApplicationError)
+    if e.is_a?(WebJourney::Errors::ApplicationError)
       logger.wj_error "ApplicationError handled in global controller."
       logger.wj_error " - #{e.message} (HTTP #{e.http_status})"
       logger.wj_error " - #{e.backtrace.first}"
@@ -145,59 +146,3 @@ class ApplicationController < ActionController::Base
     end
   end
 end
-
-module WebJourney
-  module Controllers # :nodoc:
-    module ApplicationFeatures
-      def self.append_features(base)
-        super
-        base.send(:extend,  RoleBasedAccessControl)
-      end
-
-      #
-      # This module defines role based access control mechanism used in any controllers.
-      #
-      # == Role based access control
-      #
-      # To control access user, require_roles method can be used.
-      #
-      #   class FooController < ApplicationController
-      #     require_roles :roleA, :roleB
-      #     require_roles :roleC, :except => :show
-      #     require_roles :role1, :only => :show
-      #     require_roles :role2, :role3, :only => :edit, :any => true
-      #   end
-      #
-      # - all actions require the user to have "roleA" and "roleB"
-      # - all actions except "show" require the user to have "roleC"
-      # - "show" action require the user to have "role1"
-      # - "edit" action require the user to have "role2" or "role3"
-      #
-      module RoleBasedAccessControl
-        # Define role requirements for the current user.
-        # If access check fails, WebJourney::AuthenticationRequiredError or WebJourney::ForbiddenError is raised.
-        #
-        # <tt>args</tt> is a list of roles and the last parameter is an option if it is a Hash.
-        # <tt>option</tt> is the same as :before_filter method in except the key :any.
-        #
-        # - <tt>:any</tt> - when true, the user can be accepted if he/she has at least one of the roles, not all (default is false).
-        #
-        def require_roles(*args)
-          options = args.extract_options!
-          has_role_args = args << { :any => options[:any] && true }
-          self.send :before_filter, options do |controller|
-            unless controller.current_user.has_roles?(*has_role_args)
-              logger.wj_debug "Access Rejected!!!"
-              logger.wj_debug "Required Roles : #{has_role_args.join(",")}"
-              logger.wj_debug "User Roles     : #{controller.current_user.wj_roles.map(&:name).join(",")}"
-              controller.reject_access!
-            end
-          end
-        end
-      end
-    end
-  end
-end
-
-ApplicationController.send :include, WebJourney::Controllers::ApplicationFeatures
-

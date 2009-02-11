@@ -1,7 +1,6 @@
-# Enabling Component routing class
-module WebJourney
-  module Routing
-    class ComponentRoutes
+module WebJourney  # :nodoc:
+  module Component # :nodoc:
+    class Routes   # :nodoc:
       def self.mapper
         @@mapper
       end

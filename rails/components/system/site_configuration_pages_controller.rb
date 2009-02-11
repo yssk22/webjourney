@@ -1,4 +1,4 @@
-class System::SiteConfigurationPagesController < WebJourney::ComponentPageController
+class System::SiteConfigurationPagesController < WebJourney::Component::PageController
   require_roles :administrator
   def index
     redirect_to :action => "page_header"

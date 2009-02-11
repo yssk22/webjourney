@@ -1,6 +1,13 @@
 module WebJourney
-  class AssertionFailedError < WebJourney::ApplicationError; end
-  module Assertion
+  # Unhandled error class raised by assertion failures.
+  class AssertionFailedError < WebJourney::Errors::ApplicationError
+  end
+
+  module Assertion # :nodoc:
+    #
+    # This module defines assertion methods for ActiveRecord, CouchResource, ActionController.
+    # If the assertion failed, AssertionFailureError is raised.
+    #
     module Methods
       def assert_failure(msg=nil)
         assert(false, msg || "Force assertion to fail!!", 2)
@@ -43,5 +50,5 @@ module WebJourney
   end
 end
 
-ActiveRecord::Base.send :include, WebJourney::Assertion::Methods
+ActiveRecord::Base.send     :include, WebJourney::Assertion::Methods
 ActionController::Base.send :include, WebJourney::Assertion::Methods

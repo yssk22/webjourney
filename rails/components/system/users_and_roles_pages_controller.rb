@@ -1,5 +1,5 @@
-class System::UsersAndRolesPagesController < WebJourney::ComponentPageController
-  require_roles :administrator
+class System::UsersAndRolesPagesController < WebJourney::Component::PageController
+  require_roles :administrators
   def index
   end
 end

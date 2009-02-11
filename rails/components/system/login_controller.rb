@@ -1,6 +1,6 @@
 require 'openid'
 require 'openid/store/filesystem'
-class System::LoginController < WebJourney::ComponentPageController
+class System::LoginController < WebJourney::Component::PageController
   module Msg
     PASSWORD_LOGIN_SUCCESSFUL  = "Authentication passed (%s)."
     PASSWORD_LOGIN_FAILED      = "Invalid Login Name or Password."

@@ -1,4 +1,4 @@
-class Test::Page2Controller < WebJourney::ComponentPageController
+class Test::Page2Controller < WebJourney::Component::PageController
   def index
   end
 end

@@ -27,7 +27,7 @@
 #       respond_to_error(@resource.errors)
 #     end
 #   end
-class WebJourney::ResourceController < WebJourney::ComponentController
+class WebJourney::ResourceController < WebJourney::ApplicationController
   # Response resource with 200
   def respond_to_ok(resource)
     respond_to_resource(resource, 200)

@@ -1,4 +1,4 @@
-class System::AccountsController < WebJourney::ComponentController
+class System::AccountsController < WebJourney::ResourceController
   before_filter :load_account, :only => [:show, :edit, :update, :password, :activation, :mypage] # , :reset_password_form, :activation_form]
   before_filter :check_type_parameter, :only => [:new, :create]
 

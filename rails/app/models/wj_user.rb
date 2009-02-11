@@ -10,8 +10,8 @@ class WjUser < ActiveRecord::Base
   # attr_protected :status, :last_login_at, :password_hash
   # attr_protected :request_passcode, :request_key, :request_value, :request_at
 
-
-  class InvalidStatusError  < WebJourney::ApplicationError; end
+  class InvalidStatusError  < WebJourney::Errors::ApplicationError # :nodoc:
+  end
 
   # hash of Status integer values
   Status = {
@@ -136,6 +136,6 @@ class WjUser < ActiveRecord::Base
 
   protected
   def process_authenticate(credentials)
-    raise WebJourney::ApplicationError.new("The child class of WjUser must implement the process_authenticate method.")
+    raise WebJourney::Errors::ApplicationError.new("The child class of WjUser must implement the process_authenticate method.")
   end
 end

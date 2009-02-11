@@ -1,4 +1,4 @@
-class Test::ComponentController < WebJourney::ComponentController
+class Test::ComponentController < WebJourney::Component::ComponentController
   require_roles :administrator, :only => :administrator_action
   require_roles :user, :committer, :only => :committer_action, :all => true
 

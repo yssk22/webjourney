@@ -1,4 +1,4 @@
-WebJourney::Routing::ComponentRoutes.draw do |map|
+WebJourney::Component::Routes.draw do |map|
   map.resources :settings, :member => {
     :tags => :get
   }, :collection => {

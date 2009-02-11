@@ -27,7 +27,7 @@ namespace :wj do
       Rake::Task["couchdb:fixtures:load"].invoke
       ["system", "sticky", "test", "blog"].each do |component|
         ENV["COMPONENT"] = component
-        pkg = WebJourney::Component::Package.new(component)
+        pkg = WebJourney::Component::Task::Package.new(component)
         pkg.install(false)
         create_couchdb_for_component(component)
       end
@@ -43,7 +43,7 @@ namespace :wj do
     task :register do
       component = ENV["COMPONENT"]
       raise "Component name must be specified with 'COMPONENT=x'" unless component
-      pkg = WebJourney::Component::Package.new(component)
+      pkg = WebJourney::Component::Task::Package.new(component)
       pkg.install(false)
       create_couchdb_for_component(component)
     end
@@ -51,7 +51,7 @@ namespace :wj do
     task :unregister do
       component = ENV["COMPONENT"]
       raise "Component name must be specified with 'COMPONENT=x'" unless component
-      pkg = WebJourney::Component::Package.new(component)
+      pkg = WebJourney::Component::Task::Package.new(component)
       pkg.uninstall(false)
       drop_couchdb_for_component(component)
     end

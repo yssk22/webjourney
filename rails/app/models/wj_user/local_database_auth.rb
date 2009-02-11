@@ -1,6 +1,10 @@
 module WjUser::LocalDatabaseAuth
-  class InvalidOldPasswordError < WebJourney::ClientRequestError; end
-  class PasswordVerificationError < WebJourney::ClientRequestError; end
+
+  class InvalidOldPasswordError < WebJourney::Errors::ClientRequestError # :nodoc:
+  end
+
+  class PasswordVerificationError < WebJourney::Errors::ClientRequestError # :nodoc:
+  end
 
   # the length of minumum password length
   MINIMUM_PASSWORD_LENGTH = 4

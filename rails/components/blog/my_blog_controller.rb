@@ -1,4 +1,4 @@
-class Blog::MyBlogController < WebJourney::ComponentPageController
+class Blog::MyBlogController < WebJourney::Component::PageController
   require_roles :user
   def index
   end

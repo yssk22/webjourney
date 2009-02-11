@@ -28,7 +28,7 @@ module ActionView::Helpers::AssetTagHelper
   alias :path_to_image_org :path_to_image
   def image_path(path)
     path = image_path_org(path)
-    return path unless @controller.kind_of?(WebJourney::ComponentController)
+    return path unless @controller.kind_of?(WebJourney::Component::ComponentController)
     if path =~ /^\/images\//
       "/components/#{component.directory_name}#{path}"
     else
