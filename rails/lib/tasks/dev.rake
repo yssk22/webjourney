@@ -31,7 +31,6 @@ namespace :wj do
         pkg.install(false)
         create_couchdb_for_component(component)
       end
-
       top_page = WjPage.top rescue nil
       if top_page.nil?
         top_page = WjPage.new(:_id => WjPage::TopPageId, :title => "Top Page", :owner_login_name => WjUser::BuiltIn::Administrator.me.login_name)
