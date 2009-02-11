@@ -1,2 +1,0 @@
-class WjUser::Local
-end
