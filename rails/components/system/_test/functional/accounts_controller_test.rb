@@ -103,7 +103,24 @@ class AccountsControllerTest < ActiveSupport::TestCase
       }
     }
     assert_response 400 # Invalid status
+  end
 
+  def test_password_reset
+    post :password_reset, {
+      :account => {
+        :login_name => "yssk22",
+        :email      => "yssk22@example.com"
+      }
+    }
+    assert_response 200
+
+    post :password_reset, {
+      :account => {
+        :login_name => "invalid_user",
+        :email      => "invalid_user@example.com"
+      }
+    }
+    assert_response 400
   end
 
   def test_current_get
