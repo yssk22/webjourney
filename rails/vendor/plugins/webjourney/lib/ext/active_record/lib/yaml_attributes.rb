@@ -1,6 +1,5 @@
 require 'yaml'
-
-module ActiveRecord
+module ActiveRecord # :ndoc:
   # The feature modules of ActiveRecord that enables specified column to be saved as a YAML text format.
   # Using this module, the property can not only be serialized but also be used as a text property.
   #
@@ -22,13 +21,13 @@ module ActiveRecord
   # <%= text_area 'mymodel', 'col1_text' %>
   # #=> enables the user to edit the property in yaml format
   #
-  module YamlAttributes
+  module YamlAttributes # :ndoc:
     def self.append_features(base)
       super
       base.extend(ClassMethods)
     end
 
-    module ClassMethods
+    module ClassMethods # :ndoc:
       # Defines attributes as a yaml format text
       def yaml_attributes(klass=Hash, *attrs)
         # TODO wait a bug fix for #7283(ActiveRecord SerializationTypeMismatch raised inconsistently)

@@ -1,5 +1,8 @@
-WebJourney::Routing::ComponentRoutes.draw do |map|
+WebJourney::Component::Routes.draw do |map|
   # add Component original routing here
-  #   map.resources ...
-  #   map.connect   ...
+  #   map.resources :people
+  #   # => /components/<%= component_name %>/people get available
+  #
+  #   map.connect path/to/:controller/:action
+  #   # => /components/<%= component_name %>/path/to/:controller/:action get available
 end

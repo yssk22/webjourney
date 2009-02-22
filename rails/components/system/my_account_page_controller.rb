@@ -1,13 +1,9 @@
 class System::MyAccountPageController < WebJourney::Component::PageController
-  require_roles :user
+  # see API details at http://www.webjourney.org/doc/classes/WebJourney/Component/PageController.html
+  # require_roles :administrators, :only => :show
+  # require_roles :users
+  require_roles :users
+
   def index
-    @partial = case current_user
-               when WjUser::OpenId
-                 "open_id"
-               when WjUser::BuiltIn::Administrator
-                 "administrator"
-               when WjUser::LocalDB
-                 "local_db"
-               end
   end
 end

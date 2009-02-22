@@ -36,9 +36,30 @@
   };
 
   jQuery.fn.wjNowLoading = function(option){
+    option = jQuery.extend({overlay: true}, option);
     var target = this;
-    target.html("<div class='now_loading' />");
+    if(option.overlay){
+      // append overlay div block
+      var dom = jQuery(document.createElement("div"));
+      dom.css("display", "none");
+      dom.addClass("now_loading");
+      dom.addClass("overlay");
+      dom.width(this.outerWidth());
+      dom.height(this.outerHeight());
+      var offset = this.offset();
+      dom.css("top",  offset.top);
+      dom.css("left", offset.left);
+      dom.css("display", "block");
+      target.prepend(dom);
+    }else{
+      target.html("<div class='now_loading'></div>");
+    }
   };
+
+  jQuery.fn.wjClearOverlay = function(){
+    jQuery("div.overlay", this).remove();
+  };
+
 
   jQuery.fn.wjDisableSubmit = function(option){
     option = jQuery.extend({submitting: true}, option);
@@ -57,22 +78,58 @@
     target.attr("class", "submit");
   };
 
-  jQuery.fn.wjDisplayErrors = function(name, errors, option){
+  /*
+   * Handle Error resources and display it on the display block.
+   */
+  jQuery.fn.wjDisplayErrors = function(errors, option){
     option = jQuery.extend({}, option);
-    var message_list = "";
-    for(var i=0; i<errors.length; i++){
-      var err = errors[i];
-      if( err.attr ){
-        this.find("input[name='"    + name + "[" + err.attr + "]']").addClass("with_error");
-        this.find("textarea[name='" + name + "[" + err.attr + "]']").addClass("with_error");
-        this.find("select[name='"   + name + "[" + err.attr + "]']").addClass("with_error");
+    var param_path2name = function(param_path){
+      var name = param_path[0];
+      for(var i=1; i<param_path.length; i++){
+        name += "[" + param_path[i] + "]";
       }
-      if( err.message ){
-        message_list += "<li class='error'>" + err.message + "</li>";
+      return name;
+    };
+    // get (param, message) pair list
+    var pe_pairs = [];
+    (function(obj, path){
+      var fun = arguments.callee;
+      jQuery.each(obj, function(name){
+                    var param_path = jQuery.extend([], path);
+                    param_path.push(name);
+                    if( this.constructor == Array ){
+                      pe_pairs.push({
+                        param : param_path2name(param_path),
+                        errors : this
+                      });
+                    }else if( this.constructor == String ){
+                      pe_pairs.push({
+                        param : param_path2name(param_path),
+                        errors : [this]
+                      });
+                    }else{
+                      fun(this, param_path); // recursive call
+                    }
+                  });
+     })(errors);
+    var message_list = "";
+    for(var i=0; i<pe_pairs.length; i++){
+      var param = pe_pairs[i].param;
+      var messages = pe_pairs[i].errors;
+      this.find("label[for='" + param + "']").addClass("error");
+      this.find("input[name='" + param + "']").addClass("error");
+      this.find("textarea[name='" + param + "']").addClass("error");
+      this.find("select[name='" + param + "']").addClass("error");
+      for(var j=0; j<messages.length; j++){
+        message_list += "<li class='error'>" + messages[j] + "</li>";
       }
     }
-    if( option.message ){
-      var dom = jQuery(option.message);
+    if( option.on ){
+      var dom = jQuery(option.on);
+      dom.css("display", "block");
+      dom.html("<ul class='errors'>" + message_list + "</ul>");
+    }else{
+      var dom = jQuery("div.error", this);
       dom.css("display", "block");
       dom.html("<ul class='errors'>" + message_list + "</ul>");
     }
@@ -80,11 +137,15 @@
 
   jQuery.fn.wjClearErrors = function(name, option){
     option = jQuery.extend({}, option);
-    this.find("input.with_error").removeClass("with_error");
-    this.find("textarea.with_error").removeClass("with_error");
-    this.find("select.with_error").removeClass("with_error");
-    if( jQuery(option.message) ){
-      var dom = jQuery(option.message);
+    this.find("input.error").removeClass("error");
+    this.find("textarea.error").removeClass("error");
+    this.find("select.error").removeClass("error");
+    if( option.on ){
+      var dom = jQuery(option.on);
+      dom.css("display", "none");
+      dom.html("");
+    }else{
+      var dom = jQuery("div.error", this);
       dom.css("display", "none");
       dom.html("");
     }

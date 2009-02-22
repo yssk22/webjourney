@@ -1,0 +1,94 @@
+/**
+ * CSS Form layout
+ **/
+form {
+}
+
+form div.error {
+    padding: 3px 5px 3px 5px;
+    font-weight: bold;
+    margin-bottom:20px;
+}
+
+form fieldset {
+    padding:14px;
+    border-style: solid;
+    border-width: 2px;
+    /* default name - input layout balance */
+    padding-left: 150px;
+}
+
+form fieldset legend {
+    padding: 0 3px;
+    font-weight: bold;
+    /* default name - input layout balance */
+    margin-left: -140px;
+}
+form fieldset div.error {
+    margin-left: -140px;
+}
+
+form fieldset div.field {
+    clear: both;
+    float: left;
+    margin-bottom: 20px;
+}
+
+
+form fieldset div.field label.name {
+    clear:   both;
+    display: block;
+    font-weight: bold;
+    text-align: right;
+    float: left;
+    padding-top: 5px;
+    /* default name - input layout balance */
+    width: 150px;
+    margin-left: -150px;
+}
+
+form fieldset div.field input {
+    margin-left: 10px;
+    float: left;
+}
+
+/* jQuery validation error label */
+form fieldset div.field label.error {
+    display: block;
+    font-weight: bold;
+    text-align:left;
+    margin-left: 10px;
+    clear:none;
+    width: auto;
+    float: left;
+    padding-top: 5px;
+}
+
+form div.spacer {
+    clear: both;
+}
+
+form input[type="text"],
+form input[type="password"]{
+    padding: 4px 2px;
+    border-style: solid;
+    border-width: 1px;
+}
+
+form input[type="text"]:focus,
+form input[type="password"]:focus{
+    border-style: solid;
+    border-width: 2px;
+}
+
+form input[type="submit"]{
+    margin: 2px 0 0px 10px;
+    padding: 4px 2px;
+    display:block;
+    clear:both;
+    width:60px;
+    height:31px;
+    text-align:center;
+    font-size:11px;
+    font-weight:bold;
+}

@@ -6,6 +6,10 @@
 # A component page is registered as WjCompontnPage model and the page is generally accessed via the site menu.
 # The site menu has links to the index actions of component pages.
 #
+# === Role Based Access Control
+#
+# See dtails WebJourney::Component::Features::RoleBasedAccessControl and WebJourney::Features::RoleBasedAccessControl.
+#
 # === Layout
 #
 # A component page is applied to the default layout in RAILS_ROOT/components/layouts/component_page.html.erb and the page always returns HTML content.
@@ -71,6 +75,7 @@
 # The applied navigation stylesheet is stored in <tt>RAILS_ROOT/public/stylesheets/webjourney/navigation.css</tt>.
 #
 class WebJourney::Component::PageController < WebJourney::Component::ComponentController
+  include WebJourney::Component::Features::RoleBasedAccessControl
   layout :select_layout
   skip_filter   :load_component
   before_filter :load_component_page

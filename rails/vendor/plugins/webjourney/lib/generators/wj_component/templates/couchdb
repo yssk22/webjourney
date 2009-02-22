@@ -1,7 +1,7 @@
 # specify component specific databases for your CouchResources
 # CouchResource applications support multi databases
 #
-# see also http://...
+# see also http://www.webjourney.org/doc/classes/CouchConfig.html
 #
 
 development:

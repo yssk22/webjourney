@@ -1,6 +1,6 @@
-module ActiveRecord
+module ActiveRecord # :ndoc:
   # Extension for ActiveRecord::Errors to provie more information to flexible rich client
-  class Errors
+  class Errors # :ndoc:
     # original :
     #  <errors>
     #    <error>message</error>
@@ -39,14 +39,7 @@ module ActiveRecord
         end
       end
     end
-    
-    # {
-    #   errors : [
-    #     { attr
-    #   ]
-    # }
-    # 
-    #
+
     def to_json
       self.to_hash.to_json
     end

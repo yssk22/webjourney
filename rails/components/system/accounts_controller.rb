@@ -1,207 +1,294 @@
+#
+# == Account Resource [components/system/accounts]
 class System::AccountsController < WebJourney::ResourceController
-  before_filter :load_account, :only => [:show, :edit, :update, :password, :activation, :mypage] # , :reset_password_form, :activation_form]
-  before_filter :check_type_parameter, :only => [:new, :create]
-
-  module Msg
-    INVALID_TYPE_PARAMETER = "type must be 'password' or 'open_id'."
-    ACCOUNT_CREATION_FAILURE = "Cannot register your account."
-  end
+  before_filter :load_account, :only => [:show, :destroy, :password, :my_page, :activation]
 
   def index
-    reject_access! unless current_user.has_roles?(:administrator)
-    params[:class] = case params[:type]
-                     when 'open_id'
-                       WjUser::OpenId
-                     when 'password'
-                       WjUser::LocalDB
-                     else
-                       WjUser
-                     end
-    @accounts = WjUser.list(params)
   end
 
-  # GET /components/system/accounts/new?type={type}
-  def new;  end
+  def show
+  end
 
-  # POST /components/system/accounts
+  def edit
+  end
+
+  # == system/accounts/{login_name}
+  # === POST
+  # Create a new account
+  # ==== Request
+  #
+  # <tt>account[type]</tt>:: "local_db" or "open_id"
+  #
+  # When <tt>account[type]</tt> is "local_db", following parameters are required:
+  #
+  # <tt>account[login_name]</tt>::
+  # <tt>account[email]</tt>::
+  #
+  # When <tt>account[type]</tt> is "open_id", following parameters are required:
+  #
+  # <tt>account[login_name]</tt>::
+  # <tt>account[open_id_uri]</tt>::
+  #
   def create
-    if send "create_with_#{params[:type]}"
-      respond_to_success(nil, 201)
+    case type = params[:account][:type]
+    when "local_db", "open_id"
+      # OK
     else
-      respond_to_success(@account.errors, 400)
+      client_error!("Invalid account type: #{type}")
+    end
+    if send "create_#{type}"
+      respond_to_ok(@account)
+    else
+      respond_to_error(error_resource_for(:account))
     end
   end
 
+  def update
+  end
 
-  # POST /components/system/accounts/reset_password
-  def reset_password
+  def destroy
+  end
+
+  # == system/accounts/password_reset
+  # End Point to start resetting password process.
+  #
+  # === POST
+  # Generate a comfirmation url for reset password (system/accounts/{login_name}/password?request_passcode={code})
+  # which is delivered by email
+  # ==== Request
+  #
+  # <tt>account[login_name]</tt>::
+  # <tt>account[email]</tt>::
+  #
+  # ==== Response Examples
+  # - success (status: 200)
+  #
+  #   {"reset_password" => "started"}
+  #
+  # - failure (status: 400)
+  #
+  #   {
+  #      account : {
+  #         errors     : [error_reason],
+  #         login_name : []
+  #         password   : []
+  #      }
+  #   }
+  def password_reset
     @account = WjUser::LocalDB.find_by_login_name_and_email(params[:account][:login_name], params[:account][:email])
     if @account
       @account.request_to_reset_password
       System::Mailer.deliver_reset_password_confirmation(@account,
-                                                         url_for(:controller => "login",
-                                                                 :action => "reset_password_form",
-                                                                 :params => {
-                                                                   :login_name => @account.login_name,
-                                                                   :request_passcode => @account.request_passcode
-                                                                 }))
-      respond_to_nothing()
+                                                         confirm_reset_password_url_for(@account))
+      respond_to_ok({:reset_password => :started})
     else
-      respond_to_resource({ :errors => [{ :attr    => :login_name },
-                                        { :attr    => :email },
-                                        { :message => "Account not found. Invalid Login Name or Email" }] }, 404)
+      errors = {
+        :account => {
+          :errors     => ["Invalid Login name or Email."],
+          :login_name => [],
+          :email      => []
+        }
+      }
+      respond_to_error(errors)
     end
   end
 
-  # POST /components/system/accounts/{account_id}/activation
-  def activation
-    begin
-      @account.activate(params[:account][:request_passcode], params[:account][:password])
-      respond_to_nothing()
-    rescue WjUser::LocalDatabaseAuth::PasswordVerificationError => e
-      respond_to_resource({ :errors => [{ :attr    => :password,
-                                          :message => e.message }]}, 400)
-    end
-  end
-
-  # POST /components/system/accounts/{account_id}/password
+  # == system/accounts/{login_name}/activation
+  # URI endpoint for Local DB users to update password.
+  # === PUT
+  # Update the password of the account specified by {login_name}.
+  # ==== Request
+  #
+  # <tt>account[request_passcode]</tt>::
+  # <tt>account[password]</tt>::
+  #
+  # ==== Response Examples
+  # - success (status: 200)
+  #
+  #   {"password" : "ok" }
+  #
+  # - failure (status: 400)
+  #
+  #   {
+  #      account : {
+  #         password   : [error_reason]
+  #         request_passcode   : [error_reason]
+  #      }
+  #   }
+  #
   def password
     begin
       @account.commit_to_reset_password(params[:account][:request_passcode], params[:account][:password])
-      respond_to_nothing()
+      respond_to_ok({:password => :ok})
     rescue WjUser::LocalDatabaseAuth::PasswordVerificationError => e
-      respond_to_resource({ :errors => [{ :attr    => :password,
-                                          :message => e.message }]}, 400)
+      respond_to_error({ :account => {
+                           :password  => [e.message]
+                         }})
+    rescue WjUser::LocalDB::RequestConfirmationError => e
+      respond_to_error({ :account => {
+                           :request_passcode => [e.message]
+                         }})
     end
   end
 
-  # GET /components/system/accounts/{account_id}/
-  def show
-    @title = "Account: #{@account.login_name}"
-  end
-
-  # GET /components/system/accounts/{account_id}/my_page
-  def mypage
-    page = WjPage.my_page_for(@account.login_name, current_user.login_name == @account.login_name)
-    if page
+  # == system/accounts/{login_name}/my_page
+  # end point to redirect the user's "my page" redirection.
+  #
+  # === GET
+  # This url always redirects to the user's my page if found.
+  # When the current user accesss to this uri and the page is not found, it is automatically created.
+  #
+  def my_page
+    case request.method
+    when :get
+      page = WjPage.my_page_for(@account.login_name, current_user.login_name == @account.login_name)
+      not_found! unless page
       redirect_to page_url(page._id)
     else
-      not_found!
+      method_not_allowed!
     end
   end
 
-  # GET /components/system/accounts/{account_id}/edit
-  def edit
-    @partial = get_edit_view
+  # == system/accounts/{login_name}/activation
+  # Activation URI endpoint for Local DB users
+  # === POST
+  # Activate the user account specified by {login_name}.
+  # ==== Request
+  #
+  # <tt>account[request_passcode]</tt>::
+  # <tt>account[password]</tt>::
+  #
+  # ==== Response Examples
+  # - success (status: 200)
+  #
+  #   { activation: "ok" }
+  #
+  # - failure (status: 400)
+  #
+  #   {
+  #      account : {
+  #         password   : [error_reason]
+  #         request_passcode   : [error_reason]
+  #      }
+  #   }
+  #
+  def activation
+    begin
+      @account.activate(params[:account][:request_passcode], params[:account][:password])
+      respond_to_ok({:activation => :ok})
+    rescue WjUser::LocalDatabaseAuth::PasswordVerificationError => e
+      respond_to_error({ :account => {
+                           :password  => [e.message]
+                         }})
+    rescue WjUser::LocalDB::RequestConfirmationError => e
+      respond_to_error({ :account => {
+                           :request_passcode => [e.message]
+                         }})
+    end
   end
 
-  def update
-    not_found! if @account.status == WjUser::Status[:destroyed]
-    case @account
-    when WjUser::OpenId
-      method_not_acceptable!("OpenID cannot be updated.")
-    when WjUser::BuiltIn::Administrator
-      update_administrator
-    when WjUser::LocalDB
-      update_local_db
+  # == system/accounts/current
+  # This is a RESTful representation for the 'login/logout' mechanism.
+  #
+  # === PUT
+  # Create a relation between the user and the client cookie.
+  #
+  # ==== Request
+  #
+  # <tt>account[login_name]</tt>::
+  # <tt>account[password]</tt>::
+  #
+  # ==== Response Examples
+  # - success (status: 200)
+  #
+  #   { "my_page_url" : "http://.../" }
+  #
+  # - failure (status: 400)
+  #
+  #   {
+  #      account : {
+  #         errors     : [error_reason],
+  #         login_name : []
+  #         password   : []
+  #      }
+  #   }
+  #
+  # === DELETE
+  # Delete a relation between the user and and the client cookie.
+  #
+  # ==== Response Examples
+  # - success (status: 200)
+  #
+  #   {}
+  #
+  def current
+    case request.method
+    when :put
+      @account = WjUser.find_by_login_name(params[:account][:login_name])
+      if !@account.nil? && @account.authenticate(:password => params[:account][:password])
+        set_current_user(@account)
+        respond_to_ok({ :my_page_url => my_page_system_account_url(@account.login_name)})
+      else
+        errors = {
+          :account => {
+            :errors     => ["Invalid Login name or Password."],
+            :login_name => [],
+            :password   => []
+          }
+        }
+        respond_to_error(errors)
+      end
+    when :delete
+      respond_to_nothing
+    else
+      method_not_allowed!
     end
-    @partial = get_edit_view
-    render :action => "edit"
   end
 
   private
-  def check_type_parameter
-    case params[:type]
-    when "password"
-      forbidden! unless WjConfig.instance.account_allow_local_db_register
-    when "open_id"
-      forbidden! unless WjConfig.instance.account_allow_open_id_register
-    else
-      client_error!(Msg::INVALID_TYPE_PARAMETER)
-    end
-    true
+  def load_account
+    @account = WjUser.find_by_login_name(params[:id])
+    not_found! unless @account
   end
 
-  def create_with_password
+  def create_local_db
     @account = WjUser::LocalDB.prepare(params[:account][:login_name],
                                        params[:account][:email])
     return false if @account.new_record?
     # send notification mail
     System::Mailer.deliver_registration_confirmation(@account,
-                                                     url_for(:controller => "login",
-                                                             :action => "activation_form",
-                                                             :params => {
-                                                               :login_name => @account.login_name,
-                                                               :request_passcode => @account.request_passcode
-                                                             }))
+                                                     activation_url_for(@account))
     true
   end
 
-  def create_with_open_id
+  def create_open_id
+    client_error!("request is invalid: Not authenticated.") unless params[:account][:open_id_uri] == get_authenticated_open_id
+    # TODO check the valid open id uri (vaildate already authenticated?)
     @account = WjUser::OpenId.prepare(params[:account][:login_name],
                                       params[:account][:open_id_uri])
-    !@account.new_record?
-  end
-
-  def load_account
-    @account = WjUser.find_by_login_name(params[:id])
-    not_found! unless @account
-    # status check
-    case @account.status
-    when WjUser::Status[:destroyed]
-      not_found! unless current_user.has_roles?(:administrator)
-    when WjUser::Status[:locked]
-      reject_access! unless current_user.has_roles?(:administrator)
+    if !@account.new_record?
+      @account.activate
     else
-      # OK / nothing raised
-    end
-  end
-
-  def get_edit_view
-    case @account
-    when WjUser::OpenId
-      "edit_open_id"
-    when WjUser::BuiltIn::Administrator
-      "edit_administrator"
-    when WjUser::LocalDB
-      "edit_local_db"
-    end
-  end
-
-  def update_administrator
-    if change_password
-      @account.email = params[:account][:email]
-      if @account.save
-        flash.now[:info] = "Email and Password have been successfully updated."
-      else
-        flash.now[:error] = "Invalid email format. Password is not updated."
-      end
-    end
-  end
-
-  def update_local_db
-    @account.display_name = params[:account][:display_name]
-    unless params[:account][:current_password].blank? && params[:account][:new_password].blank?
-      if change_password
-        @account.save
-        set_flash_now(:info, "Your account has been successfully updated (with a new password).")
-      end
-    else
-      @account.save
-        set_flash_now(:info, "Your account has been successfully updated (Your current password is not updated).")
-    end
-  end
-
-  def change_password
-    begin
-      @account.change_password(params[:account][:new_password], params[:account][:current_password])
-    rescue WjUser::LocalDatabaseAuth::InvalidOldPasswordError => e
-      set_flash_now(:error, "Invalid Old Password!")
-      false
-    rescue WjUser::LocalDatabaseAuth::PasswordVerificationError => e
-      set_flash_now(:error, "Password Policy Error : %s", e.message)
       false
     end
+  end
+
+  def activation_url_for(account)
+    url_for(:controller => "login_page",
+            :action => "activation",
+            :params => {
+              :login_name       => account.login_name,
+              :request_passcode => account.request_passcode
+            })
+  end
+
+  def confirm_reset_password_url_for(account)
+    url_for(:controller => "login_page",
+            :action => "confirm_reset_password",
+            :params => {
+              :login_name       => account.login_name,
+              :request_passcode => account.request_passcode
+            })
   end
 
 end

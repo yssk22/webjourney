@@ -1,7 +1,7 @@
 require 'yaml'
-class WjWidgetGenerator < Rails::Generator::NamedBase
+class WjWidgetGenerator < Rails::Generator::NamedBase # :nodoc:
   attr_accessor :component_name, :widget_name, :yaml_string
-  include WebJourney::Component::Path
+  include WebJourney::Component::Task::Package::Path
 
   def initialize(*args)
     super

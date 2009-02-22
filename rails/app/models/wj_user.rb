@@ -13,7 +13,6 @@
 # <tt>wj_roles</tt>:: has_and_belong_to_many for WjRole
 #
 # === Properties
-#
 # ==== Common properties
 #
 # <tt>login_name</tt>::   (r)  name to identify the user.
@@ -40,9 +39,9 @@ class WjUser < ActiveRecord::Base
 
   has_and_belongs_to_many :wj_roles
 
-  validates_format_of     :login_name, :with => /^[a-z][a-z0-9_]{1,15}$/, :allow_nil => false
+  validates_format_of     :login_name, :with => /^[a-z][a-z0-9_]{1,15}$/i, :allow_nil => false, :message => "must be starts with the alphabetic chars and remain 1-15 chars should be alphabets, digits or '_'."
   validates_uniqueness_of :login_name, :allow_nil => false
-  validates_length_of     :display_name, :within => 0..16, :allow_nil => true
+  validates_length_of     :display_name, :within => 0..32, :allow_nil => true
   attr_readonly           :login_name, :type
   attr_accessible         :display_name
 

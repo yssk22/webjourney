@@ -1,152 +1,154 @@
 require File.join(File.dirname(__FILE__), "../test_helper")
 require File.join(File.dirname(__FILE__), "../functional_helper")
 
-class ComponentControllerTest < ActiveSupport::TestCase
+class AccountsControllerTest < ActiveSupport::TestCase
   def setup
     @controller = System::AccountsController.new
     @request    = ActionController::TestRequest.new
     @response   = ActionController::TestResponse.new
-    @config     = WjConfig.instance
-  end
-
-  def test_index
-    login(wj_users(:administrator)) do
-      get :index
-      assert_response 200
-      get :index, { :type => "open_id" }
-      assert_response 200
-      get :index, { :type => "password" }
-      assert_response 200
-    end
-
-    get :index
-    assert_response 401
-    login(wj_users(:yssk22)) do
-      get :index
-      assert_response 403
-    end
-  end
-
-  def test_with_new
-    get :new, { :type => "password" }
-    assert_response 200
-    get :new, { :type => "open_id" }
-    assert_response 200
-    get :new, { :type => "unknown" }
-    assert_response 400
-  end
-
-  def test_with_when_not_allowed
-    @config.account_allow_local_db_register = false
-    @config.account_allow_open_id_register = false
-    @config.save!
-    get :new, { :type => "password" }
-    assert_response 403
-    get :new, { :type => "open_id" }
-    assert_response 403
-
-    post :create, { :type => "password" }
-    assert_response 403
-    post :create, { :type => "open_id" }
-    assert_response 403
   end
 
   def test_create
-    post :create, { :type => "password",
+    post :create, {
       :account => {
-        :login_name => "new_local_db",
-        :email      => "new_local_db@example.com"
+        :login_name => "test_user",
+        :email      => "test_user@example.com",
+        :type       => "local_db"
       }
     }
-    assert_redirected_to system_account_path("new_local_db")
-    # duprecated creation
-    post :create, { :type => "password",
-      :account => {
-        :login_name => "new_local_db",
-        :email      => "new_local_db@example.com"
-      }
-    }
-    assert_response 400
-    #
-    # -- OpenID
-    #
-    post :create, { :type => "open_id",
-      :account => {
-        :login_name  => "new_open_id",
-        :open_id_uri => "http://localhost//new_open_id"
-      }
-    }
-    assert_redirected_to system_account_path("new_open_id")
-
-    # duprecated creation
-    post :create, { :type => "open_id",
-      :account => {
-        :login_name  => "new_open_id",
-        :open_id_uri => "http://localhost//new_open_id"
-      }
-    }
-    assert_response 400
-  end
-
-  def test_show
-    get :show,  {  :id => "prepared_test_user"}
     assert_response 200
 
-    get :show,  {  :id => "active_test_user"}
+    @controller.set_authenticated_open_id("http://open_id.example.com/test_user")
+    post :create, {
+      :account => {
+        :login_name  => "test_oid",
+        :open_id_uri => "http://open_id.example.com/test_user",
+        :type        => "open_id"
+      }
+    }
     assert_response 200
 
-    get :show,  {  :id => "locked_test_user"}
-    assert_response 401
-
-    get :show,  {  :id => "destroyed_test_user"}
-    assert_response 404
-
-    # administrator account access
-    login(wj_users(:administrator)) do
-      get :show,  {  :id => "locked_test_user"}
-      assert_response 200
-
-      get :show,  {  :id => "destroyed_test_user"}
-      assert_response 200
-    end
-
-    # user account access
-    login(wj_users(:yssk22)) do
-      get :show,  {  :id => "locked_test_user"}
-      assert_response 403
-
-      get :show,  {  :id => "destroyed_test_user"}
-      assert_response 404
-    end
-  end
-
-
-=begin
-  def test_create_with_password
-    post :create, :type => "password", :account => {
-      :login_name => "test",
-      :email      => "test@example.com"
+    #== error case
+    post :create, {
+      :account => {
+        :login_name => "test_user",
+        :email      => "test_user@example.com"
+      }
     }
-    assert_redirected_to system_account_path(:test)
+    assert_response 400 # missing type parameter
+
+    post :create, {
+      :account => {
+        :login_name => "test_user",
+        :email      => "test_user@example.com",
+        :type       => "local_db"
+      }
+    }
+    assert_response 400 # conflict user
+
+    @controller.set_authenticated_open_id(nil)
+    post :create, {
+      :account => {
+        :login_name  => "test_oid2",
+        :open_id_uri => "http://open_id.example.com/test_user",
+        :type        => "open_id"
+      }
+    }
+    assert_response 400 # open id is not authenticated
   end
 
-  def test_current
+  def test_activation
+    post :create, {
+      :account => {
+        :login_name => "test_user",
+        :email      => "test_user@example.com",
+        :type       => "local_db"
+      }
+    }
+    assert_response 200
+
+    test_user = WjUser.find_by_login_name("test_user")
+    post :activation, {
+      :id => test_user.login_name,
+      :account => {
+        :password => "foo",
+        :request_passcode => test_user.request_passcode
+      }
+    }
+    assert_response 400 # too short password
+
+    post :activation, {
+      :id => test_user.login_name,
+      :account => {
+        :password => "foobar",
+        :request_passcode => "foobar"
+      }
+    }
+    assert_response 400 # Invalid request passcode
+
+    post :activation, {
+      :id => test_user.login_name,
+      :account => {
+        :password => "foobor",
+        :request_passcode => test_user.request_passcode
+      }
+    }
+    assert_response 200 # OK
+
+    post :activation, {
+      :id => test_user.login_name,
+      :account => {
+        :password => "foobor",
+        :request_passcode => test_user.request_passcode
+      }
+    }
+    assert_response 400 # Invalid status
+
+  end
+
+  def test_current_get
     get :current
-    assert_response 404
-    post :current, :account => {
-      :login_name => "yssk22"
-    }, :password => "invalid password"
-    assert_response 400
-    post :current, :account => {
-      :login_name => "yssk22"
-    }, :password => "password"
-    assert_redirected_to current_system_accounts_path
-    get :current
+    assert_response 405
+  end
+
+  def test_current_post
+    post :current
+    assert_response 405
+  end
+
+  def test_current_put
+    put :current, :account => {
+      :login_name => "administrator",
+      :password   => "password"
+    }, :format => "json"
     assert_response 200
+
+    put :current, :account => {
+      :login_name => "administrator",
+      :password   => "invalid_password"
+    }, :format => "json"
+    assert_response 400
+  end
+
+  def test_current_delete
     delete :current
     assert_response 200
-    delete :current
-    assert_response 404
   end
-=end
+
+  def test_my_page_get
+    page = WjPage.my_page_for("yssk22_openid", false)
+    assert_nil page
+    get :my_page, :id => "yssk22_openid"
+    assert_response 404
+
+    login(wj_users("yssk22_openid")) do
+      get :my_page, :id => "yssk22_openid"
+      page = WjPage.my_page_for("yssk22_openid", false)
+      assert_redirected_to page_url(page._id)
+    end
+
+    get :my_page, :id => "yssk22_openid"
+    assert_redirected_to page_url(page._id)
+  end
+
 end

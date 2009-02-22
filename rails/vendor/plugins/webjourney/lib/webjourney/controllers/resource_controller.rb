@@ -1,9 +1,18 @@
 #
 # Abstract controller class to standardize controller behavior that response JSON/XML resources.
 #
-# == Using responders
+# == Standardized REST using responders
 #
-# In the WebJourney standard, all the resources except HTML page is responded by using following methods as possible.
+# ===  Resource Representation
+#
+# - A resource object should have two methods, <tt>to_xml</tt> and <tt>to_json</tt>.
+# - A resource object should be compatible for Hash object.
+# - A resource should be as following expression (in Hash)::
+#
+#
+# === Utility methods
+# To standardize resource representation,
+# all the resources except HTML page should be responded by using following methods as possible.
 #
 # - respond_to_ok(resource)
 # - respond_to_created(resource)
@@ -27,7 +36,12 @@
 #       respond_to_error(@resource.errors)
 #     end
 #   end
+#
 class WebJourney::ResourceController < WebJourney::ApplicationController
+  before_filter do |controller|
+    controller.request.format = :json   # set default format json.
+  end
+
   # Response resource with 200
   def respond_to_ok(resource)
     respond_to_resource(resource, 200)
@@ -58,5 +72,48 @@ class WebJourney::ResourceController < WebJourney::ApplicationController
       format.xml  { render :text => resource.to_xml,  :status => status } if resource.respond_to?(:to_xml)
       format.json { render :text => resource.to_json, :status => status } if resource.respond_to?(:to_json)
     end
+  end
+
+  # Returns a hash containing all of error message for the objects.
+  # the resource is as following formats::
+  #
+  #   {
+  #      :object_name => {
+  #          :errors     => [msg1, msg2, ...],   # if base errors exist.
+  #          :attr_name1 => [msg1, msg2, ...],   # errors for attribtues.
+  #          :attr_name2 => [msg1, msg2, ...],   # errors for attribtues.
+  #          ...
+  #      }
+  #   }
+  def error_resource_for(*params)
+    options = params.extract_options!.symbolize_keys
+    if object = options.delete(:object)
+      object_name = options[:object_name]
+      raise ArgumentError.new(":object and :object_name must be used both.") if object_name.blank?
+      objects = [[object, object_name]].flatten
+    else
+      objects = params.collect {|object_name|
+        [instance_variable_get("@#{object_name.to_s}"), object_name]
+      }
+    end
+    resource = {}
+    objects.each do |object, object_name|
+      next if object.errors.count == 0
+      errors_by_attr = {}
+      base_errors = []
+      object.errors.each do |attr, msg|
+        next if msg.blank?
+        if attr == "base"
+          base_errors << msg
+        else
+          errors_by_attr[attr]||= []
+          errors_by_attr[attr] << (object.class.human_attribute_name(attr) + " " + msg)
+        end
+      end
+      attr_errors[:errors] = base_errors if base_errors.length > 0
+      resource[object_name] = errors_by_attr
+    end
+
+    resource
   end
 end

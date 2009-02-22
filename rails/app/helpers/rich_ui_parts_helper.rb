@@ -1,4 +1,21 @@
 module RichUiPartsHelper
+
+  #
+  # Returns a javascript to align a certain width styled form.
+  #
+  def align_form(dom_id, option={})
+    label_width = option[:label_width]
+    javascript_tag <<-EOS
+jQuery(document).ready(function(){
+    jQuery('##{dom_id} fieldset').css("padding-left", "#{label_width}px");
+    jQuery('##{dom_id} fieldset legend').css("margin-left", "-#{(label_width - 10)}px");
+    jQuery('##{dom_id} fieldset div.error').css("margin-left", "-#{(label_width - 10)}px");
+    jQuery('##{dom_id} fieldset div.field label.name').css("width", "#{label_width}px");
+    jQuery('##{dom_id} fieldset div.field label.name').css("margin-left", "-#{label_width}px");
+});
+EOS
+  end
+
   #
   # Reurns a div block with a javascript sentence that loads the contents of the specified <tt>url</tt>.
   # The contents loader script is triggered on the ready event of the document.

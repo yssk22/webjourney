@@ -1,0 +1,236 @@
+/**
+ * Form stylesheets for webjourney
+ * This file is originated from http://nidahas.com/sandbox/form_template.html
+ */
+div.form-container { margin: 10px; background-color: #FFF;}
+
+p.legend    { margin-bottom: 1em; }
+p.legend em { color: #C00; font-style: normal; }
+
+div.form-container form p { margin: 0; }
+div.form-container form p.note { font-size: 90%; color: #333; }
+div.form-container form fieldset { margin: 10px 0; padding: 10px; border: #DDD 1px solid; }
+div.form-container form legend { font-weight: bold; color: #666; }
+div.form-container form fieldset div { padding: 0.25em 0; }
+
+div.form-container label,
+div.form-container span.label { margin-right: 10px; padding-right: 10px; display: block; float: left; text-align: right; position: relative; }
+div.form-container label.error,
+div.form-container span.error { color: #C00; }
+div.form-container label em,
+div.form-container span.label em { position: absolute; right: 0; font-size: 120%; font-style: normal; color: #C00; }
+
+div.form-container input.error { border-color: #C00; background-color: #FEF; }
+div.form-container input[type="text"]:focus,
+div.form-container input[type="text"].error:focus,
+div.form-container textarea:focus {     background-color: #FFC; border-color: #FC6; }
+
+div.form-container div.controlset label,
+div.form-container div.controlset input { display: inline; float: none; }
+
+/*********************************************************
+ * SECTION: form
+ *********************************************************/
+button {
+    border:0;
+    cursor:pointer;
+    font-weight:bold;
+    padding:0 20px 0 0;
+    text-align:center;
+}
+button span {
+    position:relative;
+    display:block;
+    white-space:nowrap;
+    padding:0 0 0 20px;
+}
+
+/*blue buttons*/
+form {
+    font:100% verdana,arial,sans-serif;
+}
+
+fieldset {
+    line-height: 200%;
+    border-color: #e0e0ff;
+    border-width: 1px;
+    border-style: solid;
+    padding: 10px;
+    margin: 5px 5px 5px 5px;
+}
+
+legend {
+    font-size:1.1em;
+    font-weight: bold;
+}
+
+form table tr td{
+    padding-right: 5px;
+    text-align:left;
+}
+
+label {
+    display: -moz-inline-box;
+    display: inline-block;
+    text-align: right;
+    padding: 0;
+    margin: 0px 0 0;
+}
+
+input{
+    border       : solid 1px #C1DAD7;
+}
+
+/* non-submit button */
+input.button {
+    border       : solid 1px #C1DAD7;
+    background   : #CAE8EA;
+    padding      : 1px 1px 1px 1px;
+    font-size    : 11px;
+}
+
+input.file {
+    border       : solid 1px #C1DAD7;
+    font-size    : 11px;
+}
+
+textarea {
+    border       : solid  1px #C1DAD7;
+}
+
+select{
+    border       : solid  1px #C1DAD7;
+}
+
+.fieldWithErrors {
+    display: inline;
+}
+
+.fieldWithErrors input{
+    background-color: #ffcccc;
+    border: solid 1px #ff6666;
+}
+
+#errorExplanation {
+    width: 400px;
+    border: 2px solid red;
+    padding: 7px;
+    padding-bottom: 12px;
+    margin-bottom: 20px;
+    background-color: #f0f0f0;
+}
+
+#errorExplanation h2 {
+    text-align: left;
+    font-weight: bold;
+    padding: 5px 5px 5px 15px;
+    font-size: 12px;
+    margin: -7px;
+    background-color: #c00;
+    color: #fff;
+}
+
+#errorExplanation p {
+    color: #333;
+    margin-bottom: 0;
+    padding: 5px;
+}
+
+#errorExplanation ul{
+    margin:0;
+}
+
+#errorExplanation ul li {
+    font-size: 12px;
+    list-style: square;
+}
+
+/**
+ * Auto Complete
+ **/
+div.autocomplete {
+    position:absolute;
+    width:250px;
+    background-color:white;
+    border:1px solid #888;
+    margin:0px;
+    padding:0px;
+}
+div.autocomplete ul {
+    list-style-type:none;
+    margin:0px;
+    padding:0px;
+}
+div.autocomplete ul li.selected { background-color: #ffb;}
+div.autocomplete ul li {
+    list-style-type:none;
+    display:block;
+    margin:0;
+    padding:2px;
+    height:32px;
+    cursor:pointer;
+}
+
+/** button **/
+button,
+input.button,
+input.submit {
+    background:#0A60D6 url(jquery-ui/images/0a60d6_40x100_textures_04_highlight_hard_80.png) repeat-x scroll 0 50%;
+    border:1px solid #FFFFFF;
+    color:#FFFFFF;
+    cursor:pointer;
+    font-size:1em;
+    line-height:1.4em;
+    padding:0.2em 0.6em 0.3em;
+}
+
+button:disabled,
+input.button:disabled,
+input.submit:disabled {
+    border       : solid 1px #bAe0f6;
+    background   : #ffffff;
+    color        : #aAc0f6;
+    font-size    : 1em;
+    line-height  : 1.4em;
+    padding:0.2em 0.6em 0.3em;
+}
+
+
+button.submitting,
+input.submitting {
+    background-color : #ffffff;
+    background-image : url(./images/submitting.gif);
+    background-position: 50% 50%;
+    background-repeat : no-repeat;
+    border       : solid 1px #bAe0f6;
+    color        : #aAc0f6;
+    font-size    : 1em;
+    line-height  : 1.4em;
+    padding:0.2em 0.6em 0.3em;
+}
+
+button.submitting,
+input.submitting:focus {
+    background-color : #ffffff;
+    background-image : url(./images/submitting.gif);
+    background-position: 50% 50%;
+    background-repeat : no-repeat;
+    border       : solid 1px #bAe0f6;
+    color        : #aAc0f6;
+    font-size    : 1em;
+    line-height  : 1.4em;
+    padding:0.2em 0.6em 0.3em;
+}
+
+/* wjDisplayError Style */
+input.with_error ,
+textarea.with_error {
+    background-color: #ffcccc;
+    border: solid 1px #ff6666;
+}
+
+
+div.error ul {
+    list-style: none;
+    margin-left: 5px;
+}

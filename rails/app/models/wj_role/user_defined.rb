@@ -1,2 +1,4 @@
-class WjRole::UserDefined < WjRole
+class WjRole
+  class UserDefined < WjRole # :nodoc:
+  end
 end

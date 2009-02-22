@@ -1,9 +1,13 @@
-=begin
-* deprecated
-
 module WebJourney # :nodoc:
   module Component # :nodoc:
     module Features # :nodoc:
+      #
+      # This module defines role based access control mechanism used in any controllers.
+      # It is almost the same as WebJourney::Features::RoleBasedAccessControl.
+      # The difference is that this module is include component page dependency.
+      #
+      # The usage of require_roles method, see WebJourney::Features::RoleBasedAccessControl.
+      #
       module RoleBasedAccessControl
         def self.append_features(base)
           super
@@ -29,4 +33,3 @@ module WebJourney # :nodoc:
     end
   end
 end
-=end

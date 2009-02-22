@@ -43,7 +43,7 @@ module PagesHelper
 
   def mypage_link(user)
     return '&nbsp;' if user.anonymous?
-    link_to "My Page", mypage_system_account_path(user.login_name), :class => "icon_mypage with_inline_icon"
+    link_to "My Page", my_page_system_account_path(user.login_name), :class => "icon_mypage with_inline_icon"
   end
 
   def user_link(user)
@@ -59,9 +59,9 @@ module PagesHelper
 
   def login_link
     if current_user.anonymous?
-      link_to "Login", {:controller => "system/login", :action => "index"}, :class => "icon_login with_inline_icon"
+      link_to "Login", {:controller => "system/login_page", :action => "index"}, :class => "icon_login with_inline_icon"
     else
-      link_to "Logout", {:controller => "system/login", :action => "logout"}, :class => "icon_logout with_inline_icon"
+      link_to "Logout", {:controller => "system/login_page", :action => "logout"}, :class => "icon_logout with_inline_icon"
     end
   end
 

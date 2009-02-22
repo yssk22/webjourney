@@ -1,4 +1,8 @@
-class <%= component_name.camelize %>::<%= page_name.camelize %>Controller < WebJourney::ComponentPageController
+class <%= component_name.camelize %>::<%= page_name.camelize %>Controller < WebJourney::Component::PageController
+  # see API details at http://www.webjourney.org/doc/classes/WebJourney/Component/PageController.html
+  # require_roles :administrator, :only => :show
+  # require_roles :users
+
   def index
   end
 end

@@ -1,22 +1,17 @@
 WebJourney::Component::Routes.draw do |map|
-  map.resources :accounts, :member => {
-    :mypage     => :get,
-    :password   => :post,
-    :activation => :post
+  # add Component original routing here
+  #   map.resources :people
+  #   # => /components/system/people get available
+  #
+  #   map.connect path/to/:controller/:action
+  #   # => /components/system/path/to/:controller/:action get available
+
+  map.resources :accounts,:member => {
+    :my_page     => :get,
+    :password    => :put,
+    :activation  => :post,
   }, :collection => {
-    :reset_password => :post,
-    :current => :any
+    :current        => :any,
+    :password_reset => :post
   }
-
-  map.resources :roles, :collection => {
-    :defaults => :any
-  }
-
-  map.resource :configurations, :member => {
-    :page_header => :any,
-    :page_design => :any,
-    :smtp        => :any,
-    :account     => :any
-  }
-
 end

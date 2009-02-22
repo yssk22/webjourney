@@ -1,7 +1,7 @@
 require 'yaml'
 class WjComponentPageGenerator < Rails::Generator::NamedBase
   attr_accessor :component_name, :page_name, :display_name, :permissions, :yaml_string
-  include WebJourney::Component::Path
+  include WebJourney::Component::Task::Package::Path
 
   def initialize(*args)
     super

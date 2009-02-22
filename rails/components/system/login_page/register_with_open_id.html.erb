@@ -1,0 +1,49 @@
+<div class="content">
+  <p>
+    You need to register your account related with your OpenID before starting WebJourney.
+  </p>
+  <%= align_form(page.dom_id("form"), :label_width => 100) %>
+  <% form_remote_tag(:url => formatted_system_accounts_path("json"),
+                     :datatype => "json",
+                     :loading   => now_loading(page.dom_id("form")),
+                     :success   => "LoginPage.onOpenIdRegisterSuccess(request)",
+                     :failure   => clear_overlay(page.dom_id("form")) + "LoginPage.onOpenIdRegisterFailure(request)",
+                     :html      => {
+                       :method => "post",
+                       :id       => page.dom_id("form"),
+                       :onsubmit => validate_form(page.dom_id("form"))
+                     }) do -%>
+  <fieldset>
+    <legend>New Account</legend>
+    <div style="display:none" class="error"></div>
+    <input type="hidden" name="account[type]" value="open_id" />
+    <div class="field">
+      <label class="name" for="account_open_id_uri">
+        OpenID
+      </label>
+      <%= text_field 'account', 'open_id_uri', :class => "required url", :readonly => "readonly" %>
+    </div>
+    <div class="field">
+      <label class="name" for="account_login_name">
+        Login Name
+      </label>
+      <%= text_field 'account', 'login_name', :class => "required login_name" %>
+    </div>
+    <div class="action">
+      <%= submit_tag "Submit", :id => page.dom_id("account_submit") %>
+    </div>
+  </fieldset>
+  <div class="spacer"></div>
+  <% end -%>
+  <!-- dummy for user to retry OpenID login -->
+  <div style="display:none">
+  <% form_tag({ :controller => "open_id",
+                :action     => "begin_authentication"},
+              :method => "post",
+              :id     => page.dom_id("open_id_login_form"),
+              :onsubmit => validate_form(page.dom_id("form"))
+              ) do -%>
+  <%= text_field 'account', 'open_id_uri' %>
+  <% end -%>
+  </div>
+</div>

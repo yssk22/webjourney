@@ -16,15 +16,6 @@ h2 {
     font-weight: bold;
 }
 
-
-div.error {
-    background-image: url("./images/error.png");
-    background-position: 0% 50%;
-    background-repeat: no-repeat;
-    padding: 5px 5px 5px 20px;
-    background-color: #f6caf0;
-}
-
 div.info {
     background-image: url("./images/info.png");
     background-position: 0% 50%;

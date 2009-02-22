@@ -1,0 +1,29 @@
+<div class="content">
+  <%= align_form(page.dom_id("form"), :label_width => 150) %>
+  <% form_remote_tag(:url => formatted_activation_system_account_path(@account.login_name, "json"),
+                     :datatype => "json",
+                     :loading   => now_loading(page.dom_id("form")),
+                     :success   => "LoginPage.onActivationSuccess(request)",
+                     :failure   => clear_overlay(page.dom_id("form")) + "LoginPage.onActivationFailure(request)",
+                     :html      => {
+                       :method => "post",
+                       :id       => page.dom_id("form")
+                     }) do -%>
+  <fieldset>
+    <legend>Set Your Password</legend>
+    <div style="display:none" class="error"></div>
+    <%= render :partial => "confirmation_form" %>
+    <div class="action">
+      <%= submit_tag "Submit", :id => page.dom_id("account_submit") %>
+    </div>
+  </fieldset>
+  <div class="spacer"></div>
+  <% end -%>
+  <div id="<%= page.dom_id('success') %>" style="display:none">
+    <h2>Activation Finished</h2>
+    <p>
+      Now, you can login your new account from the login page.
+    </p>
+  </div>
+
+</div>

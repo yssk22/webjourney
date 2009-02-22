@@ -1,3 +1,5 @@
+require 'openid'
+require 'openid/store/filesystem'
 #
 # WebJourney Application Controller base. This class defines some utilities to standardize WebJourney applications.
 # In WebJourney component application, you can select three types of controllers as follows::
@@ -113,12 +115,11 @@ class WebJourney::ApplicationController < ActionController::Base
   end
 
   def get_authenticated_open_id
-    @authenticated_open_id
+    session[:wj_authenticated_open_id] if session
   end
-  alias :authenticated_open_id :get_authenticated_open_id
 
   def set_authenticated_open_id(open_id)
-    @authenticated_open_id = open_id
+    session[:wj_authenticated_open_id] = open_id if session
   end
 
 
@@ -128,7 +129,7 @@ class WebJourney::ApplicationController < ActionController::Base
       logger.wj_error "ApplicationError handled in global controller."
       logger.wj_error " - #{e.message} (HTTP #{e.http_status})"
       logger.wj_error " - #{e.backtrace.first}"
-      err = {:errors => [{ :message => e.message }]}
+      err = {:errors => [e.message]}
       respond_to do |format|
         format.html {
           # TODO layout negotiation

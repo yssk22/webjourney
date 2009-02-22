@@ -1,0 +1,23 @@
+<div class="content">
+  <%= align_form(page.dom_id("form"), :label_width => 100) %>
+  <% form_tag({ :controller => "open_id",
+                :action     => "begin_authentication"},
+              :method => "post",
+              :id     => page.dom_id("form"),
+              :onsubmit => validate_form(page.dom_id("form"))
+              ) do -%>
+  <fieldset>
+    <legend>Credentials</legend>
+    <%= message_from_flash(:error) %>
+    <div class="field">
+      <label class="name" for="account_open_id_uri">
+        OpenID
+      </label>
+      <%= text_field 'account', 'open_id_uri', :class => "required url"%>
+    </div>
+    <div class="action">
+      <%= submit_tag "Login", :id => page.dom_id("login_submit") %>
+    </div>
+  </fieldset>
+  <% end -%>
+</div>

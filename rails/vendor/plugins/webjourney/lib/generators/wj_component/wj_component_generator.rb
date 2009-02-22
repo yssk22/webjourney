@@ -1,6 +1,6 @@
 class WjComponentGenerator < Rails::Generator::NamedBase
   attr_accessor :component_name, :license, :url, :author, :description
-  include WebJourney::Component::Path
+  include WebJourney::Component::Task::Package::Path
 
   def initialize(*args)
     super

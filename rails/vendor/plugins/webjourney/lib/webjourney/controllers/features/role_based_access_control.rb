@@ -1,29 +1,29 @@
 module WebJourney
   module Features
+    #
+    # This module defines role based access control mechanism used in any controllers.
+    #
+    # == Role based access control
+    #
+    # To control access user, require_roles method can be used.
+    #
+    #   class FooController < ApplicationController
+    #     require_roles :roleA, :roleB
+    #     require_roles :roleC, :except => :show
+    #     require_roles :role1, :only => :show
+    #     require_roles :role2, :role3, :only => :edit, :any => true
+    #   end
+    #
+    # - all actions require the user to have "roleA" and "roleB"
+    # - all actions except "show" require the user to have "roleC"
+    # - "show" action require the user to have "role1"
+    # - "edit" action require the user to have "role2" or "role3"
+    #
     module RoleBasedAccessControl
       def self.append_features(base)
         super
         base.send(:extend,  ClassMethods)
       end
-      #
-      # This module defines role based access control mechanism used in any controllers.
-      #
-      # == Role based access control
-      #
-      # To control access user, require_roles method can be used.
-      #
-      #   class FooController < ApplicationController
-      #     require_roles :roleA, :roleB
-      #     require_roles :roleC, :except => :show
-      #     require_roles :role1, :only => :show
-      #     require_roles :role2, :role3, :only => :edit, :any => true
-      #   end
-      #
-      # - all actions require the user to have "roleA" and "roleB"
-      # - all actions except "show" require the user to have "roleC"
-      # - "show" action require the user to have "role1"
-      # - "edit" action require the user to have "role2" or "role3"
-      #
       module ClassMethods
         # Define role requirements for the current user.
         # If access check fails, WebJourney::AuthenticationRequiredError or WebJourney::ForbiddenError is raised.

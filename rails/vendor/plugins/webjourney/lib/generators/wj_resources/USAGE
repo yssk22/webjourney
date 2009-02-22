@@ -1,0 +1,8 @@
+Description:
+    Create component directory(if not exists) and resource controller files.
+
+WjWidgetName:
+    Fully qualified resources controller name (<component_name>/<resources_name> format)
+
+Example:
+    ./script/generate wj_resources my_company/employees

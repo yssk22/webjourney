@@ -1,9 +1,11 @@
 ---
-- login:
+- login_page:
     display_name: Login
 - my_account_page:
-    display_name: My Account Page
-- users_and_roles_pages:
+    display_name: My Account
+- users_and_roles_page:
     display_name: Users & Roles
-- site_configuration_pages:
+- components_page:
+    display_name: Components
+- site_configuration_page:
     display_name: Site Configuration

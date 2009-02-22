@@ -1,0 +1,19 @@
+<div class="field">
+  <label class="name" for="account_login_name">
+    Login Name
+  </label>
+  <%= text_field 'account', 'login_name', :class => "required login_name", :disabled => "disabled" %>
+</div>
+<div class="field">
+  <label class="name" for="account_request_passcode">
+    Confirmation Code
+  </label>
+  <%= text_field 'account', 'request_passcode', :class => "required", :readonly => "readonly" %>
+</div>
+
+<div class="field">
+  <label class="name" for="account_password">
+      Password
+  </label>
+  <input type="password" id="account_password" name="account[password]" class="required"></input>
+</div>
