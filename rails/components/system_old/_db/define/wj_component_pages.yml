@@ -1,9 +1,0 @@
----
-- login:
-    display_name: Login
-- my_account_page:
-    display_name: My Account Page
-- users_and_roles_pages:
-    display_name: Users & Roles
-- site_configuration_pages:
-    display_name: Site Configuration
