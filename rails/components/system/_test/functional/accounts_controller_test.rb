@@ -140,6 +140,7 @@ class AccountsControllerTest < ActiveSupport::TestCase
       }
     }
     assert_response 200
+
   end
 
   def test_current_get
