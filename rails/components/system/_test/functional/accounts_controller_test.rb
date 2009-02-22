@@ -123,6 +123,25 @@ class AccountsControllerTest < ActiveSupport::TestCase
     assert_response 400
   end
 
+  def test_password
+    post :password_reset, {
+      :account => {
+        :login_name => "yssk22",
+        :email      => "yssk22@example.com"
+      }
+    }
+    assert_response 200
+    yssk22 = wj_users(:yssk22)
+    put :password, {
+      :id      => "yssk22",
+      :account => {
+        :password         => "new_password",
+        :request_passcode => yssk22.request_passcode
+      }
+    }
+    assert_response 200
+  end
+
   def test_current_get
     get :current
     assert_response 405
