@@ -2,8 +2,8 @@
 # WjUser class is an abstract ActiveRecord model for the account data.
 # The WjUser subclasses automatically detected by the single table inheritance mechanism of ActiveRecord.
 #
-# - WjUser::LocalDB               : The user account authenticated by the local database password.
-# - WjUser::OpenID                : The user account authenticated by the OpenID uri.
+# - WjUser::LocalDb               : The user account authenticated by the local database password.
+# - WjUser::OpenId                : The user account authenticated by the OpenID uri.
 # - WjUser::BuiltIn:Administrator : Built in account for the administrator
 # - WjUser::BuiltIn:Anonymous     : Built in account for the anonymous user.
 #
@@ -69,7 +69,7 @@ class WjUser < ActiveRecord::Base
   #
   #   WjUser.list(:starts_with => "a", :class => WjUser::OpenID, :status => Status[:active] )
   #
-  # Get a list of active LocalDB users
+  # Get a list of active LocalDb users
   #
   #   WjUser.list(:class => WjUser::OpenID, :status => Status[:active] )
   #

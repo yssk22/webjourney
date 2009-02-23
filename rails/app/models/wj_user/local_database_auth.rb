@@ -1,6 +1,6 @@
 class WjUser
   #
-  # Shared module for WjUser::LocalDB and WjUser::BuiltIn::Administrator
+  # Shared module for WjUser::LocalDb and WjUser::BuiltIn::Administrator
   #
   module LocalDatabaseAuth
 

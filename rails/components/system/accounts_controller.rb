@@ -80,7 +80,7 @@ class System::AccountsController < WebJourney::ResourceController
   #      }
   #   }
   def password_reset
-    @account = WjUser::LocalDB.find_by_login_name_and_email(params[:account][:login_name], params[:account][:email])
+    @account = WjUser::LocalDb.find_by_login_name_and_email(params[:account][:login_name], params[:account][:email])
     if @account
       @account.request_to_reset_password
       System::Mailer.deliver_reset_password_confirmation(@account,
@@ -146,7 +146,7 @@ class System::AccountsController < WebJourney::ResourceController
       respond_to_error({ :account => {
                            :password  => [e.message]
                          }})
-    rescue WjUser::LocalDB::RequestConfirmationError => e
+    rescue WjUser::LocalDb::RequestConfirmationError => e
       respond_to_error({ :account => {
                            :request_passcode => [e.message]
                          }})
@@ -202,7 +202,7 @@ class System::AccountsController < WebJourney::ResourceController
       respond_to_error({ :account => {
                            :password  => [e.message]
                          }})
-    rescue WjUser::LocalDB::RequestConfirmationError => e
+    rescue WjUser::LocalDb::RequestConfirmationError => e
       respond_to_error({ :account => {
                            :request_passcode => [e.message]
                          }})
@@ -274,7 +274,7 @@ class System::AccountsController < WebJourney::ResourceController
   end
 
   def create_local_db
-    @account = WjUser::LocalDB.prepare(params[:account][:login_name],
+    @account = WjUser::LocalDb.prepare(params[:account][:login_name],
                                        params[:account][:email])
     return false if @account.new_record?
     # send notification mail

@@ -2,7 +2,7 @@ class WjUser
   #
   # Local database user class implemenatation.
   #
-  class LocalDB < WjUser
+  class LocalDb < WjUser
     include WjUser::LocalDatabaseAuth
     class RequestConfirmationError < WebJourney::Errors::ClientRequestError # :nodoc:
     end

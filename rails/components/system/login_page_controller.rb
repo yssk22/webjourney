@@ -17,7 +17,7 @@ class System::LoginPageController < WebJourney::Component::PageController
 
   def activation
     set_title "Password User::Account Activation"
-    @account = WjUser::LocalDB.new
+    @account = WjUser::LocalDb.new
     @account.login_name = params[:login_name]
     @account.request_passcode= params[:request_passcode]
   end
@@ -28,7 +28,7 @@ class System::LoginPageController < WebJourney::Component::PageController
 
   def confirm_reset_password
     set_title "Password User::Reset Password (Confirmation)"
-    @account = WjUser::LocalDB.new
+    @account = WjUser::LocalDb.new
     @account.login_name = params[:login_name]
     @account.request_passcode= params[:request_passcode]
   end

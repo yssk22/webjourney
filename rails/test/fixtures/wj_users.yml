@@ -18,7 +18,7 @@ anonymous:
 <% if RAILS_ENV != "production" %>
 yssk22:
    id: 3
-   type: "WjUser::LocalDB"
+   type: "WjUser::LocalDb"
    login_name: "yssk22"
    display_name: "yssk22"
    email: "yssk22@example.com"
@@ -28,7 +28,7 @@ yssk22:
 
 ma:
    id: 4
-   type: "WjUser::LocalDB"
+   type: "WjUser::LocalDb"
    login_name: "ma"
    display_name: "ma"
    email: "ma@example.com"
@@ -38,7 +38,7 @@ ma:
 
 elly:
    id: 5
-   type: "WjUser::LocalDB"
+   type: "WjUser::LocalDb"
    login_name: "elly"
    display_name: "elly"
    email: "elly@example.com"
@@ -48,7 +48,7 @@ elly:
 
 joe:
    id: 6
-   type: "WjUser::LocalDB"
+   type: "WjUser::LocalDb"
    login_name: "joe"
    display_name: "joe"
    email: "joe@example.com"
@@ -58,7 +58,7 @@ joe:
 
 taro:
    id: 7
-   type: "WjUser::LocalDB"
+   type: "WjUser::LocalDb"
    login_name: "taro"
    display_name: "taro"
    email: "taro@example.com"
@@ -68,7 +68,7 @@ taro:
 
 hanako:
    id: 8
-   type: "WjUser::LocalDB"
+   type: "WjUser::LocalDb"
    login_name: "hanako"
    display_name: "hanako"
    email: "hanako@example.com"
@@ -99,7 +99,7 @@ dead_open_id:
 # *****************************************
 <% WjUser::Status.each do |status, value| %>
 <%= status %>_user:
-   type: "WjUser::LocalDB"
+   type: "WjUser::LocalDb"
    login_name: "<%= status %>_test_user"
    display_name: "<%= status %>_test_user"
    email: "<%= status %>_test_user@example.com"
