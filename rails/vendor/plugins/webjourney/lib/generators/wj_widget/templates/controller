@@ -1,4 +1,4 @@
-class <%= component_name.camelize %>::<%= widget_name.camelize %>Controller < WebJourney::WidgetController
+class <%= component_name.camelize %>::<%= widget_name.camelize %>Controller < WebJourney::Component::WidgetController
 
   # GET /widgets/{:instance_id}/<%= component_name %>/<%= widget_name %>/show/
   def show

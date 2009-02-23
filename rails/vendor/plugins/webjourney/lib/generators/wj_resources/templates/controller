@@ -1,4 +1,4 @@
-class <%= component_name.camelize %>::<%= resources_name.camelize %>Controller < WebJourney::ResourceController
+class <%= component_name.camelize %>::<%= resources_name.camelize %>Controller < WebJourney::Component::ResourceController
   #
   # see API details at http://www.webjourney.org/doc/classes/WebJourney/ResourceController.html
   # you need append following the route _config/routes.rb file to make resource URI available.
