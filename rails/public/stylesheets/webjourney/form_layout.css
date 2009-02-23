@@ -41,7 +41,7 @@ form fieldset div.field label.name {
     font-weight: bold;
     text-align: right;
     float: left;
-    padding-top: 5px;
+    padding-top: 2px;
     /* default name - input layout balance */
     width: 150px;
     margin-left: -150px;
@@ -80,6 +80,11 @@ form input[type="password"]:focus{
     border-style: solid;
     border-width: 2px;
 }
+
+form input[type="text"][readonly="readonly"]{
+    border-style: none;
+}
+
 
 form input[type="submit"]{
     margin: 2px 0 0px 10px;

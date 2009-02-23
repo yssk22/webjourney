@@ -1,0 +1,44 @@
+<%= align_form(page.dom_id("general"), :label_width => 150) %>
+<% form_remote_tag(:url => formatted_system_account_path(@account.login_name, "json"),
+                   :datatype => "json",
+                   :loading   => now_loading(page.dom_id("general")),
+                   :success   => "MyAccountPage.onUpdateSuccess(request)",
+                   :failure   => "MyAccountPage.onUpdateFailure(request)",
+                   :complete  => clear_overlay(page.dom_id("general")),
+                   :html      => {
+                     :method => "put",
+                     :id       => page.dom_id("general"),
+                     :onsubmit => validate_form(page.dom_id("general"))
+                   }) do -%>
+<fieldset>
+  <legend>General Information</legend>
+  <div style="display:none" class="error"></div>
+  <div class="field">
+    <label class="name">
+      Account Type
+    </label>
+    <%= text_field 'account', 'type',  :readonly => "readonly" %>
+  </div>
+  <div class="field">
+    <label class="name">
+      Created At
+    </label>
+    <%= text_field 'account', 'created_at', :readonly => "readonly" %>
+  </div>
+  <div class="field">
+    <label class="name" for="account_login_name">
+      Display Name
+    </label>
+    <%= text_field 'account', 'display_name', :class => "required" %>
+  </div>
+  <div class="field">
+    <label class="name" for="account_email">
+      Email
+    </label>
+    <%= text_field 'account', 'email', :class => "email" %>
+  </div>
+  <div class="action">
+    <%= submit_tag "Save" %>
+  </div>
+</fieldset>
+<% end -%>

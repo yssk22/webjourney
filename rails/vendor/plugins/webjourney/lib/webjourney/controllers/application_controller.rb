@@ -115,10 +115,11 @@ class WebJourney::ApplicationController < ActionController::Base
   end
 
   def get_authenticated_open_id
-    session[:wj_authenticated_open_id] if session
+    @wj_authenticated_open_id || session[:wj_authenticated_open_id]
   end
 
   def set_authenticated_open_id(open_id)
+    @wj_authenticated_open_id = open_id
     session[:wj_authenticated_open_id] = open_id if session
   end
 

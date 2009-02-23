@@ -1,0 +1,7 @@
+<div class="content">
+  <%= render :partial => "general" -%>
+  <% if @account.is_administrator? || @account.is_a?(WjUser::LocalDb) -%>
+  <%= render :partial => "password" -%>
+  <% end %>
+
+</div>

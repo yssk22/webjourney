@@ -5,5 +5,7 @@ class System::MyAccountPageController < WebJourney::Component::PageController
   require_roles :users
 
   def index
+    @account = current_user
+    set_title "Account: #{@account.login_name}"
   end
 end

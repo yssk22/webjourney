@@ -1,18 +1,9 @@
 #
 # == Account Resource [components/system/accounts]
 class System::AccountsController < WebJourney::ResourceController
-  before_filter :load_account, :only => [:show, :destroy, :password, :my_page, :activation]
+  before_filter :load_account, :only => [:update, :password, :my_page, :activation]
 
-  def index
-  end
-
-  def show
-  end
-
-  def edit
-  end
-
-  # == system/accounts/{login_name}
+  # == system/accounts/
   # === POST
   # Create a new account
   # ==== Request
@@ -43,10 +34,24 @@ class System::AccountsController < WebJourney::ResourceController
     end
   end
 
+  # == system/accounts/{login_name}
+  # === POST
+  # Update account attributes
+  #
+  # ==== Request
+  #
+  # <tt>account[display_name]</tt>::
+  # <tt>account[email]</tt>::
+  #
   def update
-  end
-
-  def destroy
+    forbidden!("Cannot update others!") unless @account.login_name == current_user.login_name
+    @account.display_name = params[:account][:display_name]
+    @account.email        = params[:account][:email]
+    if @account.save
+      respond_to_ok(@account)
+    else
+      respond_to_error(error_resource_for(:account))
+    end
   end
 
   # == system/accounts/password_reset
@@ -95,12 +100,14 @@ class System::AccountsController < WebJourney::ResourceController
 
   # == system/accounts/{login_name}/activation
   # URI endpoint for Local DB users to update password.
+  #
   # === PUT
   # Update the password of the account specified by {login_name}.
   # ==== Request
   #
   # <tt>account[request_passcode]</tt>::
   # <tt>account[password]</tt>::
+  # <tt>account[password_retype]</tt>::
   #
   # ==== Response Examples
   # - success (status: 200)
@@ -118,8 +125,23 @@ class System::AccountsController < WebJourney::ResourceController
   #
   def password
     begin
-      @account.commit_to_reset_password(params[:account][:request_passcode], params[:account][:password])
-      respond_to_ok({:password => :ok})
+      if params[:account][:request_passcode]
+        @account.commit_to_reset_password(params[:account][:request_passcode], params[:account][:password])
+        respond_to_ok({:password => :ok})
+      else
+        forbidden!("Cannot update others!") unless @account.login_name == current_user.login_name
+        if params[:account][:password] == params[:account][:password_retype]
+          @account.change_password(params[:account][:password])
+          @account.save
+          respond_to_ok({:password => :ok})
+        else
+          respond_to_error({ :account => {
+                               :errors          => ["Password mismatch!"],
+                               :password        => [],
+                               :password_retype => []
+                             }})
+        end
+      end
     rescue WjUser::LocalDatabaseAuth::PasswordVerificationError => e
       respond_to_error({ :account => {
                            :password  => [e.message]
