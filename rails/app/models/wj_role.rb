@@ -16,6 +16,9 @@
 class WjRole < ActiveRecord::Base
   has_and_belongs_to_many :wj_users
 
+  SERIALIZE_METHOD_DEFAULTS  = [:type_string]
+  SERIALIZE_EXCLUDE_DEFAULTS = []
+
   # Returns all roles orderd by the name property.
   def self.order_by_name
     WjRole.find(:all, :order => "name")
@@ -40,4 +43,17 @@ class WjRole < ActiveRecord::Base
                         ["wj_roles.id NOT IN (?)", default_role_ids])
     end
   end
+
+  # Returns the type short string
+  def type_string
+    self.type.underscore.split("/").last
+  end
+
+  # Returns JSON representation
+  def to_json(options={})
+    options[:methods] = SERIALIZE_METHOD_DEFAULTS  unless options.has_key?(:methods)
+    options[:except]  = SERIALIZE_EXCLUDE_DEFAULTS unless options.has_key?(:except)
+    super(options)
+  end
+
 end

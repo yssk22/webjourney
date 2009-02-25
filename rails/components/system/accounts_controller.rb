@@ -1,4 +1,3 @@
-#
 # == Account Resource [components/system/accounts]
 class System::AccountsController < WebJourney::ResourceController
   before_filter :load_account, :only => [:update, :password, :my_page, :activation]

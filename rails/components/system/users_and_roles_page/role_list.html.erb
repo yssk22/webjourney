@@ -1,0 +1,11 @@
+<div class="content">
+  <div id="<%= page.dom_id("role_list") %>"></div>
+  <form>
+    <%= button_to_function("Update Defaults", "UsersAndRolesPage.updateDefaultRoles()")%>
+  </form>
+</div>
+<script type="text/javascript">
+jQuery(document).ready(function(){
+UsersAndRolesPage.loadRoleList();
+});
+</script>

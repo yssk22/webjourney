@@ -68,5 +68,9 @@ Rails::Initializer.run do |config|
 
   # Activate observers that should always be running
   # config.active_record.observers = :cacher, :garbage_collector
-end
 
+end
+# turn json root class off
+ActiveRecord::Base.include_root_in_json = false
+# turn TimeZone identifier off
+ActiveSupport.use_standard_json_time_format = true

@@ -50,7 +50,13 @@ form input.error[type="password"]:focus{
     background-color: #fcfccc;
 }
 
-form input[type="submit"]{
+form input[type="submit"],
+form input[type="button"]{
+    background-color: #0a3fa5;
+    color:#FFFFFF;
+}
+
+form input[type="button"]{
     background-color: #0a3fa5;
     color:#FFFFFF;
 }

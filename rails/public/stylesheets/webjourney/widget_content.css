@@ -36,29 +36,6 @@ div.widget div.body div.content ol {
     margin-left: 1em;
 }
 
-/** table **/
-div.widget div.body div.content table{
-    border-collapse : collapse;
-}
-
-div.widget div.body div.content table thead tr {
-    border-top: solid 1px #0A60D6;
-    border-bottom: solid 1px #0A60D6;
-}
-
-div.widget div.body div.content table tbody tr.even {
-    background-color: #ecefff;
-}
-div.widget div.body div.content table tbody tr.odd {
-    background-color: #ffffcc;
-}
-
-div.widget div.body div.content table tbody tr td,
-div.widget div.body div.content table thead tr th{
-    padding: 3px 0 3px 3px;
-    margin: 0;
-}
-
 /* paginate navigation */
 div.widget div.body div.content div.paginate_navigation {
     text-align:right;

@@ -1,0 +1,22 @@
+table tr th.number,
+table tr td.number {
+    text-align:right;
+}
+
+table tr th.date,
+table tr td.date {
+    width: 5em;
+    text-align:center;
+}
+
+table tr th.datetime,
+table tr td.datetime {
+    width: 10em;
+    text-align:center;
+}
+
+table tr td.number,
+table tr td.date,
+table tr td.datetime {
+    font-family: monospace;
+}

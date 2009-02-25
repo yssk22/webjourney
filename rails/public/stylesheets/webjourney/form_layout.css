@@ -86,12 +86,13 @@ form input[type="text"][readonly="readonly"]{
 }
 
 
-form input[type="submit"]{
+form input[type="submit"],
+form input[type="button"]{
     margin: 2px 0 0px 10px;
     padding: 4px 2px;
     display:block;
     clear:both;
-    width:60px;
+    min-width:60px;
     height:31px;
     text-align:center;
     font-size:11px;

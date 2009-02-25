@@ -67,7 +67,6 @@ class WebJourney::ResourceController < WebJourney::ApplicationController
 
   # Response <tt>resource</tt> with <tt>status</tt>.
   def respond_to_resource(resource, status)
-    return respond_to_nothing(status) if resource.blank?
     respond_to do |format|
       format.xml  { render :text => resource.to_xml,  :status => status } if resource.respond_to?(:to_xml)
       format.json { render :text => resource.to_json, :status => status } if resource.respond_to?(:to_json)

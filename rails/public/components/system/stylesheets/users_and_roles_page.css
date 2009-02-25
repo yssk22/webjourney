@@ -1,0 +1,58 @@
+table.alphabet {
+    width: 100%;
+    font-size: 1.1em;
+    font-family: monospace;
+}
+
+table.alphabet tbody tr td {
+    margin: 0;
+}
+
+table.alphabet tbody tr td a {
+    margin: 0;
+    display:block;
+    text-align: center;
+    text-decoration: none;
+}
+
+table.alphabet tbody tr td a.selected{
+    font-weight: bold;
+    background-color: #ccecfc;
+}
+
+table.user_list {
+    width: 100%;
+}
+
+table.user_list th.type,
+table.user_list th.status {
+    width: 8em;
+}
+
+table.user_list td.type,
+table.user_list td.status {
+    font-family: monospace;
+    text-align:  center;
+}
+
+table.role_list td.default {
+    text-align:  center;
+    width: 3em;
+}
+
+table.role_list {
+    width: 100%;
+}
+
+table.role_list th.default {
+    width: 5em;
+}
+
+table.role_list th.type {
+    width: 8em;
+}
+
+table.role_list td.type {
+    font-family: monospace;
+    text-align:  center;
+}

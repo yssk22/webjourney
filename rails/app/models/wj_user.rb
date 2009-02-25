@@ -37,6 +37,9 @@ class WjUser < ActiveRecord::Base
     :destroyed => 4
   }
 
+  SERIALIZE_METHOD_DEFAULTS  = [:status_string, :type_string]
+  SERIALIZE_EXCLUDE_DEFAULTS = [:id, :email, :password_hash, :request_passcode, :request_key, :request_at]
+
   has_and_belongs_to_many :wj_roles
 
   validates_format_of     :login_name, :with => /^[a-z][a-z0-9_]{1,15}$/i, :allow_nil => false, :message => "must be starts with the alphabetic chars and remain 1-15 chars should be alphabets, digits or '_'."
@@ -53,6 +56,14 @@ class WjUser < ActiveRecord::Base
   # Returns the number of users whose status is <tt>:active</tt>.
   def self.number_of_active_user
     self.number_of(:active)
+  end
+
+  # Returns the useres who have been registered recently.
+  def self.recently_registered(num = 10)
+    self.find(:all,
+              :limit => num,
+              :conditions => ["status = ?", WjUser::Status[:active]],
+              :order => "created_at")
   end
 
   # Returns the list of accounts who match the <tt>filter_options</tt> as follows:
@@ -173,6 +184,18 @@ class WjUser < ActiveRecord::Base
   # Return the status symbol, one of (:unknown, :prepared, :acctive, :locked or :destroyed)
   def status_string
     WjUser::Status.keys[WjUser::Status.values.index(self.status)]
+  end
+
+  # Returns the type short string
+  def type_string
+    self.type.underscore.split("/").last
+  end
+
+  # Returns JSON representation
+  def to_json(options={})
+    options[:methods] = SERIALIZE_METHOD_DEFAULTS  unless options.has_key?(:methods)
+    options[:except]  = SERIALIZE_EXCLUDE_DEFAULTS unless options.has_key?(:except)
+    super(options)
   end
 
   protected
