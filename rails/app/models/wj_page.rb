@@ -257,7 +257,7 @@ class WjPage < CouchResource::Base
       # if no instance ids are available, then return
       return hash if instance_ids.length == 0
       # some instance ids are found. get the (instance_id, instance) pairs.
-      instances = WjWidgetInstance.find(instance_ids).inject({}){ |hash, instance| hash[instance.id] = instance; hash}
+      instances = WjWidgetInstance.find(instance_ids).inject({}){ |h, instance| h[instance.id] = instance; h}
       self.widgets.inject(hash){ |hash, pos_widgets|
         pos = pos_widgets.first.to_sym
         if pos_widgets.last
