@@ -23,12 +23,14 @@ form label.error {
 }
 
 form input[type="text"],
-form input[type="password"]{
+form input[type="password"],
+form textarea{
     border-color:  #aacfe5;
 }
 
 form input[type="text"]:focus,
-form input[type="password"]:focus{
+form input[type="password"]:focus,
+form textarea:focus{
     background-color: #fcfccc;
     border-color: #aacfe5;
 }
@@ -39,13 +41,15 @@ form input[type="submit"]{
 }
 
 form input.error[type="text"],
-form input.error[type="password"]{
+form input.error[type="password"],
+form textarea.error{
     border-color:  #f53c3c;
     background-color: #f5cece;
 }
 
 form input.error[type="text"]:focus,
-form input.error[type="password"]:focus{
+form input.error[type="password"]:focus,
+form textarea.error:focus{
     border-color:  #f53c3c;
     background-color: #fcfccc;
 }

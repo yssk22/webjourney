@@ -21,8 +21,10 @@ class System::AccountsController < WebJourney::ResourceController
   #
   def create
     case type = params[:account][:type]
-    when "local_db", "open_id"
-      # OK
+    when "local_db"
+      forbidden! unless WjConfig[:account_allow_local_db_register]
+    when "open_id"
+      forbidden! unless WjConfig[:account_allow_open_id_register]
     else
       client_error!("Invalid account type: #{type}")
     end

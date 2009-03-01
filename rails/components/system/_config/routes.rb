@@ -21,4 +21,11 @@ WebJourney::Component::Routes.draw do |map|
   map.resources :roles, :collection => {
     :defaults => :any
   }
+
+  map.resource :configurations, :collection => {
+    :page_default => :any,
+    :smtp         => :any,
+    :account      => :any
+  }
+
 end

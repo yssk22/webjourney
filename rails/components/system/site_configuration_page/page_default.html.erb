@@ -1,0 +1,65 @@
+<div class="content">
+  <%= align_form(page.dom_id("form"), :label_width => 150) %>
+  <% form_remote_tag(:url => formatted_page_default_system_configurations_path("json"),
+                     :datatype => "json",
+                     :loading   => now_loading(page.dom_id("form")),
+                     :success   => "SiteConfigurationPage.onPageDefaultUpdateSuccess(request)",
+                     :failure   => "SiteConfigurationPage.onPageDefaultUpdateFailure(request)",
+                     :complete  => clear_overlay(page.dom_id("form")),
+                     :html      => {
+                       :method => "put",
+                       :id => page.dom_id("form"),
+                       :onsubmit => validate_form(page.dom_id("form"))
+                     }) do -%>
+  <div style="display:none" class="info">
+    Updated successfully.
+  </div>
+  <div style="display:none" class="error"></div>
+  <fieldset>
+    <legend>Header Configuration</legend>
+    <div class="field">
+      <label class="name" for="config_site_title">Site Title</label>
+      <%= text_field 'config', 'site_title', :class => "required", :size => 40 %>
+    </div>
+    <div class="field">
+      <label class="name" for="config_site_description">Site Description</label>
+      <%= text_area 'config', 'site_description', :size => "50x8" %>
+    </div>
+    <div class="field">
+      <label class="name" for="config_site_copyright">Copyright</label>
+      <%= text_field 'config', 'site_copyright', :class => "required", :size => 40 %>
+    </div>
+    <div class="field">
+      <label class="name" for="config_site_keywords">Keywords</label>
+      <%= text_field 'config', 'site_keywords', :size => 40 %>
+    </div>
+    <div class="field multi_inputs">
+      <label class="name" >Robotes Index</label>
+      <%= check_box 'config', 'site_robots_index' %> <label for="config_site_robotes_index">Index</label>
+      <%= check_box 'config', 'site_robots_follow' %> <label for="config_site_robotes_follow">Follow</label>
+    </div>
+  </fieldset>
+  <fieldset>
+    <legend>Design</legend>
+    <div class="field multi_inputs">
+      <label class="name" >Width</label>
+      <%= text_field 'config', 'design_width', :class => "required", :size => 5 %>
+      <%= select 'config', 'design_width_unit',  WjConfig::DesignWidthUnits.map(){ |u| [u,u] }%>
+    </div>
+    <div class="field multi_inputs">
+      <label class="name" >Left Width</label>
+      <%= text_field 'config', 'design_lwidth', :class => "required", :size => 5 %>
+      <%= select 'config', 'design_lwidth_unit',  WjConfig::DesignWidthUnits.map(){ |u| [u,u] }%>
+    </div>
+    <div class="field multi_inputs">
+      <label class="name" >Right Width</label>
+      <%= text_field 'config', 'design_rwidth', :class => "required", :size => 5 %>
+      <%= select 'config', 'design_rwidth_unit',  WjConfig::DesignWidthUnits.map(){ |u| [u,u] }%>
+    </div>
+  </fieldset>
+  <div class="spacer"></div>
+  <div class="action" style="margin-left: 150px">
+    <%= submit_tag "Save", :id => page.dom_id("login_submit") %>
+  </div>
+  <% end %>
+</div>

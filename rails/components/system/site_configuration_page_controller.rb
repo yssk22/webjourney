@@ -1,9 +1,22 @@
 class System::SiteConfigurationPageController < WebJourney::Component::PageController
-  # see API details at http://www.webjourney.org/doc/classes/WebJourney/Component/PageController.html
-  # require_roles :administrator, :only => :show
-  # require_roles :users
   require_roles :administrator
-
   def index
+    redirect_to :action => "page_default"
   end
+
+  def page_default
+    set_title "Page Settings"
+    @config = WjConfig.instance
+  end
+
+  def smtp
+    set_title "SMTP Settings"
+    @config = WjConfig.instance
+  end
+
+  def account
+    set_title "Account Settings"
+    @config = WjConfig.instance
+  end
+
 end

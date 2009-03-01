@@ -1,0 +1,47 @@
+<div class="content">
+  <%= align_form(page.dom_id("form"), :label_width => 150) %>
+  <% form_remote_tag(:url => formatted_smtp_system_configurations_path("json"),
+                     :datatype => "json",
+                     :loading   => now_loading(page.dom_id("form")),
+                     :success   => "SiteConfigurationPage.onSmtpUpdateSuccess(request)",
+                     :failure   => "SiteConfigurationPage.onSmtpUpdateFailure(request)",
+                     :complete  => clear_overlay(page.dom_id("form")),
+                     :html      => {
+                       :method => "put",
+                       :id => page.dom_id("form"),
+                       :onsubmit => validate_form(page.dom_id("form"))
+                     }) do -%>
+  <div style="display:none" class="info">
+    Updated successfully.
+  </div>
+  <div style="display:none" class="error"></div>
+  <fieldset>
+    <legend>Mail Server Configuration</legend>
+    <div class="field multi_inputs">
+      <label class="name" for="config_smtp_address">Host : Port</label>
+      <%= text_field 'config', 'smtp_address', :class => "required", :size => 20 %>
+      <%= text_field 'config', 'smtp_port',    :class => "required", :size => 3 %>
+    </div>
+    <div class="field">
+      <label class="name" for="config_smtp_domain">Domain</label>
+      <%= text_field 'config', 'smtp_domain',    :class => "required", :size => 20 %>
+    </div>
+    <div class="field">
+      <label class="name" for="config_smtp_user_name">Auth</label>
+      <%= select 'config', 'smtp_authentication', %w(plain login cram_md5).map(){ |m| [m,m] } %>
+    </div>
+    <div class="field">
+      <label class="name" for="config_smtp_user_name">User name</label>
+      <%= text_field 'config', 'smtp_user_name', :size => 40 %>
+    </div>
+    <div class="field">
+      <label class="name" for="config_smtp_password">Password</label>
+      <%= password_field 'config', 'smtp_password', :size => 40 %>
+    </div>
+    <div class="action">
+      <%= submit_tag "Save" %>
+    </div>
+  </fieldset>
+  <div class="spacer"></div>
+  <% end %>
+</div>

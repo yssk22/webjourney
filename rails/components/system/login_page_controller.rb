@@ -12,6 +12,7 @@ class System::LoginPageController < WebJourney::Component::PageController
   end
 
   def register_with_password
+    forbidden!("Password User registration is not permitted by Administrator") unless WjConfig[:account_allow_local_db_register]
     set_title "Password User::Register"
   end
 
@@ -38,6 +39,7 @@ class System::LoginPageController < WebJourney::Component::PageController
   end
 
   def register_with_open_id
+    forbidden!("OpenID User registration is not permitted by Administrator") unless WjConfig[:account_allow_open_id_register]
     set_title "OpenID User::Register"
     uri = get_authenticated_open_id
     return redirect_to(:action => "login_with_open_id") unless uri

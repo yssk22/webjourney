@@ -5,5 +5,6 @@ class System::ComponentsPageController < WebJourney::Component::PageController
   require_roles :administrator
 
   def index
+    @components = WjComponent.find(:all, :include => :wj_widgets)
   end
 end
