@@ -65,6 +65,9 @@
         <div id="bottom_container" class="widget_container"></div><!-- end of bottom_container -->
       </div>
     </div><!-- end of body -->
+    <div id="footer" class="footer">
+      <%= render_file File.join(RAILS_ROOT, "/app/views/share/footer.html.erb"), false %>
+    </div><!-- end of footer -->
     <div id="page_settings" title="Settings">
       <div class="form-container">
         <form id="page_settings_form">
@@ -77,13 +80,6 @@
         This feature has not been implemented yet!
       </p>
     </div>
-
-
-    <div id="footer" class="footer">
-      <div class="powered-by">
-        <span>Powered by <a href="http://project.webjourney.org/webjourney/trac">WebJourney</a> &copy; 2006-2008 webjourney.org </span>
-      </div>
-    </div><!-- end of footer -->
   </body>
 </html>
 

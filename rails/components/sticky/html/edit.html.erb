@@ -1,35 +1,23 @@
+<script type="text/javascript">
+jQuery(document).ready(function(){
+  var target = <%= widget.dom_id("html").to_json %>;
+  tinyMCE.init({
+    mode : "exact",
+    theme : "advanced",
+    theme_advanced_toolbar_location : "top",
+    theme_advanced_toolbar_align : "left",
+    elements : target
+  });
+  Page.getWidgetInstance(<%= widget.id.to_json %>).beforeUpdate = function(){
+    var editor = tinyMCE.get(target);
+    editor.save();
+  };
+});
+</script>
 <div class="form-container">
-  <% form_tag do -%>
-  <%# insert your widget parameter form here -%>
-  <textarea name="html" class="wymeditor"></textarea>
+  <% form_tag do %>
+  <%= text_area_tag('html', widget.parameters[:html],
+                    :rows => 10, :style => "width: 99%",
+                    :id => widget.dom_id("html") ) %>
   <% end -%>
 </div>
-<script type="text/javascript">
-  $(document).ready(function(){
-  $(".wymeditor").wymeditor({
-  html: <%= (widget.parameters[:html] || "").to_json %>,
-  updateSelector : <%= dom_id_selector("save").to_json %>,
-  updateEvent : "focus",
-  boxHtml:   "<div class='wym_box'>"
-    + "<div class='wym_area_top'>"
-      + WYMeditor.TOOLS
-      + WYMeditor.CONTAINERS
-      + WYMeditor.CLASSES
-      + "</div>"
-    + "<div class='wym_area_left'></div>"
-    + "<div class='wym_area_right'>"
-      + "</div>"
-    + "<div class='wym_area_main'>"
-      + WYMeditor.HTML
-      + WYMeditor.IFRAME
-      + WYMeditor.STATUS
-      + "</div>"
-    + "<div class='wym_area_bottom'>"
-      + "</div>"
-    + "</div>",
-  postInit : function(wym){
-  $(wym._box).find(".wym_containers").css("float", "left");
-  }
-  })});
-
-</script>

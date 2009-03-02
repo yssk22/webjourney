@@ -13,14 +13,14 @@ class WebJourney::Component::WidgetController < WebJourney::Component::Component
   end
 
   def page
-    @widget.page
+    @page
   end
 
   protected
   def load_widget
     @widget = WjWidgetInstance.find(params[:instance_id])
     not_found! unless @widget
-    @page   = @widget.page
+    @page   = @widget.wj_page
   end
 
   def permission_check_general

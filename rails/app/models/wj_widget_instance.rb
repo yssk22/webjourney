@@ -61,4 +61,32 @@ class WjWidgetInstance < CouchResource::Base
   def has_stylesheet?
     File.exist?(File.join(RAILS_ROOT, self.javascript_path))
   end
+
+  # Returns DOM Element identifier that can be used in the widget view.
+  # For example, the ERB code ::
+  #
+  #   <div id="<%= widget.dom_id('a')%>">
+  #   ...
+  #   </div>
+  #
+  # will be
+  #
+  #   <div id="wim_body_a">
+  #   ...
+  #   </div>
+  #
+  # <tt>"cpm_body_"</tt> is the prefix of DOM identifier. This assures the uniqueness of DOM identifier. In short,
+  # The WebJourney framework does NOT use the DOM identifier which starts with <tt>'cpm_body_'</tt>.
+  #
+  # If the argument, <tt>suffix</tt>, is nil, this method returns <tt>'cpm_body'</tt>,
+  # which is the DOM identifier of the <tt>div</tt> tag of the component main display block.
+  #
+  def dom_id(suffix = nil)
+    if suffix
+      "#{self._id}_#{suffix}"
+    else
+      "#{self._id}"
+    end
+  end
+
 end

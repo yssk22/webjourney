@@ -23,7 +23,7 @@ WebJourney.ShowPage.prototype = jQuery.extend(new WebJourney.WjPage, {
     for(var l in collection){
       jQuery.each(collection[l], function(){
                     var widgetInstance = new WebJourney.WidgetInstance(self, this);
-                    widgetInstance.setNowLoading();
+                    widgetInstance.setNowLoading({overlay:false});
                     widgetInstance.show();
                     self._registerWidgetInstance(widgetInstance);
                   });

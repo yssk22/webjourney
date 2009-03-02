@@ -1,11 +1,7 @@
 (function() {
    var _get_default_dom = function(dom, selector, on){
-     if(on){
-       return jQuery(on);
-     }
-     else{
-       return jQuery(selector, dom);
-     }
+     if(on){ return jQuery(on);}
+     else  { return jQuery(selector, dom); }
    };
 
    jQuery.extend({

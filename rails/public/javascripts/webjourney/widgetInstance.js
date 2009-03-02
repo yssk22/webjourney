@@ -69,13 +69,13 @@ WebJourney.WidgetInstance.prototype = {
 
   edit : function(){
     var self = this;
-    this.setNowLoading();
+    this.getDom().wjNowLoading();
     this.load({action : "edit"},{
       complete: function(req, status){
         self.getDom("show_header").hide();
         self.getDom("edit_header").show();
         self.getDom("edit_footer").show();
-        self.getDom("saving").css("display", "none");
+        self.getDom().wjClearOverlay();
       }
     });
   },
@@ -92,7 +92,7 @@ WebJourney.WidgetInstance.prototype = {
     var newTitle = this.getDom("edit_title").val();
     postData.push({name : "title",
                    value : newTitle});
-    this.getDom("save").wjDisableSubmit();
+    this.getDom().wjNowLoading();
     $.ajax({
       type : "POST",
       url : url,
@@ -109,26 +109,26 @@ WebJourney.WidgetInstance.prototype = {
         body.html(request.responseText);
       },
       complete : function(request, textStatus){
-        self.getDom("save").wjEnableSubmit();
+        self.getDom().wjClearOverlay();
       }
     });
   },
 
   cancel : function(){
     var self = this;
-    this.getDom("saving").css("display", "inline");
+    self.getDom().wjNowLoading();
     this.load({action : "show"},{
       complete: function(req, status){
         self.getDom("show_header").show();
         self.getDom("edit_header").hide();
         self.getDom("edit_footer").hide();
-        self.getDom("saving").css("display", "none");
+        self.getDom().wjClearOverlay();
       }
     });
   },
 
-  setNowLoading : function(){
-    var body = jQuery("#" + this.getDomId("body")).wjNowLoading();
+  setNowLoading : function(option){
+    var body = jQuery("#" + this.getDomId("body")).wjNowLoading(option);
   },
 
   getPath : function(url_options){

@@ -5,6 +5,8 @@
   div#top_container    { <%= render_top_container_style(@page)    %> }
   div#bottom_container { <%= render_bottom_container_style(@page) %> }
   <% if @page.allow_edit?(current_user) -%>
+  div.widget div.header span.buttons a { display:inline; }
+  <% else -%>
   div.widget div.header span.buttons a { display:none; }
   <% end -%>
 </style>

@@ -6,7 +6,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="Content-Style-Type" content="text/css" />
     <meta http-equiv="Content-Script-Type" content="text/javascript" />
-    <meta name="generator"   content="WebJourney Component Page Generator" />
+    <meta name="generator"   content="WebJourney Page Generator" />
     <%= render :partial => "pages/show/meta_tags" %>
     <title><%=h @page.title %> - WebJourney </title>
     <%= render_file File.join(RAILS_ROOT, "/app/views/share/stylesheets.html.erb"), false %>
@@ -51,9 +51,7 @@
         </div>
       </div>
       <div id="footer" class="footer">
-        <div class="powered-by">
-          <span>Powered by <a href="http://project.webjourney.org/webjourney/trac">WebJourney</a> &copy; 2006-2008 webjourney.org </span>
-        </div>
+        <%= render_file File.join(RAILS_ROOT, "/app/views/share/footer.html.erb"), false %>
       </div><!-- end of footer -->
     </div>
     <% form_tag pages_url(), :id => "new_page_form" do %>

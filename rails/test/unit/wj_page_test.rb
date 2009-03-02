@@ -85,6 +85,7 @@ class WjPageTest < ActiveSupport::TestCase
     page = WjPage.top
     instances = page.widget_instances
     assert_not_nil instances
+    assert_equal 5, instances.keys.length
     assert_equal 0, instances[:top].length
     assert_equal 2, instances[:center].length
     assert_equal 0, instances[:left].length

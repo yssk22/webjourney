@@ -5,7 +5,7 @@
   Page.adjustGrid();
   Page.setRootPath(<%= root_path.to_json %>);
   Page.setAuthToken(<%= form_authenticity_token.to_json %>);
-  Page.setEditable(<%= @page.permit_relationship_of?(current_user, :edit).to_json %>);
+  Page.setEditable(<%= @page.allow_edit?(current_user).to_json %>);
   Page.setCurrentLoginName(<%= current_user.login_name.to_json %>);
   Page.prepareDialogs();
   Page.initWidgetInstances(<%= @widget_instances.to_json %>)

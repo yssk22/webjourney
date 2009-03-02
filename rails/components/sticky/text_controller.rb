@@ -1,4 +1,4 @@
-class Sticky::TextController < WebJourney::WidgetController
+class Sticky::TextController < WebJourney::Component::WidgetController
 
   # GET /widgets/{:instance_id}/sticky/text/show/
   def show
