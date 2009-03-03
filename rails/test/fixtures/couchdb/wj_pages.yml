@@ -16,11 +16,9 @@ top:
     center :
       - component   : "sticky"
         widget      : "html"
-        title       : "Welcome to WebJourney"
         instance_id : "welcome_to_webjourney"
       - cmponent    : "stikcy"
         widget      : "text"
-        title       : "LICENSE"
         instance_id : "license"
     bottom : []
   relationship_keys:

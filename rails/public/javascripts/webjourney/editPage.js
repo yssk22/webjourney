@@ -26,17 +26,15 @@ WebJourney.EditPage.prototype = jQuery.extend(new WebJourney.WjPage, {
   },
 
   initWidgetInstances : function(collection){
-    for(var l in this._object.widgets){
-      for(var i in this._object.widgets[l]){
-        var pointer = this._object.widgets[l][i];
-        var instance = collection[pointer.instance_id];
-        if( instance ){
-          var target = "#" + l + "_container";
-          var block = this._buildWidgetInstanceBlock(instance);
-          block.css("display", "none");
-          $(target).append(block);
-          block.show("puff", {percent: 150}, 300);
-        }
+    for(var location in collection){
+      var instances = collection[location];
+      for(var i in instances){
+        var instance =instances[i];
+        var target = "#" + location + "_container";
+        var block = this._buildWidgetInstanceBlock(instance);
+        block.css("display", "none");
+        $(target).append(block);
+        block.show("puff", {percent: 150}, 300);
       }
     }
   },
@@ -175,6 +173,7 @@ WebJourney.EditPage.prototype = jQuery.extend(new WebJourney.WjPage, {
     });
   },
 
+  // collect the widgets data.
   _collectWidgets : function(){
     return {
       top    : this._collectWidgetsByLocation("top"),
@@ -185,12 +184,14 @@ WebJourney.EditPage.prototype = jQuery.extend(new WebJourney.WjPage, {
     };
   },
 
+  // collect the widgets data on each locations.
   _collectWidgetsByLocation : function(location){
    return $.map($("#" + location + "_container div.widget"), function(n, i){
      return $(n).data("widget");
     });
   },
 
+  // build div block for widget instance
   _buildWidgetInstanceBlock : function(args){
     var self = this;
     var block = $(document.createElement("div"));
@@ -232,12 +233,12 @@ WebJourney.EditPage.prototype = jQuery.extend(new WebJourney.WjPage, {
     body.html("<img src='" + this.getImagePath(args.component, args.widget) + "' />");
 
     // building data
-    var data = { title : args.title,
+    var data = {
       component : args.component,
       widget : args.widget
     };
-    if( args._id ){
-      data.instance_id = args._id;
+    if( args.id ){
+      data.instance_id = args.id;
     }
 
     // add to container

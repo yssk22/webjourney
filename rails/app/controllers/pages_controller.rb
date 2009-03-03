@@ -1,6 +1,7 @@
 class PagesController < WebJourney::ApplicationController
   before_filter :load_page, :only => [:show, :edit, :update, :destroy]
   before_filter :load_widget_instances, :only => [:show, :edit]
+
   def index; end
 
   def show

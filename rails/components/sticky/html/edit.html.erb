@@ -1,6 +1,6 @@
 <script type="text/javascript">
 jQuery(document).ready(function(){
-  var target = <%= widget.dom_id("html").to_json %>;
+  var target = <%= widget.dom_id("content").to_json %>;
   tinyMCE.init({
     mode : "exact",
     theme : "advanced",
@@ -16,8 +16,8 @@ jQuery(document).ready(function(){
 </script>
 <div class="form-container">
   <% form_tag do %>
-  <%= text_area_tag('html', widget.parameters[:html],
+  <%= text_area_tag('content', widget.parameters[:content],
                     :rows => 10, :style => "width: 99%",
-                    :id => widget.dom_id("html") ) %>
+                    :id => widget.dom_id("content") ) %>
   <% end -%>
 </div>

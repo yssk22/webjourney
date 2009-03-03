@@ -4,7 +4,7 @@ welcome_to_webjourney:
   wj_page_id : "top"
   title      : "Welcome to WebjJourney"
   parameters :
-    html       : |-
+    content       : |-
        <p>WebJourney has been installed successfully!!</p>
 
 license:
@@ -13,7 +13,7 @@ license:
   wj_page_id : "top"
   title      : "LICENSE"
   parameters :
-    text       : |-
+    content       : |-
        WebJourney::Widgets on Rails http://www.webjourney.org/
        Copyright (c) 2006-2009 webjourney.org
        All rights reserved.

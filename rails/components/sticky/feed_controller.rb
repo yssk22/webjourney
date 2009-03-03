@@ -1,4 +1,4 @@
-class Sticky::FeedController < WebJourney::WidgetController
+class Sticky::FeedController < WebJourney::Component::WidgetController
 
   # GET /widgets/{:instance_id}/sticky/feed/show/
   def show
@@ -7,7 +7,7 @@ class Sticky::FeedController < WebJourney::WidgetController
     else
       begin
         load_feed
-      rescue WebJourney::FeedReader::FeedFetchError => e
+      rescue WebJourney::Util::FeedReader::FeedFetchError => e
         @error = e
         return render(:action => "feed_fetch_error")
       end

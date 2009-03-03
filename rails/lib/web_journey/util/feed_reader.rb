@@ -6,7 +6,7 @@ require 'feed-normalizer'
 module WebJourney
   module Util
     module FeedReader
-      class FeedFetchError < WebJourney::ApplicationError
+      class FeedFetchError < WebJourney::Errors::ApplicationError
         def initialize(last_response, msg="failed to fetch feed.")
           super(msg)
           @last_response = last_response

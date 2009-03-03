@@ -1,0 +1,10 @@
+<% form_tag() do -%>
+<%= text_area_tag('content', widget.parameters[:content],
+                  :rows  => 10,
+                  :id    => widget.dom_id("content"),
+                  :style => "width: 99%")%>
+<%= textile_editor_initialize(widget.dom_id("content"), {:framework => "jquery"}) -%>
+<div class="content">
+<a href="http://hobix.com/textile/" target="_blank">About Textile Format?</a>
+</div>
+<% end -%>

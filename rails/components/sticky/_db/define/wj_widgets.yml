@@ -1,7 +1,11 @@
---- 
-- text: 
+---
+- text:
     display_name: Text
-- html: 
+- html:
     display_name: Html
-- feed: 
+- textile:
+    display_name: Textile
+- markdown:
+    display_name: Markdown
+- feed:
     display_name: Feed

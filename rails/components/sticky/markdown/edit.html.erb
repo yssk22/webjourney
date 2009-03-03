@@ -1,0 +1,9 @@
+<% form_tag() do -%>
+<%= text_area_tag('content', widget.parameters[:content],
+                  :rows  => 10,
+                  :id    => widget.dom_id("content"),
+                  :style => "width: 99%")%>
+<div class="content">
+<a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">About Markdown Format?</a>
+</div>
+<% end -%>

@@ -354,7 +354,7 @@ class WjPage < CouchResource::Base
   def verify_and_update_pointer(pointer, wj_widget)
     raise ArgumentError.new("missing key(:component) in the widget instance pointer") unless pointer.has_key?(:component)
     raise ArgumentError.new("missing key(:component) in the widget instance pointer") unless pointer.has_key?(:widget)
-    return pointer if pointer.has_key?(:instance)
+    return pointer if pointer.has_key?(:instance_id)
     # create a new instance
     key = File.join(pointer[:component], pointer[:widget])
     wj_widget[key] ||= WjWidget.get(pointer[:component], pointer[:widget])
