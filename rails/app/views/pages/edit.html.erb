@@ -17,11 +17,11 @@
     </style>
     <script type="text/javascript">
       Page = new WebJourney.EditPage(<%= @page.to_json %>, <%= page_url(@page._id).to_json %>);
+      Page.setRootPath(<%= root_path.to_json %>);
+      Page.setAuthToken(<%= form_authenticity_token.to_json %>);
+      Page.setCurrentLoginName(<%= current_user.login_name.to_json %>);
       $(document).ready(function(){
         Page.adjustGrid();
-        Page.setRootPath(<%= root_path.to_json %>);
-        Page.setAuthToken(<%= form_authenticity_token.to_json %>);
-        Page.setCurrentLoginName(<%= current_user.login_name.to_json %>);
         Page.prepareDialogs();
         Page.prepareWidgets();
         Page.initWidgetInstances(<%= @widget_instances.to_json %>)
@@ -69,11 +69,7 @@
       <%= render_file File.join(RAILS_ROOT, "/app/views/share/footer.html.erb"), false %>
     </div><!-- end of footer -->
     <div id="page_settings" title="Settings">
-      <div class="form-container">
-        <form id="page_settings_form">
-          <%= render :partial => "page_settings_form" %>
-        </form>
-      </div>
+      <%= render :partial => "page_settings_form" %>
     </div>
     <div id="page_permissions" title="Permissions">
       <p>

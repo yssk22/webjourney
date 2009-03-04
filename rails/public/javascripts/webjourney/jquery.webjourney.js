@@ -30,6 +30,15 @@
          }
          return s.join("&").replace(/%20/g, "+");
        }
+     },
+     // returns absolute url for supporting passenger SubURI deployment.
+     wjAbsoluteUrl : function(path, options){
+       var root = WebJourney.RootPath;
+       if( root.match(/\/$/) && path.match(/^\// )){
+         return root.substr(0, root.length - 1) + path;
+       }else{
+         return root + path;
+       }
      }
    });
 

@@ -16,7 +16,9 @@ WebJourney.EditPage.prototype = jQuery.extend(new WebJourney.WjPage, {
   },
 
   prepareDialogs : function(){
-    this._prepareSettingsDialog();
+    var self = this;
+    this._pageSettingsDialog = new WebJourney.Widgets.PageSettingsDialog(this._object, "#page_settings",
+                                                                         { OK : function(){ self.setChanged(true); } });
     this._preparePermissionsDialog();
     this._prepareWidgetSelectionDialog();
   },
@@ -74,6 +76,10 @@ WebJourney.EditPage.prototype = jQuery.extend(new WebJourney.WjPage, {
     else{
       window.location.href = this._uri;
     }
+  },
+
+  hasChanged : function(){
+    return this._changed;
   },
 
   setChanged : function(flag){
