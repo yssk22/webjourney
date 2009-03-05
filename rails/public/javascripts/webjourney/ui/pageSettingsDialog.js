@@ -1,20 +1,22 @@
-WebJourney.Widgets.PageSettingsDialog = function(){
+WebJourney.UI.PageSettingsDialog = function(){
   this.initialize.apply(this, arguments);
 };
 
-WebJourney.Widgets.PageSettingsDialog.prototype = jQuery.extend(
+WebJourney.UI.PageSettingsDialog.prototype = jQuery.extend(
 {
-  initialize : function(page, dom_id, callbacks){
+  initialize : function(page, options){
     this._page = page;
-    this._dom  = jQuery(dom_id);
     this._changed = false;
-    this.build(callbacks);
+    this._options = jQuery.extend({}, options);
+    this.build();
   },
 
-  build : function(callbacks){
-    callbacks = jQuery.extend({}, callbacks);
+  build : function(){
     var self = this;
-    this._dom.load(jQuery.wjAbsoluteUrl("/javascripts/webjourney/widgets/page_settings_dialog.template.html"),
+    this._dom = jQuery(document.createElement("div"));
+    this._dom.attr("title", "Page Settings");
+    jQuery("body").append(this._dom);
+    this._dom.load(jQuery.wjAbsoluteUrl("/javascripts/webjourney/ui/page_settings_dialog.template.html"),
       function(){
         self.bindObjectToField();
         self._dom.dialog({
@@ -25,16 +27,24 @@ WebJourney.Widgets.PageSettingsDialog.prototype = jQuery.extend(
           buttons: {
             OK     : function(btn, evt){
               self.bindFieldToObject();
-              callbacks.OK && callbacks.OK(btn, evt);
-              self._dom.dialog("close");
+              self._options.ok && self._options.ok(evt, self);
+              self.close();
             },
             Cancel : function(btn, evt){
-              callbacks.Cancel && callbacks.Cancel(btn, evt);
-              self._dom.dialog("close");
+              self._options.cancel && self._options.cancel(evt, self);
+              self.close();
             }
           }
         });
       });
+  },
+
+  open : function(){
+    this._dom.dialog("open");
+  },
+
+  close : function(){
+    this._dom.dialog("close");
   },
 
   setChanged : function(changed){

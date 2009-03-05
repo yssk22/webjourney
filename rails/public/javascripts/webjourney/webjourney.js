@@ -1,3 +1,3 @@
 var WebJourney = {};
-WebJourney.Widgets = {};
+WebJourney.UI = {};
 
