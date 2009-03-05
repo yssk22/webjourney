@@ -100,7 +100,7 @@ module CouchResource
 
       # Returns the path of _all_docs API
       def all_docs_path(query_options=nil)
-        "#{database.path}#{query_string(query_options)}"
+        document_path("_all_docs", query_options)
       end
 
       # Returns the path of _bulk_docs
@@ -515,22 +515,19 @@ module CouchResource
       end
 
       def find_from_ids(*args)
-        # TODO change POST request with keys option
         options = args.extract_options!
         ids = args.flatten
         query_option = {}
         headers      = {}
         query_option[:rev] = options[:rev] if options[:rev]
         if ids.length > 1 # two or more ids
-          docs = ids.map do |id|
-            path = document_path(id, query_option)
-            logger.debug "CouchResource::Connection#get #{path}"
-            result = connection.get(path, headers)
-            logger.debug result.to_json
-            result
-          end
+          path = all_docs_path((query_option || {}).update({:include_docs => true}))
+          post = { :keys => ids }
+          logger.debug "CouchResource::Connection#post #{path}"
+          docs = connection.post(path, post.to_json)["rows"]
+          logger.debug docs.to_json
           docs.map { |doc|
-            obj = new(doc)
+            obj = new(doc["doc"])
             obj.send(:after_find) rescue NoMethodError
             obj
           }
