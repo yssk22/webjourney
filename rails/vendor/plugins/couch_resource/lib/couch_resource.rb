@@ -17,7 +17,6 @@ module CouchResource
   end
 end
 
-# subresource
 module CouchResource
   class SubResource
     include Struct

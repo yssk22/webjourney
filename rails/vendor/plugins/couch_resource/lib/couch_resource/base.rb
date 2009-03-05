@@ -517,11 +517,11 @@ module CouchResource
       def find_from_ids(*args)
         # TODO change POST request with keys option
         options = args.extract_options!
-        ids = args.first
+        ids = args.flatten
         query_option = {}
         headers      = {}
         query_option[:rev] = options[:rev] if options[:rev]
-        if ids.is_a?(Array)
+        if ids.length > 1 # two or more ids
           docs = ids.map do |id|
             path = document_path(id, query_option)
             logger.debug "CouchResource::Connection#get #{path}"

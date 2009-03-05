@@ -21,7 +21,8 @@ module CouchResource
       # Returns the design path specified by the <tt>design</tt> and <tt>view</tt> name.
       def design_path(design, query_options=nil)
         design_fullname = get_design_fullname(design)
-        document_path("_design%2F#{design_fullname}", query_options)
+        # document_path("_design%2F#{design_fullname}", query_options)
+        document_path("_design/#{design_fullname}", query_options)
       end
 
       # returns the view path specified by the <tt>design</tt> and <tt>view</tt> name.
@@ -91,7 +92,7 @@ module CouchResource
         logger.debug "Design Doc: get the existance revision."
         rev = connection.get(design_path(design))[:_rev] rescue nil
         design_document[:_rev] = rev if rev
-        logger.debug "Design Doc: => #{rev}"
+        logger.debug "Design Doc: revision: #{rev || 'not found'}"
 
         # Update inheritable attribute for design_documents
         design_documents = read_inheritable_attribute(:design_documents) || {}
@@ -164,11 +165,15 @@ EOS
         path = design_path(design)
         design_document         = read_inheritable_attribute(:design_documents)[design]
         design_revision_checked = read_inheritable_attribute(:design_revision_checked) || false
+        logger.debug "Design Document Check"
+        logger.debug "  check_design_revision_every_time = #{check_design_revision_every_time}"
+        logger.debug "  design_revision_checked          = #{design_revision_checked}"
         #if self.check_view_every_access
         if self.check_design_revision_every_time || !design_revision_checked
           current_doc = get_design_document_from_server(design)
           # already exists
           if current_doc
+            logger.debug "Design document is found and updates are being checked."
             logger.debug current_doc.to_json
             if match_views?(design_document[:views], current_doc[:views])
               logger.debug "Design document(#{path}) is the latest."

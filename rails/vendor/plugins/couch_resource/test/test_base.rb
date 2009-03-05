@@ -4,7 +4,7 @@ require File.join(File.dirname(__FILE__), "../lib/couch_resource")
 TEST_DB_PATH  = "couch_resource_base_test"
 
 CouchResource::Base.logger = Logger.new("/dev/null")
-CouchResource::Base.check_view_every_access = true
+CouchResource::Base.check_design_revision_every_time = true
 # CouchResource::Base.logger = Logger.new(STDOUT)
 
 class SimpleDocument < CouchResource::Base
@@ -172,25 +172,25 @@ class TestBase < Test::Unit::TestCase
   def test_find_first
     register_simple_documents()
     # without any options
-    doc = SimpleDocument.simple_document_first("all_by_title")
+    doc = SimpleDocument.find_simple_document_all_by_title_first
     assert_not_nil doc
     assert_equal "title_0", doc.title
     assert_equal "content_0", doc.content
 
     # with descending option (same as SimpleDocument.last without descending option)
-    doc = SimpleDocument.simple_document_first("all_by_title", :descending => true)
+    doc = SimpleDocument.find_simple_document_all_by_title_first(:descending => true)
     assert_not_nil doc
     assert_equal "title_9", doc.title
     assert_equal "content_9", doc.content
 
     # with offset option
-    doc = SimpleDocument.simple_document_first("all_by_title", :skip => 1)
+    doc = SimpleDocument.find_simple_document_all_by_title_first(:skip => 1)
     assert_not_nil doc
     assert_equal "title_1", doc.title
     assert_equal "content_1", doc.content
 
     # with key options
-    doc = SimpleDocument.simple_document_first("all_by_title", :key => "title_2")
+    doc = SimpleDocument.find_simple_document_all_by_title_first(:key => "title_2")
     assert_not_nil doc
     assert_equal "title_2", doc.title
     assert_equal "content_2", doc.content
@@ -199,19 +199,19 @@ class TestBase < Test::Unit::TestCase
   def test_find_last
     register_simple_documents()
     # without any options
-    doc = SimpleDocument.simple_document_last("all_by_title")
+    doc = SimpleDocument.find_simple_document_all_by_title_last
     assert_not_nil doc
     assert_equal "title_9", doc.title
     assert_equal "content_9", doc.content
 
     # with descending option (same as SimpleDocument.last without descending option)
-    doc = SimpleDocument.simple_document_last("all_by_title", :descending => true)
+    doc = SimpleDocument.find_simple_document_all_by_title_last(:descending => true)
     assert_not_nil doc
     assert_equal "title_0", doc.title
     assert_equal "content_0", doc.content
 
     # with key option
-    doc = SimpleDocument.simple_document_last("all_by_title", :key => "title_2")
+    doc = SimpleDocument.find_simple_document_all_by_title_last(:key => "title_2")
     assert_not_nil doc
     assert_equal "title_2", doc.title
     assert_equal "content_2", doc.content
@@ -220,7 +220,7 @@ class TestBase < Test::Unit::TestCase
   def test_find_all
     register_simple_documents()
     # without any options
-    docs = SimpleDocument.simple_document_all( "all_by_title")
+    docs = SimpleDocument.find_simple_document_all_by_title
     assert_not_nil docs
     (0..9).each do |i|
       doc = docs[:rows][i]
@@ -230,7 +230,7 @@ class TestBase < Test::Unit::TestCase
     end
 
     # with descending option
-    docs = SimpleDocument.simple_document_all("all_by_title", :descending => true)
+    docs = SimpleDocument.find_simple_document_all_by_title(:descending => true)
     (0..9).each do |i|
       doc = docs[:rows][i]
       assert_equal "title_#{9-i}", doc.title
@@ -238,16 +238,16 @@ class TestBase < Test::Unit::TestCase
     end
 
     # with key option
-    docs = SimpleDocument.simple_document_all("all_by_title", :key => "title_1")
+    docs = SimpleDocument.find_simple_document_all_by_title(:key => "title_1")
     assert_equal 1, docs[:rows].length
     assert_equal "title_1", docs[:rows].first.title
     assert_equal "content_1", docs[:rows].first.content
     # with key option (no matching)
-    docs = SimpleDocument.simple_document_all("all_by_title", :key => "1")
+    docs = SimpleDocument.find_simple_document_all_by_title(:key => "1")
     assert_equal 0, docs[:rows].length
 
     # with startkey option
-    docs = SimpleDocument.simple_document_all("all_by_title", :startkey => "title_5")
+    docs = SimpleDocument.find_simple_document_all_by_title(:startkey => "title_5")
     assert_equal 5, docs[:rows].length
     (5..9).each do |i|
       doc = docs[:rows][i-5]
@@ -257,7 +257,7 @@ class TestBase < Test::Unit::TestCase
     end
 
     # with endkey option
-    docs = SimpleDocument.simple_document_all("all_by_title", :endkey => "title_4")
+    docs = SimpleDocument.find_simple_document_all_by_title(:endkey => "title_4")
     assert_equal 5, docs[:rows].length
     (0..4).each do |i|
       doc = docs[:rows][i]
@@ -267,8 +267,7 @@ class TestBase < Test::Unit::TestCase
     end
 
     # with startkey and endkey option
-    docs = SimpleDocument.simple_document_all("all_by_title",
-                               :startkey => "title_3", :endkey => "title_6")
+    docs = SimpleDocument.find_simple_document_all_by_title(:startkey => "title_3", :endkey => "title_6")
     assert_equal 4, docs[:rows].length
     (3..6).each do |i|
       doc = docs[:rows][i-3]
@@ -283,7 +282,7 @@ class TestBase < Test::Unit::TestCase
     register_simple_documents()
 
     # retrieve all documentes
-    docs = SimpleDocument.simple_document_all( "all_by_title", :count => 10)
+    docs = SimpleDocument.find_simple_document_all_by_title(:count => 10)
     assert_nil  docs[:previous]
     assert_nil  docs[:next]
     assert_equal "title_0", docs[:rows].first.title
@@ -291,7 +290,7 @@ class TestBase < Test::Unit::TestCase
 
     # retrive documents per 4 docs.
     # 0..3
-    docs = SimpleDocument.simple_document_all( "all_by_title", :count => 4)
+    docs = SimpleDocument.find_simple_document_all_by_title(:count => 4)
     assert_equal -1, docs[:previous][:expected_offset]
     assert docs[:next][:expected_offset] > 0
     assert_equal "title_0", docs[:rows].first.title
@@ -299,7 +298,7 @@ class TestBase < Test::Unit::TestCase
 
     # next
     # 4..7
-    docs = SimpleDocument.simple_document_all( "all_by_title", docs[:next])
+    docs = SimpleDocument.find_simple_document_all_by_title(docs[:next])
     assert docs[:previous][:expected_offset] > 0
     assert docs[:next][:expected_offset] > 0
     assert_equal "title_4", docs[:rows].first.title
@@ -307,7 +306,7 @@ class TestBase < Test::Unit::TestCase
 
     # next (it remains only 2 docs);
     # 8..9
-    docs = SimpleDocument.simple_document_all( "all_by_title", docs[:next])
+    docs = SimpleDocument.find_simple_document_all_by_title(docs[:next])
     assert docs[:previous][:expected_offset] > 0
     assert_equal -1, docs[:next][:expected_offset]
     assert_equal "title_8", docs[:rows].first.title
@@ -315,7 +314,7 @@ class TestBase < Test::Unit::TestCase
 
     # previous (should return 4 docs before title_8)
     # 4..7
-    docs = SimpleDocument.simple_document_all( "all_by_title", docs[:previous])
+    docs = SimpleDocument.find_simple_document_all_by_title(docs[:previous])
     assert docs[:previous][:expected_offset] > 0
     assert docs[:next][:expected_offset] > 0
     assert_equal "title_4", docs[:rows].first.title
@@ -323,14 +322,14 @@ class TestBase < Test::Unit::TestCase
 
     # previous (should return 4 docs before title_4)
     # 0..3
-    docs = SimpleDocument.simple_document_all( "all_by_title", docs[:previous])
+    docs = SimpleDocument.find_simple_document_all_by_title(docs[:previous])
     assert docs[:previous][:expected_offset] > 0
     assert docs[:next][:expected_offset] > 0
     assert_equal "title_0", docs[:rows].first.title
     assert_equal "title_3", docs[:rows].last.title
 
     # previous over reached
-    docs = SimpleDocument.simple_document_all( "all_by_title", docs[:previous])
+    docs = SimpleDocument.find_simple_document_all_by_title(docs[:previous])
     assert_equal -1, docs[:previous][:expected_offset]
     assert_nil docs[:next][:expected_offset]
     assert_equal 0, docs[:rows].length
@@ -338,7 +337,7 @@ class TestBase < Test::Unit::TestCase
     # more complex case
     # fetch more than half documents at first access and with descending option
     # retrieve 9 documentes (from 9 to 1)
-    docs = SimpleDocument.simple_document_all( "all_by_title", :descending => true, :count => 9)
+    docs = SimpleDocument.find_simple_document_all_by_title(:descending => true, :count => 9)
     assert_equal -1, docs[:previous][:expected_offset]
     assert docs[:next][:expected_offset] > 0
     assert_equal "title_9", docs[:rows].first.title
@@ -346,21 +345,21 @@ class TestBase < Test::Unit::TestCase
 
     # next
     # only 0
-    docs = SimpleDocument.simple_document_all( "all_by_title", docs[:next])
+    docs = SimpleDocument.find_simple_document_all_by_title(docs[:next])
     assert docs[:previous][:expected_offset] > 0
     assert_equal -1, docs[:next][:expected_offset]
     assert_equal "title_0", docs[:rows].first.title
 
     # previous
     # 9..1
-    docs = SimpleDocument.simple_document_all( "all_by_title", docs[:previous])
+    docs = SimpleDocument.find_simple_document_all_by_title(docs[:previous])
     assert docs[:previous][:expected_offset] > 0
     assert docs[:next][:expected_offset] > 0
     assert_equal "title_9", docs[:rows].first.title
     assert_equal "title_1", docs[:rows].last.title
 
     # previous over reached
-    docs = SimpleDocument.simple_document_all( "all_by_title", docs[:previous])
+    docs = SimpleDocument.find_simple_document_all_by_title(docs[:previous])
     assert_equal -1, docs[:previous][:expected_offset]
     assert_nil docs[:next][:expected_offset]
     assert_equal 0, docs[:rows].length
