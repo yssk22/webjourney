@@ -18,7 +18,7 @@ namespace :wj do
   namespace :doc do
     task :update do
       Rake::Task["wj:doc"].invoke
-      sh "rsync -avze ssh doc www:~/webjourney_doc"
+      sh "rsync -avze ssh doc/ www:~/sitedoc/webjourney/"
     end
   end
 end
