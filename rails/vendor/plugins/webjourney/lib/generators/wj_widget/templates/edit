@@ -1,6 +1,0 @@
-<div class="form-container">
-  <%= '<%' %> form_tag do -%>
-  <%= '<%#' %> insert your widget parameter form here -%>
-
-  <%= '<%' %> end -%>
-</div>

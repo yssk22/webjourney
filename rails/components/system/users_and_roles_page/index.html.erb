@@ -1,9 +1,0 @@
-<div class="content">
-  <h2>Recently Registered Users</h2>
-  <ul>
-  <% WjUser.recently_registered.each do |user| -%>
-  <li><%= user.created_at %> <%=h user.display_name %> (<%=h user.login_name %>)</li>
-  <% end -%>
-  </ul>
-  <p><%= link_to "More users ...", :action => "user_list" %></p>
-</div>

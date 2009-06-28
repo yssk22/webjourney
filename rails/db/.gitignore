@@ -1,5 +1,0 @@
-# SQLite db files are ignored
-*.sqlite3
-# schema file is ignored
-schema.rb
-
