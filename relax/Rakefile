@@ -1,0 +1,19 @@
+require 'rubygems'
+require 'json'
+env = ENV["COUCHAPP_ENV"] || "default"
+
+task :initialize do
+  Dir.glob(File.join(File.dirname(__FILE__), "apps/*")) do |dir|
+    config = JSON.parse(File.read("#{dir}/.couchapprc"))
+    db = config["env"][env]["db"]
+
+    sh("curl -X DELETE #{db}")
+
+    sh("cd #{dir}; couchapp push")
+    # import fixtures
+    Dir.glob(File.join(dir, "fixtures/**/*.json")) do |jsonfile|
+      sh("curl -X POST --data @#{jsonfile} #{db}/_bulk_docs")
+    end
+  end
+end
+

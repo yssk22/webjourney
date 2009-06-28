@@ -1,0 +1,63 @@
+a img {
+    border: none;
+}
+
+/**
+ * Header
+ **/
+div#header {
+    clear:both;
+}
+
+div#main {
+    clear:both;
+    width: 96%;
+    overflow:hidden;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+div#footer {
+    clear:both;
+}
+
+/**
+ * Container layouts
+ **/
+div#container-top {
+    margi-bottom: 10px;
+}
+div#wrapper {
+    width: 100%;
+    float: left;
+    margin-bottom: 10px;
+}
+div#wrapper-main{
+    width: 100%;
+    float: right;
+}
+div#container-center {
+}
+div#container-left {
+    float: right;
+}
+div#container-right {
+    float: left;
+}
+
+div#container-bottom{
+    clear: left;
+}
+
+div.container {
+    padding: 5px 5px 0 5px;
+}
+
+/**
+ * Banner
+ */
+div.powered-by {
+    color: #ccccaa;
+    text-align: center;
+    font-size: x-small;
+}
