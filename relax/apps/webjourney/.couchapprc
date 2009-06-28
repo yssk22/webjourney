@@ -1,7 +1,0 @@
-{
-  "env": {
-    "default": {
-      "db": "http://admin:time2relax@localhost:5984/webjourney-development"
-    }
-  }
-}
