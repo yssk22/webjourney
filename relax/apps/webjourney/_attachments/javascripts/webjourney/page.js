@@ -11,8 +11,9 @@ WebJourney.Page.prototype = {
    * @constructor
    * @param document Object document retrieved from CouchDB
    */
-  initialize : function(document){
+  initialize : function(document, app){
     this._document = document;
+    this._couchapp = app;
     this._initializeContainers();
   },
 
@@ -104,8 +105,18 @@ WebJourney.Page.prototype = {
    * Returns a hash passed to gadget.Container.createGadget function.
    */
   _getGadgetArguments : function(gadgetData){
+    var specUrl;
+    if( gadgetData.url.match(/^(http|https)\:\/\//)){
+      specUrl = gadgetData.url;
+    }else{
+      // gadget host on the same database
+      dbname = unescape(document.location.href).split('/')[3];
+      specUrl = document.location.protocol + "//" + document.location.host +
+        "/" + dbname + gadgetData.url;
+    }
+
     return {
-      specUrl: gadgetData.url,
+      specUrl: specUrl,
       title: gadgetData.title
     };
   },
