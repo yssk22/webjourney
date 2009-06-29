@@ -1,0 +1,14 @@
+default:
+  httpd:
+    servername: localhost
+  couchdb:
+    pages: http://user:pass@localhost:5984/webjourney-pages-default
+  misc:
+    import_test_fixtures : true
+
+production:
+  httpd:
+    servername: www.example.com
+  couchdb:
+    pages: http://db.example.comlocalhos:5984/webjourney-pages-production
+

@@ -1,7 +1,0 @@
-{
-  "env": {
-    "default": {
-      "db": "http://user:password@localhost:5984/webjourney-development"
-    }
-  }
-}

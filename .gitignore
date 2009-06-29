@@ -1,4 +1,7 @@
-# Mac OS X 
-.*
+# Mac OS X
+.DS_Store*
+.htaccess
+.couchapprc
+
 
 
