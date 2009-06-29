@@ -12,6 +12,7 @@ $shindigConfig =  array(
                         'activity_service' => 'MyActivitiesService',
                         'app_data_service' => 'MyAppDataService',
                         'messages_service' => 'MyMessagesService',
-                        'oauth_lookup_service' => 'MyOAuthLookupService'
+                        'oauth_lookup_service' => 'MyOAuthLookupService',
+                        'cache_time' => 0
                         );
 ?>
