@@ -434,7 +434,13 @@ gadgets.Gadget.prototype.render = function(chrome) {
     var gadget = this;
     this.getContent(function(content) {
       chrome.innerHTML = content;
-      window.frames[gadget.getIframeId()].location = gadget.getIframeUrl(); 
+      // original throws "setting a property that has only a getter" error
+      // because of frame.location is readonly property after content is loaded.
+      //
+      // -- original
+      // window.frames[gadget.getIframeId()].location = gadget.getIframeUrl();
+      // -- fixed by yssk22
+      document.getElementById(gadget.getIframeId()).src = gadget.getIframeUrl();
     });
   }
 };
