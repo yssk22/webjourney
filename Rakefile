@@ -19,10 +19,10 @@ APPNAME_TO_DB = {
   "webjourney" => config[env]["couchdb"]["pages"]
 }
 import_test_fixtures = config[env]["misc"]["import_test_fixtures"]
+http_root            = "http://#{config[env]["httpd"]["servername"]}"
 
 desc("Initialize Environemnt")
 task :initialize do
-
   APPNAME_TO_DB.each do |key, db|
     dir = File.join(File.dirname(__FILE__), "relax/apps/#{key}")
     step("Configuration Info about #{key}") do
@@ -59,6 +59,7 @@ task :initialize do
         puts "#{File.basename(fname)} - #{count} documents"
       end
     end
+
   end
 end
 
@@ -98,17 +99,21 @@ end
 
 def db_exists?(db)
   uri = URI.parse(db)
+  req = Net::HTTP::Get.new(File.join(uri.path))
+  req.basic_auth(uri.user, uri.password)
   Net::HTTP.start(uri.host, uri.port) do |http|
-    res = http.get(uri.path)
+    res = http.request(req)
     res.is_a?(Net::HTTPOK)
   end
 end
 
 def drop_db(db)
   uri = URI.parse(db)
+  req = Net::HTTP::Delete.new(File.join(uri.path))
+  req.basic_auth(uri.user, uri.password)
   Net::HTTP.start(uri.host, uri.port) do |http|
-    res = http.delete(uri.path)
-    res.is_a?(Net::HTTPOK)
+    res = http.request(req)
+    raise_http_error(req, res)    unless res.is_a?(Net::HTTPSuccess)
   end
 end
 
@@ -133,14 +138,16 @@ def import_fixtures(fname, db, is_test=false)
   Net::HTTP.start(uri.host, uri.port) do |http|
     res = http.request(req)
     json = JSON.parse(res.body)
-    unless res.is_a?(Net::HTTPSuccess)
-      puts "An error received from Server"
-      puts res.body
-
-      puts "Request Body: "
-      puts req.body
-      raise res.error!
-    end
+    raise_http_error(req, res)    unless res.is_a?(Net::HTTPSuccess)
   end
   docs.length
+end
+
+def raise_http_error(req, res)
+  puts "An error received from Server"
+  puts res.body
+
+  puts "Request Body: "
+  puts req.body
+  raise res.error!
 end
