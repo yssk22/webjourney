@@ -5,14 +5,14 @@
     "type"  : "Page",
     "gadgets" : {
       "left"   : [
-        { "url" : "http://webjourney.local/webjourney-development/_design/webjourney/gadgets/helloworld.xml",
+        { "url" : "/_design/webjourney/gadgets/helloworld.xml",
           "title" : "left0" } ],
       "center" : [
-        { "url" : "http://webjourney.local/webjourney-development/_design/webjourney/gadgets/helloworld.xml",
+        { "url" : "/_design/webjourney/gadgets/helloworld.xml",
           "title" : "center0" },
-        { "url" : "http://webjourney.local/webjourney-development/_design/webjourney/gadgets/helloworld.xml",
+        { "url" : "/_design/webjourney/gadgets/helloworld.xml",
           "title" : "center1" },
-        { "url" : "http://webjourney.local/webjourney-development/_design/webjourney/gadgets/helloworld.xml",
+        { "url" : "/_design/webjourney/gadgets/helloworld.xml",
           "title" : "center2" }
       ]
     }
@@ -24,14 +24,14 @@
     "type"  : "Page",
     "gadgets" : {
       "right"   : [
-        { "url" : "http://webjourney.local/webjourney-development/_design/webjourney/gadgets/helloworld.xml",
+        { "url" : "/_design/webjourney/gadgets/helloworld.xml",
           "title" : "right0" } ],
       "center" : [
-        { "url" : "http://webjourney.local/webjourney-development/_design/webjourney/gadgets/helloworld.xml",
+        { "url" : "/_design/webjourney/gadgets/helloworld.xml",
           "title" : "center0" },
-        { "url" : "http://webjourney.local/webjourney-development/_design/webjourney/gadgets/helloworld.xml",
+        { "url" : "/_design/webjourney/gadgets/helloworld.xml",
           "title" : "center1" },
-        { "url" : "http://webjourney.local/webjourney-development/_design/webjourney/gadgets/helloworld.xml",
+        { "url" : "/_design/webjourney/gadgets/helloworld.xml",
           "title" : "center2" }
       ]
     }
@@ -39,18 +39,18 @@
 
   {
     "_id" : "pages:2columns-left-and-right",
-    "title" : "2 Column Left and Center",
+    "title" : "2 Column Left and Right",
     "type"  : "Page",
     "gadgets" : {
       "left"   : [
-        { "url" : "http://webjourney.local/webjourney-development/_design/webjourney/gadgets/helloworld.xml",
+        { "url" : "/_design/webjourney/gadgets/helloworld.xml",
           "title" : "left0" } ],
       "right" : [
-        { "url" : "http://webjourney.local/webjourney-development/_design/webjourney/gadgets/helloworld.xml",
+        { "url" : "/_design/webjourney/gadgets/helloworld.xml",
           "title" : "right0" },
-        { "url" : "http://webjourney.local/webjourney-development/_design/webjourney/gadgets/helloworld.xml",
+        { "url" : "/_design/webjourney/gadgets/helloworld.xml",
           "title" : "right1" },
-        { "url" : "http://webjourney.local/webjourney-development/_design/webjourney/gadgets/helloworld.xml",
+        { "url" : "/_design/webjourney/gadgets/helloworld.xml",
           "title" : "right2" }
       ]
     }
@@ -62,7 +62,7 @@
     "type"  : "Page",
     "gadgets" : {
       "left"   : [
-        { "url" : "http://webjourney.local/webjourney-development/_design/webjourney/gadgets/helloworld.xml",
+        { "url" : "/_design/webjourney/gadgets/helloworld.xml",
           "title" : "left0" } ]
     }
   },
@@ -73,7 +73,7 @@
     "type"  : "Page",
     "gadgets" : {
       "center"   : [
-        { "url" : "http://webjourney.local/webjourney-development/_design/webjourney/gadgets/helloworld.xml",
+        { "url" : "/_design/webjourney/gadgets/helloworld.xml",
           "title" : "center0" } ]
     }
   },
@@ -84,7 +84,7 @@
     "type"  : "Page",
     "gadgets" : {
       "right"   : [
-        { "url" : "http://webjourney.local/webjourney-development/_design/webjourney/gadgets/helloworld.xml",
+        { "url" : "/_design/webjourney/gadgets/helloworld.xml",
           "title" : "center0" } ]
     }
   }

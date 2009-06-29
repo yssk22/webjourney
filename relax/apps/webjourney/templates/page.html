@@ -41,12 +41,16 @@
   <script type="text/javascript" src="<%= assetPath %>/../../../opensocial/gadgets/files/container/util.js"></script>
   <script type="text/javascript" src="<%= assetPath %>/../../../opensocial/gadgets/files/container/gadgets.js"></script>
   <script type="text/javascript" src="<%= assetPath %>/../../../opensocial/gadgets/files/container/osapi.js"></script>
+  <script type="text/javascript" src="/_utils/script/json2.js"></script>
   <script type="text/javascript" src="<%= assetPath %>/javascripts/vendor/jquery/jquery-1.3.2.min.js"></script>
   <script type="text/javascript" src="<%= assetPath %>/javascripts/vendor/jquery/jquery-ui-1.7.2.custom.min.js"></script>
+  <script type="text/javascript" src="/_utils/script/jquery.cookies.js"></script>
+  <script type="text/javascript" src="/_utils/script/jquery.couch.js"></script>
+  <script type="text/javascript" src="<%= assetPath %>/vendor/couchapp/jquery.couchapp.js"></script>
   <script type="text/javascript" src="<%= assetPath %>/javascripts/webjourney/page.js"></script>
   <script type="text/javascript">
-    $(document).ready(function(){
-    Page = new WebJourney.Page(<%= toJSON(page) %>);
+    $.CouchApp(function(app){
+    Page = new WebJourney.Page(<%= toJSON(page) %>, app);
     });
   </script>
 </html>
