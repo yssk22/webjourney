@@ -21,6 +21,51 @@ APPNAME_TO_DB = {
 import_test_fixtures = config[env]["misc"]["import_test_fixtures"]
 http_root            = "http://#{config[env]["httpd"]["servername"]}"
 
+namespace :initialize do
+  desc("Initialize CouchApp design documents")
+  task :couchapp do
+    APPNAME_TO_DB.each do |key, db|
+      dir = File.join(File.dirname(__FILE__), "relax/apps/#{key}")
+      step("Push the application") do
+        sh("couchapp push #{dir} #{db}")
+      end
+    end
+  end
+
+  desc("Initialize Database")
+  task :db do
+    APPNAME_TO_DB.each do |key, db|
+      dir = File.join(File.dirname(__FILE__), "relax/apps/#{key}")
+      step "Database Check" do
+        if db_exists?(db)
+          confirmed = confirm("Continue with dropping database?") do
+            puts "Drop the database."
+            drop_db(db)
+          end
+          unless confirmed
+            puts "Initialization canceled."
+            exit 0
+          end
+        end
+        puts "Create a database."
+        create_db(db)
+      end
+
+      step("Import initial data set") do
+        Dir.glob(File.join(dir, "**/*.json")) do |fname|
+          count = if fname =~ /test\.json/    # test fixture
+                    import_fixtures(fname, db, true) if import_test_fixtures
+                  else
+                    import_fixtures(fname, db)
+                  end
+          puts "#{File.basename(fname)} - #{count} documents"
+        end
+      end
+    end
+  end
+
+end
+
 desc("Initialize Environemnt")
 task :initialize do
   APPNAME_TO_DB.each do |key, db|
@@ -29,38 +74,15 @@ task :initialize do
       puts "Database  :  #{db}"
       puts "Directory :  #{dir}"
     end
-
-    step "Database Check" do
-      if db_exists?(db)
-        confirmed = confirm("Continue with dropping database?") do
-          puts "Drop the database."
-          drop_db(db)
-        end
-        unless confirmed
-          puts "Initialization canceled."
-          exit 0
-        end
-      else
-        puts "No database exists"
-      end
-    end
-
-    step("Push the application") do
-      sh("couchapp push #{dir} #{db}")
-    end
-
-    step("Import initial data set") do
-      Dir.glob(File.join(dir, "**/*.json")) do |fname|
-        count = if fname =~ /test\.json/    # test fixture
-                  import_fixtures(fname, db, true) if import_test_fixtures
-                else
-                  import_fixtures(fname, db)
-                end
-        puts "#{File.basename(fname)} - #{count} documents"
-      end
-    end
-
   end
+  Rake::Task["initialize:db"].invoke()
+  Rake::Task["initialize:couchapp"].invoke()
+
+  puts "WebJourney has been initialized successfully."
+  puts "Visit your webjourney here:"
+  puts
+  puts "   #{http_root}/"
+  puts
 end
 
 desc("Display Apache VirtualHost Configuration")
@@ -104,6 +126,16 @@ def db_exists?(db)
   Net::HTTP.start(uri.host, uri.port) do |http|
     res = http.request(req)
     res.is_a?(Net::HTTPOK)
+  end
+end
+
+def create_db(db)
+  uri = URI.parse(db)
+  req = Net::HTTP::Put.new(File.join(uri.path))
+  req.basic_auth(uri.user, uri.password)
+  Net::HTTP.start(uri.host, uri.port) do |http|
+    res = http.request(req)
+    raise_http_error(req, res)    unless res.is_a?(Net::HTTPSuccess)
   end
 end
 
