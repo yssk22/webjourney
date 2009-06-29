@@ -14,10 +14,9 @@
 
 ### Configuration
 
-Create .couchapprc file from dot_couchapprc(sample file) to configure database configuraitons.
+Create config/webjourney.yml file from webjourney.sample.yml
 
-    % cp relax/apps/webjourney/dot_couchapprc relax/apps/webjourney/.couchapprc
-    % vi relax/apps/webjourney/.couchapprc
+    % vi config/webjourney.yml
 
 Create .htaccess file from dot_htaccess(sample file) to configure Apache Shindig.
 
@@ -46,7 +45,6 @@ You must configure /opensocial as the Shindig web_prefix path.
 
 ### Import Initial Dataset
 
-    % cd relax
     % rake initiailze
 
 ### Access the top page.
