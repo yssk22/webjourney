@@ -1,7 +1,13 @@
-WebJourney = {};
-WebJourney.Page = function(){
+/**
+ * @fileoverview WebJourney Gadget Container (Page) implementation
+ */
+WebJourney.Page = WebJourney.Page || function(){
   this.initialize.apply(this, arguments);
 };
+
+/**
+ * Location symbols
+ */
 WebJourney.Page.LOCATIONS = ["top", "bottom", "left", "right", "center"];
 
 WebJourney.Page.prototype = {
@@ -9,80 +15,69 @@ WebJourney.Page.prototype = {
   /**
    * Page object that manages gadget containers.
    * @constructor
-   * @param document Object document retrieved from CouchDB
+   * @param document Object document retrieved from Gadget Database by CouchDB.
+   * @param app CouchApp application context.
    */
   initialize : function(document, app){
     this._document = document;
     this._couchapp = app;
-    this._initializeContainers();
+    this._editMode = false;
+    this._chromeIdCounter = 0;
+    this._initializeGadgets();
+
+
+    this.renderGadgets();
+    this.refresh();
   },
 
   /**
-   * Initialize container object
+   * Toggle edit mode. Edit mode enable users to layout gadgets, add/remove gadgets, modify title labels, ... so on.
    */
-  _initializeContainers : function(){
-    // reuse the shindig container implementation (IfrContainer);
-    gadgets.container = new gadgets.IfrContainer();
-    this._container = gadgets.container;
-    // callback
-    var self = this;
-    var container = self._container;
-    // clean up container & location
-    container.view_    = "default";
-    container.gadgets_ = {};
-    var chromeIds  = [];
+  toggleEditMode : function(){
+    if( this._editMode ){
+      this._editMode = false;
+    }else{
+      this._editMode = true;
+    }
+  },
+
+  /**
+   * Render the html documents on the current page.
+   */
+  renderGadgets : function(){
     for(var l in WebJourney.Page.LOCATIONS){
       var lkey = WebJourney.Page.LOCATIONS[l];
-      var location  = self._getContainerElement(lkey);
-      var gadgetData = self._document.gadgets[lkey];
-      if( gadgetData instanceof Array && gadgetData.length > 0 ){
-        // create and add gadget.Gadget instances on the each container
-        var chromeHTML = "";
-        for(var i in gadgetData ){
-          var gadget = container.createGadget(self._getGadgetArguments(gadgetData[i]));
-          gadget.setServerBase(self.getServerBase());
-          gadget.secureToken = encodeURIComponent(self.getSecureToken());
-          container.addGadget(gadget);
-          var chromeId = "gadget-chrome-" + gadget.id;
-          chromeIds.push(chromeId);
-          chromeHTML += "<div id=\"" + chromeId + "\" class=\"gadget-chrome\"></div>";
-        }
-        // set the gadget chrome ids on the each container
-        location.html(chromeHTML);
-        location.css("display", "block");
-      }else{
-        location.html("");
-        location.css("display", "none");
+      var location  = this.getContainerElement(lkey);
+      var html = "";
+      for(var i in this._gadgets[lkey]){
+        html += this._gadgets[lkey][i].getContent();
+      }
+      location.html(html);
+    }
+    this.adjustLayout();
+  },
+
+  /**
+   * Refresh the page.
+   */
+  refresh : function(){
+    for(var l in WebJourney.Page.LOCATIONS){
+      var lkey = WebJourney.Page.LOCATIONS[l];
+      var location  = this.getContainerElement(lkey);
+      var html = "";
+      for(var i in this._gadgets[lkey]){
+        this._gadgets[lkey][i].refresh();
       }
     }
-    self._adjustContainerElements();
-    container.layoutManager.setGadgetChromeIds(chromeIds);
-    container.renderGadgets();
-    self._applyThemeClasses();
   },
 
   /**
-   * Fetch the gadget data related with this page and refresh the page gadgets
+   * Adjust the width/margin of div block elements for gadget containers.
    */
-  _loadGadgetData : function(){
-  },
-
-  /**
-   * Apply the jQuery UI theme classes to the rendered Gadgets
-   */
-  _applyThemeClasses : function(){
-    $("div.gadget-chrome").addClass("ui-widget");
-    $("div.gadget-chrome").addClass("ui-widget-content");
-    $("div.gadget-chrome").addClass("ui-corner-all");
-    $("div.gadget-chrome div.gadgets-gadget-title-bar").addClass("ui-state-default ui-widget-header ui-corner-all");
-  },
-  /**
-   * Adjust the width/margin of container div block elements
-   */
-  _adjustContainerElements : function(){
-    var left    = this._getContainerElement("left");
-    var right   = this._getContainerElement("right");
-    var center  = this._getContainerElement("center");
+  adjustLayout : function(){
+    var left    = this.getContainerElement("left");
+    var right   = this.getContainerElement("right");
+    var center  = this.getContainerElement("center");
     var wrapper     = $("#wrapper");
     var wrapperMain = $("#wrapper-main");
 
@@ -94,44 +89,48 @@ WebJourney.Page.prototype = {
     center.css("margin-left",  lwidth > 0 ? lwidth + 10 : 0);
   },
 
-  _getContainerId : function(locationKey){
+  getContainerId : function(locationKey){
     return "#container-" + locationKey;
   },
 
-  _getContainerElement : function(locationKey){
-    return $(this._getContainerId(locationKey));
-  },
   /**
-   * Returns a hash passed to gadget.Container.createGadget function.
+   * Returns a jQuery Object matched with locationKey
+   * @param locationKey {String} location key name, one of WebJourney.Page.LOCATIONS
    */
-  _getGadgetArguments : function(gadgetData){
-    var specUrl;
-    if( gadgetData.url.match(/^(http|https)\:\/\//)){
-      specUrl = gadgetData.url;
-    }else{
-      // gadget host on the same database
-      dbname = unescape(document.location.href).split('/')[3];
-      specUrl = document.location.protocol + "//" + document.location.host +
-        "/" + dbname + gadgetData.url;
-    }
-
-    return {
-      specUrl: specUrl,
-      title: gadgetData.title
-    };
+  getContainerElement : function(locationKey){
+    return $(this.getContainerId(locationKey));
   },
 
   /**
-   * Returns a server base URI:
+   * Returns a server base URI for iframe gadgets.
    */
   getServerBase : function(){
     return "http://webjourney.local/opensocial/gadgets/";
   },
 
   /**
-   * Returns a security token
+   * Returns a security token for iframe gadgets.
    */
   getSecureToken : function(){
     return "john.doe:john.doe:appid:cont:url:0:default";
+  },
+
+  /**
+   * (Private) Initialize gadget objects for display
+   */
+  _initializeGadgets : function(){
+    this._gadgets = {};
+    for(var l in WebJourney.Page.LOCATIONS){
+      var lkey = WebJourney.Page.LOCATIONS[l];
+      this._gadgets[lkey] = [];
+      var gadgets = this._document.gadgets[lkey];
+      if( gadgets instanceof Array && gadgets.length > 0){
+        for(var i in gadgets){
+          var gadget = new WebJourney.Gadget(this, gadgets[i]);
+          this._gadgets[lkey][i] = gadget;
+        }
+      }
+    }
   }
+
 };
