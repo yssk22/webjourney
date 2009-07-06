@@ -21,11 +21,61 @@ WebJourney.Gadget.prototype = {
   },
 
   /**
+   * Returns WebJourney.Page object where the gadget should be rendered.
+   */
+  getPage : function(){
+    return this._page;
+  },
+
+  /**
+   * Returns an object that should be an element in gadgets member in a page document.
+   */
+  getParameter : function(){
+    return this._params;
+  },
+
+  /**
    * Returns the identifier.
    */
   getId : function(){
     return this._params.id;
   },
+
+  /**
+   * Returns the title
+   */
+  getTitle : function(){
+    return this._params.title || "Title";
+  },
+
+  /**
+   * Returns the id attributes of the top level div tag.
+   */
+  getBlockId : function(){
+    return "gadget-" + this.getId();
+  },
+
+  /**
+   * Returns the jQuery object of the top level 'div' tag;
+   */
+  getBlockObject : function(){
+    return jQuery(document.getElementById(this.getBlockId()));
+  },
+
+  /*:
+   * Returns the id attributes of body block 'div' tag;
+   */
+  getBodyId : function(){
+    return   "gadget-body-" + this.getId();
+  },
+
+  /*:
+   * Returns the jQuery object of body block 'div' tag;
+   */
+  getBodyObject : function(){
+    return jQuery(document.getElementById(this.getBodyId()));
+  },
+
 
   /**
    * Returns the 'id' attriubute of the iframe tag
@@ -35,11 +85,19 @@ WebJourney.Gadget.prototype = {
   },
 
   /**
+   * Returns the jQuery object of iframe tag;
+   */
+  getIframeObject : function(){
+    return jQuery(document.getElementById(this.getIframeId()));
+  },
+
+  /**
    * Returns the 'name' attriubute of the iframe tag
    */
   getIframeName : function(){
     return this.getIframeId();
   },
+
 
   /**
    * Returns the specification url.
@@ -99,85 +157,35 @@ WebJourney.Gadget.prototype = {
   },
 
   /**
-   * Returns the gadget HTML string.
+   * Returns the gadget jQuery object that is appendable to the page.
    */
-  getContent : function(){
-    var params = {
-      "id": "gadget" + this.getId(),
-      "class": "ui-widget ui-widget-content ui-corner-all gadget"
-    };
-    return WebJourney.Util.tag("div",
-                               params,
-                               this.getTitleBarContent() +
-                               this.getBodyContent());
-
+  createBlockObject : function(){
+    var block = jQuery("<div></div>");
+    block.attr("id",    this.getBlockId());
+    block.attr("class", "ui-widget ui-widget-content ui-corner-all gadget");
+    return block.append(this._createTitleBarBlock()).append(this._createBodyBlock());
   },
 
+  /**
+   * Refresh the iframe content.
+   */
   refresh : function(){
-    document.getElementById(this.getIframeId()).src = this.getIframeUrl();
-    // $("#" + this.getIframeId()).attr("src", this.getIframeUrl());
+    this.getIframeObject().attr("src", this.getIframeUrl());
   },
 
-
-
-  getTitleBarContent : function(){
-    var params = {
-      "id": "gadget-title-bar-" + this.getId(),
-      "class": "ui-widget ui-state-default ui-widget-header ui-corner-all gadget-title-bar"
-    };
-    return WebJourney.Util.tag("div",
-                               params,
-                               this.getTitleBarLabelContent() +
-                               this.getTitleBarButtonsContent()
-                              );
+  /**
+   * Hide iframe content
+   */
+  minimize : function(){
+    this.getBodyObject().hide("blind");
+  },
+  /**
+   * Show iframe content
+   */
+  revertMinimize : function(){
+    this.getBodyObject().show("blind");
   },
 
-  getTitleBarLabelContent : function(){
-    var params = {
-      "id": "gadget-title-bar-label-" + this.getId(),
-      "class": "gadget-title-bar-label"
-    };
-    return WebJourney.Util.tag("span",
-                               params,
-                               this._title ? this._title : "Title"
-                              );
-  },
-
-  getTitleBarButtonsContent : function(){
-    var params = {
-      "id": "gadget-title-bar-buttons-" + this.getId(),
-      "class": "gadget-title-bar-buttons"
-    };
-    return WebJourney.Util.tag("span",
-                               params,
-                               ""
-                              );
-  },
-
-  getBodyContent : function(){
-    var params = {
-      "id": "gadget-body-" + this.getId(),
-      "class": "ui-widget gadget-body"
-    };
-    return WebJourney.Util.tag("div",
-                               params,
-                               this.getBodyIframeContent()
-                              );
-  },
-
-  getBodyIframeContent : function(){
-    var params = {
-      "id"          : this.getIframeId(),
-      "class"       : "gadget-body-ifr",
-      "name"        : this.getIframeName(),
-      "frameborder" : "no",
-      "scrolling"   : "no",
-      "height"      : this.getHeight(),
-      "width"       : this.getWidth()
-    };
-    return WebJourney.Util.tag("iframe",
-                               params);
-  },
 
   getIframeUrl : function(){
     // http://webjourney.local/opensocial/gadgets/ifr?container=default
@@ -198,5 +206,87 @@ WebJourney.Gadget.prototype = {
 
     return this.getServerBase() + "ifr?" +
       WebJourney.Util.toQueryString(params);
+  },
+
+  _createTitleBarBlock : function(){
+    var obj = jQuery("<div></div>");
+    obj.attr("id", "gadget-title-bar-" + this.getId());
+    obj.attr("class", "ui-widget ui-state-default ui-widget-header ui-corner-all gadget-title-bar");
+    obj.append(this._createTitleBarButtons());
+    obj.append(this._createTitleBarLabel());
+    return obj;
+  },
+
+
+  _createTitleBarLabel : function(){
+    var label = jQuery("<div></div>");
+    label.attr("id",    "gadget-title-bar-label-" + this.getId());
+    label.attr("class", "gadget-title-bar-label");
+
+    var span = jQuery("<span></span>");
+    span.attr("id", "gadget-title-bar-label-span-" + this.getId());
+    span.text(this.getTitle());
+    var input = jQuery("<input></input>");
+    input.attr("id", "gadget-title-bar-label-input-" + this.getId());
+    input.hide();
+    return label.append(span).append(input);
+  },
+
+  _createTitleBarButtons : function(){
+    var self = this;
+    var buttons = jQuery("<ul></ul>");
+    buttons.attr("id",    "gadget-title-bar-buttons-" + this.getId());
+    buttons.attr("class", "ui-widget ui-helper-clearfix gadget-title-bar-buttons");
+
+    var minimize = this._createTitleBarButton("ui-icon-minus");
+    minimize.toggle(
+      function(){
+        $("span", this).removeClass("ui-icon-minus");
+        $("span", this).addClass("ui-icon-plus");
+        self.minimize();
+      },
+      function(){
+        $("span", this).removeClass("ui-icon-plus");
+        $("span", this).addClass("ui-icon-minus");
+        self.revertMinimize();
+      }
+    );
+
+    return buttons.append(
+      minimize
+    );
+  },
+
+  _createTitleBarButton : function(icon_name, callback){
+    var item = jQuery("<li></li>");
+    item.attr("class", "ui-state-default ui-corner-all");
+    callback && item.bind("click", callback);
+    item.hover(
+      function(){ $(this).addClass("ui-state-hover");    },
+      function(){ $(this).removeClass("ui-state-hover"); }
+    );
+    var icon = jQuery("<span></span>");
+    icon.attr("class", "ui-icon " + icon_name);
+    return item.append(icon);
+  },
+
+  _createBodyBlock : function(){
+    var body = jQuery("<div></div>");
+    body.attr("id",    this.getBodyId());
+    body.attr("class", "ui-widget gadget-body");
+    return body.append(this._createBodyIframe());
+  },
+
+  _createBodyIframe : function(){
+    var iframe = jQuery("<iframe></iframe>");
+    iframe.attr("id",  this.getIframeId());
+    iframe.attr("class", "gadget-body-ifr");
+    iframe.attr("name",  this.getIframeName());
+    iframe.attr("frameborder", "no");
+    iframe.attr("scrolling", "no");
+    iframe.attr("height", this.getHeight());
+    iframe.attr("width",  this.getWidth());
+    return iframe;
   }
+
 };

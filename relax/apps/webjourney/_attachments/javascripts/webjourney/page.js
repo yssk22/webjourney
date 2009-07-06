@@ -9,6 +9,15 @@ WebJourney.Page = WebJourney.Page || function(){
  * Location symbols
  */
 WebJourney.Page.LOCATIONS = ["top", "bottom", "left", "right", "center"];
+WebJourney.Page._GADGET_SORTABLE_OPTION =  {
+  connectWith: ["div.container"],
+  placeholder: "ui-state-highlight",
+  handle     : "div.gadget-title-bar",
+  scroll     : true,
+  cursor     : "move",
+  forcePlaceholderSize: true,
+  cursorAt: { top: 20, left: 20 }
+};
 
 WebJourney.Page.prototype = {
 
@@ -23,9 +32,10 @@ WebJourney.Page.prototype = {
     this._couchapp = app;
     this._editMode = false;
     this._chromeIdCounter = 0;
+    this._changed  = false;
+    this._app      = app;
+
     this._initializeGadgets();
-
-
     this.renderGadgets();
     this.refresh();
   },
@@ -39,21 +49,54 @@ WebJourney.Page.prototype = {
     }else{
       this._editMode = true;
     }
+    this._initializeGadgets();
+    this.renderGadgets();
+    this.refresh();
+  },
+
+  /**
+   * Set _changed value to val.
+   */
+  setChanged : function(val){
+    this._changed = val;
+  },
+
+  save : function(){
+    this._gatherBoundDataFromGadgetBlocks();
+    this._app.db.saveDoc(this._document);
   },
 
   /**
    * Render the html documents on the current page.
    */
   renderGadgets : function(){
+    var self = this;
     for(var l in WebJourney.Page.LOCATIONS){
       var lkey = WebJourney.Page.LOCATIONS[l];
       var location  = this.getContainerElement(lkey);
-      var html = "";
+      location.html("");
       for(var i in this._gadgets[lkey]){
-        html += this._gadgets[lkey][i].getContent();
+        var block = this._gadgets[lkey][i].createBlockObject();
+        block.data("gadget_object", this._gadgets[lkey][i]); // binding gadget object to block
+        block.appendTo(location);
       }
-      location.html(html);
+      if( this._editMode ){
+        location.addClass("container-edit-mode");
+      }else{
+        location.removeClass("container-edit-mode");
+      }
     }
+    if( this._editMode ){
+      // make sortable
+      jQuery("div.container").sortable(jQuery.extend(WebJourney.Page._GADGET_SORTABLE_OPTION,
+        {
+          start  : function(e, ui){ jQuery(ui.helper).width("200px"); },
+          stop   : function(e, ui){ jQuery(ui.helper).width("100%");  },
+          update : function(e, ui){ self.setChanged(true);       }
+        }));
+    }
+
+
     this.adjustLayout();
   },
 
@@ -78,8 +121,8 @@ WebJourney.Page.prototype = {
     var left    = this.getContainerElement("left");
     var right   = this.getContainerElement("right");
     var center  = this.getContainerElement("center");
-    var wrapper     = $("#wrapper");
-    var wrapperMain = $("#wrapper-main");
+    var wrapper     = jQuery("#wrapper");
+    var wrapperMain = jQuery("#wrapper-main");
 
     var lwidth = left.css("display")  == "block" ? left.outerWidth(true)  : 0;
     var rwidth = right.css("display") == "block" ? right.outerWidth(true) : 0;
@@ -98,7 +141,7 @@ WebJourney.Page.prototype = {
    * @param locationKey {String} location key name, one of WebJourney.Page.LOCATIONS
    */
   getContainerElement : function(locationKey){
-    return $(this.getContainerId(locationKey));
+    return jQuery(this.getContainerId(locationKey));
   },
 
   /**
@@ -131,6 +174,29 @@ WebJourney.Page.prototype = {
         }
       }
     }
+  },
+
+  /**
+   * (Private) Gather this._document.gadgets data and this._gadgets data from currently rendered elements.
+   */
+  _gatherBoundDataFromGadgetBlocks : function(){
+    var gadget_parameters = {};
+    var gadget_objects    = {};
+    for(var l in WebJourney.Page.LOCATIONS){
+      var lkey = WebJourney.Page.LOCATIONS[l];
+      var location  = this.getContainerElement(lkey);
+      gadget_parameters[lkey] = [];
+      gadget_objects[lkey]    = [];
+      jQuery("div.gadget", location)
+        .each(function(index){
+                var block = jQuery(this);
+                var gadget_object = block.data("gadget_object");
+                gadget_objects[lkey].push(gadget_object);
+                gadget_parameters[lkey].push(gadget_object.getParameter());
+              });
+    }
+    this._document.gadgets = gadget_parameters;
+    this._gadgets = gadget_objects;
   }
 
 };
