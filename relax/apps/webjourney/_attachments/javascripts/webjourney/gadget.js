@@ -177,13 +177,17 @@ WebJourney.Gadget.prototype = {
    * Hide iframe content
    */
   minimize : function(){
-    this.getBodyObject().hide("blind");
+    // DO NOT apply any effects. Effects will cause many iframe reloadings ...
+    // this.getBodyObject().hide("blind");
+    this.getBodyObject().hide();
   },
   /**
    * Show iframe content
    */
   revertMinimize : function(){
-    this.getBodyObject().show("blind");
+    // DO NOT apply any effects. Effects will cause many iframe reloadings ...
+    // this.getBodyObject().show("blind");
+    this.getBodyObject().show();
   },
 
 
