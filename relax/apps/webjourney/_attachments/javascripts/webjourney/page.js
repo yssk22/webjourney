@@ -34,25 +34,64 @@ WebJourney.Page.prototype = {
     this._chromeIdCounter = 0;
     this._changed  = false;
     this._app      = app;
+    this._message  = new WebJourney.Message("#page-message");
 
+    this._initializeGadgets();
+    this.renderGadgets();
+    this.refresh();
+
+    log("[Page#initialize] " + JSON.stringify(this._document));
+    this._message.highlight("Updated successfully");
+  },
+
+  /**
+   * Make the page mode to 'edit-mode'
+   */
+  edit : function(){
+    this._editMode = true;
+    this._changed  = false;
     this._initializeGadgets();
     this.renderGadgets();
     this.refresh();
   },
 
   /**
-   * Toggle edit mode. Edit mode enable users to layout gadgets, add/remove gadgets, modify title labels, ... so on.
+   * Make the page mode to 'show-mode'
    */
-  toggleEditMode : function(){
-    if( this._editMode ){
-      this._editMode = false;
-    }else{
-      this._editMode = true;
+  cancelEdit : function(){
+    if( this._changed ){
+      if(!confirm("Discard changes?")){
+        return; // cancel
+      }
     }
+    this._editMode = false;
+    this._changed  = false;
     this._initializeGadgets();
     this.renderGadgets();
     this.refresh();
   },
+
+  /**
+   * Save the document to database
+   */
+  save : function(){
+    log("[Page#save] --> " + JSON.stringify({"_id"  : this._document._id,
+                                             "_rev" : this._document._rev}));
+    var self = this;
+    this._populateBoundDataFromGadgetBlocks();
+    this._app.db.saveDoc(this._document, {
+                           error   :function(status, error, reason){
+                             log("[Page#save] <-- " + JSON.stringify({error: error, reason:reason}));
+                             alert("The document could not be saved: " + reason);
+                           },
+                           success :function(resp){
+                             log("[Page#save] <-- " + JSON.stringify(resp));
+                             self._changed = false;
+                             self._message.highlight("Updated successfully");
+                           }
+                         });
+  },
+
 
   /**
    * Set _changed value to val.
@@ -61,10 +100,6 @@ WebJourney.Page.prototype = {
     this._changed = val;
   },
 
-  save : function(){
-    this._gatherBoundDataFromGadgetBlocks();
-    this._app.db.saveDoc(this._document);
-  },
 
   /**
    * Render the html documents on the current page.
@@ -104,6 +139,7 @@ WebJourney.Page.prototype = {
    * Refresh the page.
    */
   refresh : function(){
+    // refresh the gadgets
     for(var l in WebJourney.Page.LOCATIONS){
       var lkey = WebJourney.Page.LOCATIONS[l];
       var location  = this.getContainerElement(lkey);
@@ -111,6 +147,15 @@ WebJourney.Page.prototype = {
       for(var i in this._gadgets[lkey]){
         this._gadgets[lkey][i].refresh();
       }
+    }
+
+    // edit-mode link and buttons
+    if( this._editMode ){
+      $(".show-mode").hide();
+      $(".edit-mode").show();
+    }else{
+      $(".edit-mode").hide();
+      $(".show-mode").show();
     }
   },
 
@@ -177,9 +222,9 @@ WebJourney.Page.prototype = {
   },
 
   /**
-   * (Private) Gather this._document.gadgets data and this._gadgets data from currently rendered elements.
+   * (Private) Populate this._document.gadgets data and this._gadgets data from currently rendered elements.
    */
-  _gatherBoundDataFromGadgetBlocks : function(){
+  _populateBoundDataFromGadgetBlocks : function(){
     var gadget_parameters = {};
     var gadget_objects    = {};
     for(var l in WebJourney.Page.LOCATIONS){

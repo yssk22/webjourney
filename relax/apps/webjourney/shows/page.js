@@ -4,6 +4,7 @@ function(doc, req) {
   // !code vendor/couchapp/path.js
   if( doc ){
     try{
+      doc._revisions = undefined;
       var html = template(templates.page, {
                             page : doc,
                             assetPath: assetPath()

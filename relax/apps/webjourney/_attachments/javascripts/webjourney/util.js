@@ -32,3 +32,11 @@ WebJourney.Util.toQueryString = function(params){
   }
   return str;
 };
+
+WebJourney.Util.log = function(message){
+  if( window.console && window.console.log ){
+    window.console.log(message);
+  }
+};
+
+window.log = WebJourney.Util.log;

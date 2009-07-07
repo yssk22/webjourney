@@ -3,7 +3,7 @@ a img {
 }
 
 /**
- * Header
+ * Main three blocks
  **/
 div#header {
     clear:both;
@@ -11,14 +11,31 @@ div#header {
 
 div#main {
     clear:both;
-    width: 96%;
+    width: 100%;
     overflow:hidden;
     margin-top: 10px;
+    padding-top: 10px;
     margin-bottom: 10px;
+    padding-bottom: 10px;
 }
 
 div#footer {
     clear:both;
+}
+
+div#page-actions {
+    float:right;
+}
+
+div#page-message {
+    font-size: 12px;
+    position:absolute;
+    width: 66%;
+    left: 17%;
+}
+
+div#page-message div{
+    padding: 5px 5px 5px 5px;
 }
 
 /**
