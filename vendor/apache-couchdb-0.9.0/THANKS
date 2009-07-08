@@ -1,0 +1,29 @@
+Apache CouchDB THANKS
+=====================
+
+A number of people have contributed to Apache CouchDB by reporting problems,
+suggesting improvements or submitting changes. Some of these people are:
+
+ * William Beh <willbeh@gmail.com>
+ * Dirk Schalge <dirk@epd-me.net>
+ * Roger Leigh <rleigh@debian.org>
+ * Sam Ruby <rubys@intertwingly.net>
+ * Carlos Valiente <superdupont@gmail.com>
+ * Till Klampaeckel <till@klampaeckel.de>
+ * Benoit Chesneau <bchesneau@gmail.com>
+ * Jim Lindley <web@jimlindley.com>
+ * Yoan Blanc <yoan.blanc@gmail.com>
+ * Michael Gottesman <gottesmm@reed.edu>
+ * Mark Baran <mebaran@gmail.com>
+ * Michael Hendricks <michael@ndrix.org>
+ * Antony Blakey <antony.blakey@gmail.com>
+ * Paul Carey <paul.p.carey@gmail.com>
+ * Hunter Morris <huntermorris@gmail.com>
+ * Brian Palmer <jira@brian.codekitchen.net>
+ * Jason Davies <jason@jasondavies.com>
+ * Maximillian Dornseif <md@hudora.de>
+ * Eric Casteleijn <eric.casteleijn@canonical.com>
+ * Maarten Thibaut <mthibaut@cisco.com>
+ * Florian Ebeling <florian.ebeling@gmail.com>
+
+For a list of authors see the `AUTHORS` file.

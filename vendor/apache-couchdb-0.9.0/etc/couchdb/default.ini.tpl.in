@@ -1,0 +1,67 @@
+; @configure_input@
+
+; Upgrading CouchDB will overwrite this file.
+
+[couchdb]
+database_dir = %localstatelibdir%
+view_index_dir = %localstatelibdir%
+util_driver_dir = %couchprivlibdir%
+max_document_size = 4294967296 ; 4 GB
+max_attachment_chunk_size = 4294967296 ; 4GB
+os_process_timeout = 5000 ; 5 seconds. for view and external servers.
+max_dbs_open = 100
+
+[httpd]
+port = 5984
+bind_address = 127.0.0.1
+authentication_handler = {couch_httpd, default_authentication_handler}
+WWW-Authenticate = Basic realm="administrator"
+
+[log]
+file = %localstatelogdir%/couch.log
+level = info
+
+[query_servers]
+javascript = %bindir%/%couchjs_command_name% %localdatadir%/server/main.js
+
+; enable external as an httpd handler, then link it with commands here.
+; note, this api is still under consideration.
+; [external]
+; mykey = /path/to/mycommand
+
+[daemons]
+view_manager={couch_view, start_link, []}
+external_manager={couch_external_manager, start_link, []}
+db_update_notifier={couch_db_update_notifier_sup, start_link, []}
+query_servers={couch_query_servers, start_link, []}
+httpd={couch_httpd, start_link, []}
+stats_aggregator={couch_stats_aggregator, start, []}
+stats_collector={couch_stats_collector, start, []}
+
+[httpd_global_handlers]
+/ = {couch_httpd_misc_handlers, handle_welcome_req, <<"Welcome">>}
+favicon.ico = {couch_httpd_misc_handlers, handle_favicon_req, "%localdatadir%/www"}
+
+_utils = {couch_httpd_misc_handlers, handle_utils_dir_req, "%localdatadir%/www"}
+_all_dbs = {couch_httpd_misc_handlers, handle_all_dbs_req}
+_active_tasks = {couch_httpd_misc_handlers, handle_task_status_req}
+_config = {couch_httpd_misc_handlers, handle_config_req}
+_replicate = {couch_httpd_misc_handlers, handle_replicate_req}
+_uuids = {couch_httpd_misc_handlers, handle_uuids_req}
+_restart = {couch_httpd_misc_handlers, handle_restart_req}
+_stats = {couch_httpd_stats_handlers, handle_stats_req}
+
+[httpd_db_handlers]
+_design = {couch_httpd_db, handle_design_req}
+_temp_view = {couch_httpd_view, handle_temp_view_req}
+
+; The external module takes an optional argument allowing you to narrow it to a
+; single script. Otherwise the script name is inferred from the first path section 
+; after _external's own path.
+; _mypath = {couch_httpd_external, handle_external_req, <<"mykey">>}
+; _external = {couch_httpd_external, handle_external_req}
+
+[httpd_design_handlers]
+_view = {couch_httpd_view, handle_view_req}
+_show = {couch_httpd_show, handle_doc_show_req}
+_list = {couch_httpd_show, handle_view_list_req}
