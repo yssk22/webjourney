@@ -1,0 +1,8 @@
+# ignore files generated ./configure command 
+Makefile
+*.gz
+*.tpl
+config.*
+libtool
+stamp-h1
+.deps
