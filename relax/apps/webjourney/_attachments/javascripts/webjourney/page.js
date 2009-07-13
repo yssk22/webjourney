@@ -41,7 +41,6 @@ WebJourney.Page.prototype = {
     this.refresh();
 
     log("[Page#initialize] " + JSON.stringify(this._document));
-    this._message.highlight("Updated successfully");
   },
 
   /**
@@ -130,8 +129,6 @@ WebJourney.Page.prototype = {
           update : function(e, ui){ self.setChanged(true);       }
         }));
     }
-
-
     this.adjustLayout();
   },
 
@@ -168,6 +165,13 @@ WebJourney.Page.prototype = {
     var center  = this.getContainerElement("center");
     var wrapper     = jQuery("#wrapper");
     var wrapperMain = jQuery("#wrapper-main");
+
+    if( this._gadgets["left"].length == 0 ){
+      left.hide();
+    }
+    if( this._gadgets["right"].length == 0 ){
+      right.hide();
+    }
 
     var lwidth = left.css("display")  == "block" ? left.outerWidth(true)  : 0;
     var rwidth = right.css("display") == "block" ? right.outerWidth(true) : 0;

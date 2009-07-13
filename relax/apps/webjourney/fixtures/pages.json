@@ -18,14 +18,11 @@
                     "title" : "right0" } ],
      "center" : [
        { "id" : "pages:top:center-0",
-         "url" : "/_design/webjourney/gadgets/helloworld.xml",
+         "url" : "/_design/webjourney/gadgets/sticky.xml",
          "title" : "center0" },
        { "id" : "pages:top:center-1",
          "url" : "/_design/webjourney/gadgets/helloworld.xml",
-         "title" : "center1" },
-       { "id" : "pages:top:center-2",
-         "url" : "/_design/webjourney/gadgets/helloworld.xml",
-         "title" : "center2" }
+         "title" : "center1" }
      ]
    }
  }

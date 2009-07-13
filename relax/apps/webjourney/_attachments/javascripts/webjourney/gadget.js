@@ -49,6 +49,13 @@ WebJourney.Gadget.prototype = {
   },
 
   /**
+   * Returns Gadget View
+   */
+  getView : function(){
+    return this._params.view || "canvas";
+  },
+
+  /**
    * Returns the id attributes of the top level div tag.
    */
   getBlockId : function(){
@@ -204,7 +211,7 @@ WebJourney.Gadget.prototype = {
       "st"        : this.getSecureToken(),
       "country"   : "ALL",
       "lang"      : "ALL",
-      "view"      : "default"
+      "view"      : this.getView()
 //      "v"         : this.getSpecVersion()
     };
 

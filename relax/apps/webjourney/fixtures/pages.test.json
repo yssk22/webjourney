@@ -1,5 +1,23 @@
 [
   {
+    "_id" : "pages:OpenSocial-Compliance-v0.8.0",
+    "title" : "OpenSocial Compliance Test Suite",
+    "type"  : "Page",
+    "gadgets" : {
+      "center" : [
+       {
+         "id" : "opensocial-compliance-v0.8",
+         "url" : "http://opensocial-resources.googlecode.com/svn/tests/trunk/suites/0.8/compliance/reference.xml",
+         "title" : "OpenSocial Compliance (v0.8)"
+       },
+       {
+         "id"  : "OpenSocial-dev-app-v0.8",
+         "url" : "http://osda.appspot.com/gadget/osda-0.8.xml",
+         "title" : "OpenSocial Dev App"
+       }
+    ]}
+  },
+  {
     "_id" : "pages:2columns-left-and-center",
     "title" : "2 Column Left and Center",
     "type"  : "Page",
