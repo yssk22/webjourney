@@ -16,8 +16,10 @@ config = YAML.load(File.read(File.join(File.dirname(__FILE__), "config/webjourne
 
 # app and db mappping
 APPNAME_TO_DB = {
-  "webjourney" => config[env]["couchdb"]["pages"]
+  "webjourney" => config[env]["couchdb"]["webjourney"],
+  "opensocial" => config[env]["couchdb"]["webjourney"]
 }
+
 import_test_fixtures = config[env]["misc"]["import_test_fixtures"]
 http_root            = "http://#{config[env]["httpd"]["servername"]}"
 
@@ -34,8 +36,8 @@ namespace :initialize do
 
   desc("Initialize Database")
   task :db do
-    APPNAME_TO_DB.each do |key, db|
-      dir = File.join(File.dirname(__FILE__), "relax/apps/#{key}")
+    # Database Creation
+    APPNAME_TO_DB.map { |key, db|  db }.uniq.each do |db|
       step "Database Check" do
         if db_exists?(db)
           confirmed = confirm("Continue with dropping database?") do
@@ -50,7 +52,11 @@ namespace :initialize do
         puts "Create a database."
         create_db(db)
       end
+    end
 
+    # Data Loading
+    APPNAME_TO_DB.each do |key, db|
+      dir = File.join(File.dirname(__FILE__), "relax/apps/#{key}")
       step("Import initial data set") do
         Dir.glob(File.join(dir, "**/*.json")) do |fname|
           count = if fname =~ /test\.json/    # test fixture

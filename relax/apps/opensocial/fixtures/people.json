@@ -1,0 +1,19 @@
+[
+  {
+    "type"  : "Person",
+    // singluar person fields
+    // required
+    // "id" : automatically assigned
+    "displayName" : {
+      "formatted" : "Joe Doe"
+    },
+
+    // optional
+    "anniversary" : "1990-01-01",
+    "birthday"    : "1980-01-01",
+    "name"  : {
+      "formatted" : "Joe Doe"
+    },
+    "gender" : "femail"
+  }
+]
