@@ -28,7 +28,7 @@ You must configure /opensocial as the Shindig web_prefix path.
 
     <VirtualHost *:80>
        ServerName {your hostname}
-       DocumentRoot {your webjourney root}
+       DocumentRoot {your webjourney root}/site
        ErrorLog logs/webjourney_error_log
        AllowEncodedSlashes On
        ProxyRequests Off

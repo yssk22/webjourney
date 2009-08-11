@@ -20,8 +20,10 @@ APPNAME_TO_DB = {
   "opensocial" => config[env]["couchdb"]["webjourney"]
 }
 
+HTTP_ROOT            = "http://#{config[env]["httpd"]["servername"]}"
+TOP_PAGE_PATH        = File.join(APPNAME_TO_DB["webjourney"].split("/").last, "_design/webjourney/_show/page/pages:top")
+
 import_test_fixtures = config[env]["misc"]["import_test_fixtures"]
-http_root            = "http://#{config[env]["httpd"]["servername"]}"
 
 namespace :initialize do
   desc("Initialize CouchApp design documents")
@@ -87,7 +89,7 @@ task :initialize do
   puts "WebJourney has been initialized successfully."
   puts "Visit your webjourney here:"
   puts
-  puts "   #{http_root}/"
+  puts "   #{HTTP_ROOT}/#{TOP_PAGE_PATH}"
   puts
 end
 
