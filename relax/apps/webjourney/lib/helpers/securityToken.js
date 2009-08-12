@@ -9,8 +9,7 @@ function createSecurityToken(ownerId, viewerId, appId, domainId, appUrl, modId){
     "m" : modId,
     "t" : new Date().getTime()
   };
-  var rawToken = serialize(obj);
-  return base64encode(encrypt(rawToken));
+  return base64encode(encrypt(serialize(obj)));
 }
 
 //

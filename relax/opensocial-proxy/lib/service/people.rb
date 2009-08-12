@@ -10,20 +10,18 @@ module Service
       # params
       #  <tt>userId</tt>
       #  <tt>groupId</tt>
-      def get(params={}, req = nil)
+      def get(params={}, req = nil, token = nil)
         if params["groupId"] == "@self"
           # TODO handling the case params["userId"] is "@me".
           ids = params["userId"].is_a?(Array) ? params["userId"] : [params["userId"]]
           # Fetch the records from CouchDB
-          
+
         end
-
-
         {
           "name"        => "Jane Doe",
           "displayName" => "Jone Doe",
           "gender"      => "female",
-          "id"          => "example.org:34KJDCSKJN2HHF0DW20394"
+          "id"          => token.viewer_id
         }
       end
     end

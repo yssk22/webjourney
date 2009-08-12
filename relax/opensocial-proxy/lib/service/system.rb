@@ -1,3 +1,5 @@
+require 'rubygems'
+
 #
 # OpenSocial system service
 #
@@ -47,7 +49,7 @@ module Service
       #
       # A proxy method of available methods. This method should be for the dispach routine.
       #
-      def apply(service, method, params, request)
+      def apply(service, method, params, request, token)
         k = service.to_sym
         m = method.to_sym
         if AVAILABLE_SERVICES.has_key?(k) &&
@@ -55,7 +57,7 @@ module Service
           require File.join(File.dirname(__FILE__), service)
           klass_name = service[0,1].upcase + service[1..-1]
           klass = Service.const_get(klass_name)
-          klass.method(m).call(params, request)
+          klass.method(m).call(params, request, token)
         else
           # TODO
           raise "not supported"
