@@ -3,6 +3,7 @@
    "_id" : "pages:top",
    "title" : "Top Page",
    "type"  : "Page",
+   "owner" : "administrator",
    "gadgets" : {
      "top"    : [ { "id"    : "pages:top:top-0",
                     "url" : "/_design/webjourney/gadgets/helloworld.xml",

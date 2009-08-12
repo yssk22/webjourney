@@ -129,10 +129,10 @@ WebJourney.Gadget.prototype = {
   },
 
   /**
-   * Returns the secure token.
+   * Returns the security token.
    */
-  getSecureToken : function(){
-    return this._params.secureToken || this._page.getSecureToken();
+  getSecurityToken : function(){
+    return this._params.securityToken;
   },
 
   /**
@@ -208,13 +208,15 @@ WebJourney.Gadget.prototype = {
       "mid"       : this.getId(),
       "nocache"   : this.getNoCache(),
       "url"       : this.getSpecUrl(),
-      "st"        : this.getSecureToken(),
       "country"   : "ALL",
       "lang"      : "ALL",
       "view"      : this.getView()
 //      "v"         : this.getSpecVersion()
     };
 
+    if( this.getSecurityToken() ){
+      params["st"] = this.getSecurityToken();
+    }
     return this.getServerBase() + "ifr?" +
       WebJourney.Util.toQueryString(params);
   },

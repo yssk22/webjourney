@@ -201,13 +201,6 @@ WebJourney.Page.prototype = {
   },
 
   /**
-   * Returns a security token for iframe gadgets.
-   */
-  getSecureToken : function(){
-    return "john.doe:john.doe:appid:cont:url:0:default";
-  },
-
-  /**
    * (Private) Initialize gadget objects for display
    */
   _initializeGadgets : function(){
