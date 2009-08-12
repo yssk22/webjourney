@@ -2,7 +2,8 @@
 
 ## REQUIREMENTS
 
-* Apache HTTPD 2.2.7 or higher (with php+curl+openssl+mcrypt)
+* Apache HTTPD 2.2.7 or higher with php+curl+openssl+mcrypt
+* Ruby 1.8.6 or higher with rack + passenger
 * Apache CouchDB 0.9.0
 
 ## INSTLLATION

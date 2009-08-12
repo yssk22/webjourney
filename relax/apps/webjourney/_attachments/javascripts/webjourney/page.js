@@ -194,10 +194,11 @@ WebJourney.Page.prototype = {
   },
 
   /**
-   * Returns a server base URI for iframe gadgets.
+   * Returns a gadget rendering server base URI for iframe gadgets.
    */
   getServerBase : function(){
-    return "http://webjourney.local/opensocial/gadgets/";
+    // TODO make server base configurable (or automatically determined)
+    return "http://webjourney.local/shindig/gadgets/";
   },
 
   /**
