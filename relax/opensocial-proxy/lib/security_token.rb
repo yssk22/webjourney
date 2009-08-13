@@ -15,9 +15,9 @@ class SecurityToken
   attr_reader :module_id
   attr_reader :time
 
-  def initialize(owner_id, viewer_id, app_id, domain_id, app_url, module_id, time)
-    @owner_id  = owner_id
+  def initialize(viewer_id, owner_id, app_id, domain_id, app_url, module_id, time)
     @viewer_id = viewer_id
+    @owner_id  = owner_id
     @app_id    = app_id
     @domain_id = domain_id
     @app_url   = app_url
@@ -33,8 +33,8 @@ class SecurityToken
               deserialize(token_string)
             end
       # each objects are parsed as CGI.parse
-      self.new(obj["o"].first,
-               obj["v"].first,
+      self.new(obj["v"].first,
+               obj["o"].first,
                obj["a"].first,
                obj["d"].first,
                obj["u"].first,

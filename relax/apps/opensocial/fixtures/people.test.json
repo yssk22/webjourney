@@ -15,5 +15,31 @@
       "formatted" : "Administrator"
     },
     "gender" : "male"
+  },
+
+  {
+    "type"  : "Person",
+    // singluar person fields
+    // required
+    "_id"   : "example.org:joe-doe",
+    "displayName" : {
+      "formatted" : "Joe Doe"
+    },
+
+    // optional
+    "gender" : "male"
+  },
+
+  {
+    "type"  : "Person",
+    // singluar person fields
+    // required
+    "_id"   : "example.org:john",
+    "displayName" : {
+      "formatted" : "John"
+    },
+
+    // optional
+    "gender" : "male"
   }
 ]

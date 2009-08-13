@@ -20,26 +20,45 @@ module Service
         }.update(params)
 
         user_ids = normalize_user_ids(params["userId"], token)
-        # resolve the actual user ids to be fetched.
         case params["groupId"]
         when "@self"
           # nothing to do
         when "@friends"
-          user_ids = fetch_relation_ids(user_ids, 'friends')
+          # @friends interpreted as groupId="friend"
+          # Get the people ids in the group tagged with {groupId}
+          user_ids = people_ids_in_group(user_ids, "friends")
         else
-          user_ids = fetch_relation_ids(user_ids, params["groupId"])
+          user_ids = people_ids_in_group(user_ids, params["groupId"])
         end
 
-        # TODO search options such as order
+        # Get the opensocial.Person objects.
+        # TODO search options such as sortOrder, count, ...
         raw_result = @@db.view("people_by_id",
                                :keys => user_ids)
         result = raw_result["rows"].map do |row|
           row["value"]
         end
-        params["userId"].is_a?(Array) ? result : result.first
+
+        if !params["userId"].is_a?(Array) && params["groupId"] == "@self"
+          # returns person object
+          result.first
+        else
+          # returns array of person objects.
+          result
+        end
       end
 
       private
+      def people_ids_in_group(user_ids, group_name)
+        user_ids.map { |uid|
+          opts = {
+            :startkey => [uid, group_name].to_json,
+            :endkey   => [uid, group_name, "\u0000"].to_json
+          }
+          @@db.view("people_ids_in_group",opts)["rows"].map { |r| r["key"].last }
+        }.flatten
+      end
+
       def normalize_user_ids(ids, token)
         if ids.is_a?(Array)
           ids.map { |id|

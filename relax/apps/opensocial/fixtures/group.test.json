@@ -1,0 +1,43 @@
+// Group definition document.
+//
+//  - from : the user id that defines this group.
+//  - to   : the target user id that defined in this group.
+//  - name : a group name
+//
+[
+  /**
+   * Group definitioin for yssk22
+   */
+  {
+    "type"  : "Group",
+    "from"  : "example.org:yssk22",
+    "to"    : "example.org:joe-doe",
+    "tags"  : ["friends"]
+  },
+  {
+    "type"  : "Group",
+    "from"  : "example.org:yssk22",
+    "to"    : "example.org:john",
+    "tags"  : ["friends"]
+  },
+
+  /**
+   * Group definitioin for joe-doe
+   */
+  {
+    "type"  : "Group",
+    "from"  : "example.org:joe-doe",
+    "to"    : "example.org:yssk22",
+    "tags"  : ["friends"]
+  },
+
+  /**
+   * Group definitioin for john
+   */
+  {
+    "type"  : "Group",
+    "from"  : "example.org:john",
+    "to"    : "example.org:yssk22",
+    "tags"  : ["blocks"]
+  }
+]
