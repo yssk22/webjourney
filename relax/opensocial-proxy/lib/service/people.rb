@@ -1,12 +1,11 @@
 require 'rubygems'
-require File.join(File.dirname(__FILE__), "../relax_client")
+require File.join(File.dirname(__FILE__), "./util")
 #
 # OpenSocial people service implementation
 # Specification : http://www.opensocial.org/Technical-Resources/opensocial-spec-v09/RPC-Protocol.html#People
 #
 module Service
   class People
-    @@db = RelaxClient.new("opensocial")
 
     class << self
       # get operation
@@ -19,22 +18,13 @@ module Service
           "groupId" => "@self",
         }.update(params)
 
-        user_ids = normalize_user_ids(params["userId"], token)
-        case params["groupId"]
-        when "@self"
-          # nothing to do
-        when "@friends"
-          # @friends interpreted as groupId="friend"
-          # Get the people ids in the group tagged with {groupId}
-          user_ids = people_ids_in_relationship(user_ids, "friends")
-        else
-          user_ids = people_ids_in_relationship(user_ids, params["groupId"])
-        end
+        user_ids = Util.normalize_user_ids(params["userId"], token)
+        user_ids = Util.resolve_user_ids_by_group_id(user_ids, params["groupId"])
 
         # Get the opensocial.Person objects.
         # TODO search options such as sortOrder, count, ...
-        raw_result = @@db.view("people_by_id",
-                               :keys => user_ids)
+        raw_result = Util.db.view("people_by_id",
+                                  :keys => user_ids)
         result = raw_result["rows"].map do |row|
           row["value"]
         end
@@ -45,40 +35,6 @@ module Service
         else
           # returns array of person objects.
           result
-        end
-      end
-
-      private
-      def people_ids_in_relationship(user_ids, rel_name)
-        user_ids.map { |uid|
-          opts = {
-            :startkey => [uid, rel_name].to_json,
-            :endkey   => [uid, rel_name, "\u0000"].to_json
-          }
-          @@db.view("people_ids_in_relationship",opts)["rows"].map { |r| r["key"].last }
-        }.flatten
-      end
-
-      def normalize_user_ids(ids, token)
-        if ids.is_a?(Array)
-          ids.map { |id|
-            replace_user_id(id.to_s, token)
-          }
-        else
-          normalize_user_ids([ids], token)
-        end
-      end
-
-      #
-      # Replace placeholder (that starts with '@') to the actual value derived from the request token
-      #
-      def replace_user_id(value, token)
-        return value unless value =~ /^@.+/
-        case value
-          when "@me"
-          token.viewer_id
-          else
-          value
         end
       end
     end
