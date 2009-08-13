@@ -26,9 +26,9 @@ module Service
         when "@friends"
           # @friends interpreted as groupId="friend"
           # Get the people ids in the group tagged with {groupId}
-          user_ids = people_ids_in_group(user_ids, "friends")
+          user_ids = people_ids_in_relationship(user_ids, "friends")
         else
-          user_ids = people_ids_in_group(user_ids, params["groupId"])
+          user_ids = people_ids_in_relationship(user_ids, params["groupId"])
         end
 
         # Get the opensocial.Person objects.
@@ -49,13 +49,13 @@ module Service
       end
 
       private
-      def people_ids_in_group(user_ids, group_name)
+      def people_ids_in_relationship(user_ids, rel_name)
         user_ids.map { |uid|
           opts = {
-            :startkey => [uid, group_name].to_json,
-            :endkey   => [uid, group_name, "\u0000"].to_json
+            :startkey => [uid, rel_name].to_json,
+            :endkey   => [uid, rel_name, "\u0000"].to_json
           }
-          @@db.view("people_ids_in_group",opts)["rows"].map { |r| r["key"].last }
+          @@db.view("people_ids_in_relationship",opts)["rows"].map { |r| r["key"].last }
         }.flatten
       end
 
