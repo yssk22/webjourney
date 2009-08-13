@@ -57,7 +57,7 @@ class JsonRpcProxy
     validate!(rpc)
     # dispatch the rpc request
     service, method = rpc["method"].split(".")
-    result = Service::System.apply(service, method, rpc["params"], get_security_token(req), req)
+    result = Service::System.apply(service, method, rpc["params"], SecurityToken.from_request(req), req)
     # TODO
     #   Currently shindig implementation required 'data' field, not 'result' field.
     #   This should be changed.
@@ -65,21 +65,6 @@ class JsonRpcProxy
       "id"     => rpc["id"],
       "data"   => result
     }
-  end
-
-  def get_security_token(req)
-    oauth_req = OAuth::RequestProxy::RackRequest.new(req)
-    if oauth_req.oauth_signature && oauth_req.oauth_consumer_key
-      # TODO 2-legged oauth implemetation
-    else
-      # NOT OAuth Request, check st=xxx for Shindig specific security token
-      token_string = req.params["st"]
-      if token_string
-        SecurityToken.from_string(token_string)
-      else
-        SecurityToken::ANONYMOUS
-      end
-    end
   end
 
   def validate!(rpc)

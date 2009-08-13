@@ -26,6 +26,21 @@ class SecurityToken
   end
 
   class << self
+    def from_request(req)
+      oauth_req = OAuth::RequestProxy::RackRequest.new(req)
+      if oauth_req.oauth_signature && oauth_req.oauth_consumer_key
+        # TODO 2-legged oauth implemetation
+      else
+        # NOT OAuth Request, check st=xxx for Shindig specific security token
+        token_string = req.params["st"]
+        if token_string
+          SecurityToken.from_string(token_string)
+        else
+          SecurityToken::ANONYMOUS
+        end
+      end
+    end
+
     def from_string(token_string, encrypted = true)
       obj = if encrypted
               deserialize(decrypt(base64decode(token_string)))
