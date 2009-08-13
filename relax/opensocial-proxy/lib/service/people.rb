@@ -32,10 +32,9 @@ module Service
 
         # TODO search options such as order
         raw_result = @@db.view("people_by_id",
-                               :keys => user_ids,
-                               :include_docs => true)
+                               :keys => user_ids)
         result = raw_result["rows"].map do |row|
-          row["doc"]
+          row["value"]
         end
         params["userId"].is_a?(Array) ? result : result.first
       end
