@@ -26,19 +26,25 @@ class SecurityToken
   end
 
   class << self
-    def from_string(token_string)
-      obj = deserialize(decrypt(base64decode(token_string)))
-      self.new(obj["o"],
-               obj["v"],
-               obj["a"],
-               obj["d"],
-               obj["u"],
-               obj["m"],
-               obj["t"])
+    def from_string(token_string, encrypted = true)
+      obj = if encrypted
+              deserialize(decrypt(base64decode(token_string)))
+            else
+              deserialize(token_string)
+            end
+      # each objects are parsed as CGI.parse
+      self.new(obj["o"].first,
+               obj["v"].first,
+               obj["a"].first,
+               obj["d"].first,
+               obj["u"].first,
+               obj["m"].first,
+               obj["t"].first)
     end
 
+    private
     def deserialize(token_string)
-      obj = CGI.parse(token_string)
+      CGI.parse(token_string)
     end
 
     def base64decode(token_string)

@@ -3,9 +3,9 @@
     "type"  : "Person",
     // singluar person fields
     // required
-    // "id" : automatically assigned
+    "_id"   : "example.org:yssk22",
     "displayName" : {
-      "formatted" : "Administrator"
+      "formatted" : "yssk22"
     },
 
     // optional

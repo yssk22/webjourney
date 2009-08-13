@@ -11,14 +11,17 @@ class JsonRpcProxy
     'Content-Type'=>'application/json'
   }
 
+  class JsonRpcError < StandardError;  end
+
   def initialize
   end
 
   # Rack application handling
-  def process(req)
-    status = 200
+  def call(env)
+    req = Rack::Request.new(env)
+    status          = 200
     response_header = DEFAULT_RESPONSE_HEADER.dup
-    body   = nil
+    body            = nil
     begin
       if req.post?
         json = JSON.parse(req.body.read)
@@ -34,21 +37,27 @@ class JsonRpcProxy
         status = 405
         body   = {}
       end
+    rescue JsonRpcError => e
+      status = 400
+      body   = {"error" => "Invalid Json RPC request(At least one of method, params, or id is missing)"}
     rescue => e
       # something goes wrong ...
       status = 500
       body   = {"error" => e.message, "trace" => e.backtrace}
     end
     # returns Rack style response array.
-    return [status, response_header, [body.to_json]]
+    body = body.to_json
+    response_header["Content-Length"] = body.length.to_s
+    return [status, response_header, body]
   end
 
   private
   # dispatch the rpc request
   def dispatch(rpc, req)
+    validate!(rpc)
     # dispatch the rpc request
     service, method = rpc["method"].split(".")
-    result = Service::System.apply(service, method, rpc["params"], req, get_security_token(req))
+    result = Service::System.apply(service, method, rpc["params"], get_security_token(req), req)
     # TODO
     #   Currently shindig implementation required 'data' field, not 'result' field.
     #   This should be changed.
@@ -70,6 +79,12 @@ class JsonRpcProxy
       else
         SecurityToken::ANONYMOUS
       end
+    end
+  end
+
+  def validate!(rpc)
+    unless (rpc.has_key?("method") && rpc.has_key?("params") && rpc.has_key?("id"))
+      raise JsonRpcError.new
     end
   end
 end

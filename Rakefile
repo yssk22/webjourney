@@ -17,7 +17,7 @@ config = YAML.load(File.read(File.join(File.dirname(__FILE__), "config/webjourne
 # app and db mappping
 APPNAME_TO_DB = {
   "webjourney" => config[env]["couchdb"]["webjourney"],
-  "opensocial" => config[env]["couchdb"]["webjourney"]
+  "opensocial" => config[env]["couchdb"]["opensocial"]
 }
 
 HTTP_ROOT            = "http://#{config[env]["httpd"]["servername"]}"
