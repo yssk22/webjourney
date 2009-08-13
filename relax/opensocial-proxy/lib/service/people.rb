@@ -6,7 +6,6 @@ require File.join(File.dirname(__FILE__), "./util")
 #
 module Service
   class People
-
     class << self
       # get operation
       # params

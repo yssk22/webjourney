@@ -49,7 +49,7 @@ module Service
             :startkey => [uid, group_id].to_json,
             :endkey   => [uid, group_id, "\u0000"].to_json
           }
-          @@db.view("people_ids_in_relationship",opts)["rows"].map { |r| r["key"].last }
+          db.view("people_ids_in_relationship",opts)["rows"].map { |r| r["key"].last }
         }.flatten
       end
 

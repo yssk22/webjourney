@@ -1,18 +1,13 @@
 require 'rubygems'
 require 'rack'
-require File.join(File.dirname(__FILE__), "../../lib/security_token")
+require File.join(File.dirname(__FILE__), "../spec_helper")
 require File.join(File.dirname(__FILE__), "../../lib/service/people")
 
 #
 # Fixtures are defined in
 #  - relax/apps/opensocial/fixtures/people.test.json
-#  - relax/apps/opensocial/fixtures/groups.test.json
+#  - relax/apps/opensocial/fixtures/relationships.test.json
 #
-
-def security_token(viewer_id, owner_id=nil)
-  owner_id ||= viewer_id
-  SecurityToken.new(viewer_id, owner_id,  "app1", "example.org", "http://example.org/app.xml", "module1", 0)
-end
 
 yssk22  = security_token("example.org:yssk22")
 joe_doe = security_token("example.org:joe-doe")
@@ -50,8 +45,8 @@ describe Service::People, "when fetching @friends." do
 
     # Data expectation.
     result.length.should == 2
-    result.map { |r| r["id"] }.include?("example.org:joe-doe")
-    result.map { |r| r["id"] }.include?("example.org:john")
+    result.map { |r| r["id"] }.include?("example.org:joe-doe").should be_true
+    result.map { |r| r["id"] }.include?("example.org:john").should be_true
   end
 end
 
@@ -65,20 +60,16 @@ describe Service::People, "when fetching the specified userId" do
     result = Service::People.get({"userId" => "example.org:yssk22", "groupId" => "@friends"}, john)
 
     result.length.should == 2
-    result.map { |r| r["id"] }.include?("example.org:joe-doe")
-    result.map { |r| r["id"] }.include?("example.org:john")
+    result.map { |r| r["id"] }.include?("example.org:joe-doe").should be_true
+    result.map { |r| r["id"] }.include?("example.org:john").should be_true
   end
-
-  it "should return the person object of example.org:yssk22" do
-  end
-
 end
 
 describe Service::People, "when fetching the specified groupId" do
   it "should return john's list of 'blocks'." do
     result = Service::People.get({"userId" => "@me", "groupId" => "blocks"}, john)
     result.length.should == 1
-    result.map { |r| r["id"] }.include?("example.org:yssk22")
+    result.map { |r| r["id"] }.include?("example.org:yssk22").should be_true
   end
 
   it "should return an empty array." do
