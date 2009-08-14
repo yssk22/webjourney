@@ -10,7 +10,7 @@ describe Service::System, "when proxied unsupported methods" do
   end
 end
 
-describe Service::System, "call 'list_methods'" do
+describe Service::System, "list_methods" do
   before do
     @params, @req, @token = {}, nil, nil
     @result = Service::System.list_methods(@params, @req, @token)
@@ -30,5 +30,14 @@ describe Service::System, "call 'list_methods'" do
   end
 end
 
-# TODO method_signatures specification to be described.
-# TODO method_help specification to be described.
+describe Service::System, "method_signatures" do
+  it "should raise LazyImplentationError" do
+    lambda { Service::System.method_signatures({}, nil, nil)}.should raise_error(Service::LazyImplementationError)
+  end
+end
+
+describe Service::System, "method_help" do
+  it "should raise LazyImplentationError" do
+    lambda { Service::System.method_help({}, nil, nil)}.should raise_error(Service::LazyImplementationError)
+  end
+end

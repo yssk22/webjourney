@@ -6,6 +6,8 @@ require 'rubygems'
 module Service
   # An exception raised when the service is not suppored.
   class NotSupportedError < StandardError; end
+  # An exception raised when the service should be supported but not yet.
+  class LazyImplementationError < NotSupportedError; end
 
   class System
     # key valie pairs for available methods,
@@ -34,8 +36,8 @@ module Service
       #
       def method_signatures(params, token=nil, req=nil)
         method_name = params["methodName"]
-        # TODO must implement
-        raise "must implement"
+        # TODO to be implemented
+        raise LazyImplementationError.new
       end
 
       #
@@ -44,8 +46,8 @@ module Service
       #
       def method_help(params, token=nil, req=nil)
         method_name = params["methodName"]
-        # TODO may implement
-        raise "may implement"
+        # TODO to be implemented
+        raise LazyImplementationError.new
       end
 
 

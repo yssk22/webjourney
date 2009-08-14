@@ -34,7 +34,18 @@ describe Service::Activities, "when fetching @self activities" do
     result.map { |r| r["id"] }.include?("test_activity_1").should be_true
     result.map { |r| r["id"] }.include?("test_activity_2").should be_true
   end
+
+  it "should return filtered activities with activityIds arguments" do
+    result = Service::Activities.get({
+                                       "userId" => "example.org:yssk22",
+                                       "groupId" => "@self",
+                                       "activityIds" => ["test_activity_2"]
+                                     }, joe_doe)
+    result.length.should == 1
+    result.map { |r| r["id"] }.include?("test_activity_2").should be_true
+  end
 end
+
 
 describe Service::Activities, "when fetching with the token including the invalid app_id" do
   it "should return the empty" do

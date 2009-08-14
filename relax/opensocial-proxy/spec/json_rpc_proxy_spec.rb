@@ -34,20 +34,45 @@ end
 describe JsonRpcProxy, "when the HTTP method is not POST" do
   it "should response 405 error" do
     get ENDPOINT
-    last_response.status.should be_equal(405)
+    last_response.status.should == 405
   end
 end
 
-describe JsonRpcProxy, "when one of parameters is missing in the request." do
-  it "should response 400 error with error message." do
+describe JsonRpcProxy, "when the invalid json is post" do
+  it "should response 400 error with a error message" do
+    post ENDPOINT, "invalid json"
+    last_response.status.should == 400
+    JSON(last_response.body)["error"].should_not be_nil
+  end
+end
+
+describe JsonRpcProxy, "when one of parameters is missing in the request" do
+  it "should response 400 error with a error message." do
     post ENDPOINT, { }.to_json
-    last_response.status.should be_equal(400)
+    last_response.status.should == 400
     JSON(last_response.body)["error"].should_not be_nil
 
     post ENDPOINT, [{}].to_json
-    last_response.status.should be_equal(400)
+    last_response.status.should == 400
     JSON(last_response.body)["error"].should_not be_nil
   end
 end
 
-# TODO 500 error specification to be described.
+describe JsonRpcProxy, "when an uncaught exception detected" do
+  before do
+    @rpc = {
+      "id" => "test",
+      "method" => "people.get",
+      "params" => { "p1" => "v1" }
+    }
+    Service::System.should_receive(:apply).and_raise("unknown error")
+  end
+
+  it "should response 500 error with a error message." do
+    post ENDPOINT, @rpc.to_json
+    last_response.status.should == 500
+    JSON(last_response.body)["error"].should_not be_nil
+  end
+end
+
+

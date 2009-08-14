@@ -30,5 +30,15 @@ describe Service::Util, "when normalizing user ids" do
     ids.length.should == 3
     ids.should == ["a", "b", "example.org:yssk22"]
   end
+
+  it 'should raise ArgumentError when ids is an unknown placeholder.' do
+    lambda { Service::Util.normalize_user_ids("@unknown", nil)}.should raise_error(ArgumentError)
+  end
+end
+
+describe Service::Util, "when resolving user ids by group id" do
+  it 'should raise ArgumentError when groupId is an unknown placeholder.' do
+    lambda { Service::Util.resolve_user_ids_by_group_id(["a"], "@unknown", nil)}.should raise_error(ArgumentError)
+  end
 end
 

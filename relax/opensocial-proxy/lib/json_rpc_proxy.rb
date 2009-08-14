@@ -16,11 +16,11 @@ class JsonRpcProxy
 
   # Rack application handling
   def call(env)
-    req = Rack::Request.new(env)
     status          = 200
     response_header = DEFAULT_RESPONSE_HEADER.dup
     body            = nil
     begin
+      req = Rack::Request.new(env)
       if req.post?
         json = JSON.parse(req.body.read)
         if json.is_a?(Array) # json-rpc batch request
@@ -37,9 +37,11 @@ class JsonRpcProxy
       end
     rescue JsonRpcError => e
       status = 400
-      body   = {"error" => "Invalid Json RPC request(At least one of method, params, or id is missing)"}
+      body   = {"error" => "Invalid JSON RPC request(At least one of method, params, or id is missing)"}
+    rescue JSON::ParserError => e
+      status = 400
+      body   = {"error" => "Invalid JSON RPC request(JSON format could not be parsed.)"}
     rescue => e
-      # something goes wrong ...
       status = 500
       body   = {"error" => e.message, "trace" => e.backtrace}
     end

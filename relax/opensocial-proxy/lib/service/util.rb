@@ -34,23 +34,27 @@ module Service
       # Returns the list of user ids for the specified group name.
       #
       def resolve_user_ids_by_group_id(user_ids, group_id, option = {})
-        case group_id
-        when "@self"
-          return user_ids
-        when "@friends"
-          group_id = "friends"
-        else
-          # nothing to do
+
+        if is_placeholder?(group_id)
+          case group_id
+          when "@self"
+            return user_ids
+          when "@friends"
+            group_id = "friends"
+          else
+            raise ArgumentError.new("Unknown placeholder (groupId='#{group_id}')")
+          end
         end
 
         # return the list using "people_ids_in_relationship" view
-        user_ids.map { |uid|
+        result = user_ids.map { |uid|
           opts = {
             :startkey => [uid, group_id],
             :endkey   => [uid, group_id, "\u0000"]
           }
           db.view("people_ids_in_relationship",opts)["rows"].map { |r| r["key"].last }
-        }.flatten
+        }
+        result.flatten
       end
 
       private
@@ -58,13 +62,17 @@ module Service
       # Replace placeholder (that starts with '@') to the actual value derived from the request token
       #
       def replace_user_id(value, token)
-        return value unless value =~ /^@.+/
+        return value unless is_placeholder?(value)
         case value
-          when "@me"
+        when "@me"
           token.viewer_id
-          else
-          value
+        else
+          raise ArgumentError.new("Unknown placeholder (userId='#{value}')")
         end
+      end
+
+      def is_placeholder?(v)
+        v =~ /^@.+/
       end
     end
   end

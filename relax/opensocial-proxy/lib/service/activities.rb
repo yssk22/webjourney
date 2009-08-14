@@ -29,9 +29,10 @@ module Service
         #   otherwise, use :startkey and :endkey option.
         if params["activityIds"] && params["activityIds"].is_a?(Array)
           option = {}
-          option[:keys] = user_ids.map { |uid|
-            activityIds.map {  |act_id|
-              [uid, app_id, act_id]
+          option[:keys] = []
+          user_ids.each { |uid|
+            params["activityIds"].each {  |act_id|
+              option[:keys] << [uid, app_id, act_id]
             }
           }
           Util.db.view("activities_by_ids", option)["rows"].map { |row|
@@ -40,13 +41,14 @@ module Service
         else
           # TODO optimization is required when user_ids is the large list.
           option = {}
-          user_ids.map { |uid|
+          result = user_ids.map { |uid|
             option[:startkey] = [uid, app_id]
             option[:endkey]   = [uid, app_id, "\u0000"]
             Util.db.view("activities_by_ids", option)["rows"].map { |row|
               row["value"]
             }
-          }.flatten
+          }
+          result.flatten
         end
       end
 
