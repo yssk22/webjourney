@@ -1,14 +1,23 @@
 require 'rubygems'
 
 #
-# OpenSocial system service
+# Service module provides the service classes that implement opensocial JSON-RPC/REST services
 #
 module Service
+  #
   # An exception raised when the service is not suppored.
+  #
   class NotSupportedError < StandardError; end
+
+  #
   # An exception raised when the service should be supported but not yet.
+  #
   class LazyImplementationError < NotSupportedError; end
 
+  #
+  # OpenSocial System service implementation
+  # Specification : http://www.opensocial.org/Technical-Resources/opensocial-spec-v09/RPC-Protocol.html#System
+  #
   class System
     # key valie pairs for available methods,
     # {service name => array of available methods}

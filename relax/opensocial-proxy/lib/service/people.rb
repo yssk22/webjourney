@@ -1,10 +1,11 @@
 require 'rubygems'
 require File.join(File.dirname(__FILE__), "./util")
-#
-# OpenSocial people service implementation
-# Specification : http://www.opensocial.org/Technical-Resources/opensocial-spec-v09/RPC-Protocol.html#People
-#
+
 module Service
+  #
+  # OpenSocial people service implementation
+  # Specification : http://www.opensocial.org/Technical-Resources/opensocial-spec-v09/RPC-Protocol.html#People
+  #
   class People
     class << self
       # get operation
