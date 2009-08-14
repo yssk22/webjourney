@@ -10,6 +10,7 @@ require 'rubygems'
 require 'json'
 require 'net/http'
 require 'yaml'
+require File.join(File.dirname(__FILE__), "relax/relax_client/lib/relax_client")
 
 env = ENV["WEBJOURNEY_ENV"] || "default"
 config = YAML.load(File.read(File.join(File.dirname(__FILE__), "config/webjourney.yml")))
@@ -19,6 +20,15 @@ APPNAME_TO_DB = {
   "webjourney" => config[env]["couchdb"]["webjourney"],
   "opensocial" => config[env]["couchdb"]["opensocial"]
 }
+DB_TO_APPNAMES = {}
+APPNAME_TO_DB.each do |appname, db_uri|
+    if DB_TO_APPNAMES.has_key?(db_uri)
+      DB_TO_APPNAMES[db_uri] << appname
+    else
+      DB_TO_APPNAMES[db_uri] = [appname]
+    end
+end
+
 
 HTTP_ROOT            = "http://#{config[env]["httpd"]["servername"]}"
 TOP_PAGE_PATH        = File.join(APPNAME_TO_DB["webjourney"].split("/").last, "_design/webjourney/_show/page/pages:top")
@@ -38,13 +48,14 @@ namespace :initialize do
 
   desc("Initialize Database")
   task :db do
-    # Database Creation
-    APPNAME_TO_DB.map { |key, db|  db }.uniq.each do |db|
+    # Database creation for each database
+    DB_TO_APPNAMES.each do |db_uri, appnames|
+      db = RelaxClient.new(appnames.first)
       step "Database Check" do
-        if db_exists?(db)
+        if db.exist?
           confirmed = confirm("Continue with dropping database?") do
             puts "Drop the database."
-            drop_db(db)
+            db.drop
           end
           unless confirmed
             puts "Initialization canceled."
@@ -52,20 +63,17 @@ namespace :initialize do
           end
         end
         puts "Create a database."
-        create_db(db)
+        db.create
       end
     end
 
     # Data Loading
-    APPNAME_TO_DB.each do |key, db|
-      dir = File.join(File.dirname(__FILE__), "relax/apps/#{key}")
+    APPNAME_TO_DB.each do |appname, db_uri|
+      db = RelaxClient.new(appname)
+      dir = File.join(File.dirname(__FILE__), "relax/apps/#{appname}")
       step("Import initial data set") do
         Dir.glob(File.join(dir, "**/*.json")) do |fname|
-          count = if fname =~ /test\.json/    # test fixture
-                    import_fixtures(fname, db, true) if import_test_fixtures
-                  else
-                    import_fixtures(fname, db)
-                  end
+          count = import_fixtures(fname, db)
           puts "#{File.basename(fname)} - #{count} documents"
         end
       end
@@ -126,36 +134,6 @@ def confirm(msg, &block)
   end
 end
 
-def db_exists?(db)
-  uri = URI.parse(db)
-  req = Net::HTTP::Get.new(File.join(uri.path))
-  req.basic_auth(uri.user, uri.password)
-  Net::HTTP.start(uri.host, uri.port) do |http|
-    res = http.request(req)
-    res.is_a?(Net::HTTPOK)
-  end
-end
-
-def create_db(db)
-  uri = URI.parse(db)
-  req = Net::HTTP::Put.new(File.join(uri.path))
-  req.basic_auth(uri.user, uri.password)
-  Net::HTTP.start(uri.host, uri.port) do |http|
-    res = http.request(req)
-    raise_http_error(req, res)    unless res.is_a?(Net::HTTPSuccess)
-  end
-end
-
-def drop_db(db)
-  uri = URI.parse(db)
-  req = Net::HTTP::Delete.new(File.join(uri.path))
-  req.basic_auth(uri.user, uri.password)
-  Net::HTTP.start(uri.host, uri.port) do |http|
-    res = http.request(req)
-    raise_http_error(req, res)    unless res.is_a?(Net::HTTPSuccess)
-  end
-end
-
 def import_fixtures(fname, db, is_test=false)
   docs = nil
   begin
@@ -165,28 +143,7 @@ def import_fixtures(fname, db, is_test=false)
     puts "JSON error detected in #{fname}"
     raise e
   end
-
-  # test fixture should be marked as "is_test_fixture"
-  docs = docs.map { |doc| doc["is_test_fixture"] = true; doc }  if is_test
-
   # Importing by bulk_docs
-  uri = URI.parse(db)
-  req = Net::HTTP::Post.new(File.join(uri.path, "_bulk_docs"))
-  req.basic_auth(uri.user, uri.password)
-  req.body = { "docs" => docs, "all_or_nothing" => is_test}.to_json
-  Net::HTTP.start(uri.host, uri.port) do |http|
-    res = http.request(req)
-    json = JSON.parse(res.body)
-    raise_http_error(req, res)    unless res.is_a?(Net::HTTPSuccess)
-  end
+  db.bulk_docs(docs, :all_or_nothing => true)
   docs.length
-end
-
-def raise_http_error(req, res)
-  puts "An error received from Server"
-  puts res.body
-
-  puts "Request Body: "
-  puts req.body
-  raise res.error!
 end
