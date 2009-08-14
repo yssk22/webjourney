@@ -1,0 +1,18 @@
+[
+  {
+    "_id"     : "test_app_data_1",
+    "type"    : "AppData",
+    "userId"  : "example.org:yssk22",
+    "appId"   : "test",
+    "key"     : "key1",
+    "value"   : "value1"
+  },
+  {
+    "_id"     : "test_app_data_2",
+    "type"    : "AppData",
+    "userId"  : "example.org:yssk22",
+    "appId"   : "test",
+    "key"     : "key2",
+    "value"   : "value2"
+  }
+]

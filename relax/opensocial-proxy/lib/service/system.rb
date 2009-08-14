@@ -13,8 +13,9 @@ module Service
     # key valie pairs for available methods,
     # {service name => array of available methods}
     AVAILABLE_SERVICES = {
-      :system => [:listMethods, :methodSignatures, :methodHelp],
-      :people => [:get]
+      :system     => [:listMethods, :methodSignatures, :methodHelp],
+      :people     => [:get],
+      :activities => [:get]
     }
 
     class << self
