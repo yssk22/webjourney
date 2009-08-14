@@ -3,6 +3,10 @@ require 'spec'
 require File.join(File.dirname(__FILE__), "../lib/security_token")
 require File.join(File.dirname(__FILE__), "../lib/relax_client")
 
+FIXTURE_MARKER   = "is_test_fixture"
+TEST_DATA_MARKER = "is_test_data"
+
+
 #
 # Make fixtures reset on the specified timing.
 # The argument should be :all or :each.
@@ -20,17 +24,34 @@ end
 #
 def reset_fixture
   apps_dir = File.join(File.dirname(__FILE__), "../../apps")
+  apps = []
+  # clean up fixtures
   Dir.glob(File.join(apps_dir, "**/fixtures")) do |fdir|
     app_name = fdir.split("/")[-2]
+    apps << app_name
+    # Delete old fixtures
     db = RelaxClient.new(app_name)
+    [FIXTURE_MARKER, TEST_DATA_MARKER].each do |marker|
+      map = <<-EOS
+function(doc){
+  if(doc.#{marker}){
+    emit(doc._id, {"_id" : doc._id, "_rev": doc._rev, "_deleted" : true})
+  }
+}
+EOS
+    old = db.temp_view(map)
+    db.bulk_docs(old["rows"].map { |row| row["value"] }, :all_or_nothing => true)
+    end
+  end
 
-    db.drop if db.exist?
-    db.create
+  # insert fixtures
+  apps.each do |app_name|
+    db = RelaxClient.new(app_name)
     docs = []
-    Dir.glob(File.join(fdir, "**/*.json")) do |file|
+    Dir.glob(File.join(apps_dir, app_name, "fixtures/**/*.test.json")) do |file|
       bulk = JSON.parse(File.read(file))
       raise "Fixture #{file} is not an Array document. Please check the file." unless bulk.is_a?(Array)
-      docs = docs + bulk
+      docs = docs + bulk.map {|doc| doc[FIXTURE_MARKER] = true; doc}
     end
     db.bulk_docs(docs, :all_or_nothing => true)
   end
@@ -56,3 +77,4 @@ def security_token(viewer_id, option = { })
                     option[:module_id],
                     option[:time])
 end
+

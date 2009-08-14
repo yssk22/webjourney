@@ -9,6 +9,8 @@ require 'cgi'
 class RelaxClient
   @@config = YAML.load(File.read(File.join(File.dirname(__FILE__), "../../../config/webjourney.yml")))
 
+  attr_reader :uri
+
   #
   # Constructor
   #
@@ -116,7 +118,13 @@ class RelaxClient
     else
       JSON.parse(RestClient.get(uri))
     end
+  end
 
+  def temp_view(map, reduce = nil, options = {})
+    uri = build_uri("_temp_view", options)
+    doc = {:map => map}
+    doc[:reduce] = reduce unless reduce
+    JSON.parse(RestClient.post(uri, doc.to_json, :content_type => "application/json"))
   end
 
   private
