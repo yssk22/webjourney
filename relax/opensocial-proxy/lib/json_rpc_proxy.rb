@@ -1,7 +1,5 @@
 require 'rubygems'
 require 'json'
-require 'oauth'
-require 'oauth/request_proxy/rack_request'
 
 require File.join(File.dirname(__FILE__), 'security_token')
 require File.join(File.dirname(__FILE__), 'service/system')

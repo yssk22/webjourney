@@ -1,3 +1,6 @@
+require 'rubygems'
+require 'oauth'
+require 'oauth/request_proxy/rack_request'
 require 'cgi'
 #
 # Security Token Implementation
@@ -23,6 +26,13 @@ class SecurityToken
     @app_url   = app_url
     @module_id = module_id
     @time      = time
+  end
+
+  def ==(other)
+    [:viewer_id, :app_url, :domain_id, :app_url, :module_id, :time].each do |property|
+      return false if self.send(property) != other.send(property)
+    end
+    return true
   end
 
   class << self
