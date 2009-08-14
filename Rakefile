@@ -71,7 +71,6 @@ namespace :initialize do
       end
     end
   end
-
 end
 
 desc("Initialize Environemnt")
