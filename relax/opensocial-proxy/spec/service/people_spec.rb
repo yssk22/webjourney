@@ -1,5 +1,4 @@
 require 'rubygems'
-require 'rack'
 require File.join(File.dirname(__FILE__), "../spec_helper")
 require File.join(File.dirname(__FILE__), "../../lib/service/people")
 
@@ -8,6 +7,7 @@ require File.join(File.dirname(__FILE__), "../../lib/service/people")
 #  - relax/apps/opensocial/fixtures/people.test.json
 #  - relax/apps/opensocial/fixtures/relationships.test.json
 #
+reset_fixtures
 
 yssk22  = security_token("example.org:yssk22")
 joe_doe = security_token("example.org:joe-doe")

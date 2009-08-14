@@ -8,6 +8,7 @@ require File.join(File.dirname(__FILE__), "../../lib/service/activities")
 #  - relax/apps/opensocial/fixtures/people.test.json
 #  - relax/apps/opensocial/fixtures/activities.test.json
 #
+reset_fixtures
 
 # tokens including correct app_id
 yssk22  = security_token("example.org:yssk22")
@@ -41,4 +42,3 @@ describe Service::Util, "when resolving user ids by group id" do
     lambda { Service::Util.resolve_user_ids_by_group_id(["a"], "@unknown", nil)}.should raise_error(ArgumentError)
   end
 end
-

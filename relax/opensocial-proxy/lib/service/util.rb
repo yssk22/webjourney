@@ -1,5 +1,5 @@
 require 'rubygems'
-require File.join(File.dirname(__FILE__), "../relax_client")
+require File.join(File.dirname(__FILE__), "../../../relax_client/lib/relax_client")
 module Service
   #
   # Util class provides the common methods used in service implementation classes.

@@ -1,26 +1,13 @@
 require 'rubygems'
 require 'spec'
 require File.join(File.dirname(__FILE__), "../lib/security_token")
-require File.join(File.dirname(__FILE__), "../lib/relax_client")
+require File.join(File.dirname(__FILE__), "../../relax_client/lib/relax_client")
 
 FIXTURE_MARKER   = "is_test_fixture"
 TEST_DATA_MARKER = "is_test_data"
 
-
 #
-# Make fixtures reset on the specified timing.
-# The argument should be :all or :each.
-#
-def use_fixture()
-  Spec::Runner.configure do |config|
-    config.before(:all) do
-      reset_fixture
-    end
-  end
-end
-
-#
-# Reset the database using fixtures.
+# clean up fixture/test data and reload from fixtures.
 #
 def reset_fixture
   apps_dir = File.join(File.dirname(__FILE__), "../../apps")
@@ -56,6 +43,7 @@ EOS
     db.bulk_docs(docs, :all_or_nothing => true)
   end
 end
+alias :reset_fixtures :reset_fixture
 
 #
 # Generate security token for spec test

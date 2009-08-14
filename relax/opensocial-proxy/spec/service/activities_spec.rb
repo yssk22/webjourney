@@ -8,6 +8,7 @@ require File.join(File.dirname(__FILE__), "../../lib/service/activities")
 #  - relax/apps/opensocial/fixtures/people.test.json
 #  - relax/apps/opensocial/fixtures/activities.test.json
 #
+reset_fixtures
 
 # tokens including correct app_id
 yssk22  = security_token("example.org:yssk22")
