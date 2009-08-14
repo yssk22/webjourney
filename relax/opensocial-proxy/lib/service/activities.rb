@@ -41,8 +41,8 @@ module Service
           # TODO optimization is required when user_ids is the large list.
           option = {}
           user_ids.map { |uid|
-            option[:startkey] = [uid, app_id].to_json
-            option[:endkey]   = [uid, app_id, "\u0000"].to_json
+            option[:startkey] = [uid, app_id]
+            option[:endkey]   = [uid, app_id, "\u0000"]
             Util.db.view("activities_by_ids", option)["rows"].map { |row|
               row["value"]
             }

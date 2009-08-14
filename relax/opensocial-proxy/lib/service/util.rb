@@ -46,8 +46,8 @@ module Service
         # return the list using "people_ids_in_relationship" view
         user_ids.map { |uid|
           opts = {
-            :startkey => [uid, group_id].to_json,
-            :endkey   => [uid, group_id, "\u0000"].to_json
+            :startkey => [uid, group_id],
+            :endkey   => [uid, group_id, "\u0000"]
           }
           db.view("people_ids_in_relationship",opts)["rows"].map { |r| r["key"].last }
         }.flatten

@@ -65,7 +65,12 @@ class RelaxClient
       uri
     else
       query = options.map { |k,v|
-        "#{CGI.escape(k.to_s)}=#{CGI.escape(v.to_s)}"
+        case k.to_sym
+        when :key, :startkey, :endkey
+          "#{CGI.escape(k.to_s)}=#{CGI.escape(v.to_json)}"
+        else
+          "#{CGI.escape(k.to_s)}=#{CGI.escape(v.to_s)}"
+        end
       }.join("&")
       "#{uri}?#{query}"
     end
