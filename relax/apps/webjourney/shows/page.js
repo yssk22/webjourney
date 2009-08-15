@@ -18,7 +18,7 @@ function(doc, req) {
           // - what does the "module id" means ?
           var st = createSecurityToken(
             doc.owner,
-            "testviewer",
+            "example.org:yssk22",
             gadget.id,
             "example.com",
             gadget.url,

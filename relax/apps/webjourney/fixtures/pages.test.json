@@ -3,7 +3,7 @@
     "_id" : "pages:OpenSocial-Compliance-v0.8.0",
     "title" : "OpenSocial Compliance Test Suite",
     "type"  : "Page",
-    "owner" : "yssk22",
+    "owner" : "example.org:yssk22",
     "gadgets" : {
       "center" : [
        {
@@ -22,7 +22,7 @@
     "_id" : "pages:OpenSocial-Prototype",
     "title" : "OpenSocial Prototype page",
     "type"  : "Page",
-    "owner" : "yssk22",
+    "owner" : "example.org:yssk22",
     "gadgets" : {
       "center" : [
        {
@@ -36,7 +36,7 @@
     "_id" : "pages:2columns-left-and-center",
     "title" : "2 Column Left and Center",
     "type"  : "Page",
-    "owner" : "yssk22",
+    "owner" : "example.org:yssk22",
     "gadgets" : {
       "left"   : [
         { "url" : "/_design/webjourney/gadgets/helloworld.xml",
@@ -56,7 +56,7 @@
     "_id" : "pages:2columns-right-and-center",
     "title" : "2 Column Right and Center",
     "type"  : "Page",
-    "owner" : "yssk22",
+    "owner" : "example.org:yssk22",
     "gadgets" : {
       "right"   : [
         { "url" : "/_design/webjourney/gadgets/helloworld.xml",
@@ -76,7 +76,7 @@
     "_id" : "pages:2columns-left-and-right",
     "title" : "2 Column Left and Right",
     "type"  : "Page",
-    "owner" : "yssk22",
+    "owner" : "example.org:yssk22",
     "gadgets" : {
       "left"   : [
         { "url" : "/_design/webjourney/gadgets/helloworld.xml",
@@ -96,7 +96,7 @@
     "_id" : "pages:1column-left-only",
     "title" : "1 Column Left Only",
     "type"  : "Page",
-    "owner" : "yssk22",
+    "owner" : "example.org:yssk22",
     "gadgets" : {
       "left"   : [
         { "url" : "/_design/webjourney/gadgets/helloworld.xml",
@@ -108,7 +108,7 @@
     "_id" : "pages:1column-center-only",
     "title" : "1 Column Center Only",
     "type"  : "Page",
-    "owner" : "yssk22",
+    "owner" : "example.org:yssk22",
     "gadgets" : {
       "center"   : [
         { "url" : "/_design/webjourney/gadgets/helloworld.xml",
@@ -120,7 +120,7 @@
     "_id" : "pages:1column-right-only-des",
     "title" : "1 Column Right Only des",
     "type"  : "Page",
-    "owner" : "yssk22",
+    "owner" : "example.org:yssk22",
     "gadgets" : {
       "right"   : [
         { "url" : "/_design/webjourney/gadgets/helloworld.xml",

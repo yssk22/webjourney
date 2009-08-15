@@ -16,7 +16,7 @@ module Service
     end
   end
 
-  module Util::Placeholder
+  module Util::Ids
     #
     # Normalize the use ids
     #
@@ -65,6 +65,10 @@ module Service
       case value
       when "@me"
         token.viewer_id
+      when "@owner"
+        token.owner_id
+      when "@viewer"
+        token.viewer_id
       else
         raise ArgumentError.new("Unknown placeholder (userId='#{value}')")
       end
@@ -89,5 +93,5 @@ module Service
   end
 
 
-  Util.extend(Util::Placeholder)
+  Util.extend(Util::Ids)
 end
