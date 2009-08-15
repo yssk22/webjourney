@@ -73,7 +73,9 @@ namespace :initialize do
       dir = File.join(File.dirname(__FILE__), "relax/apps/#{appname}")
       step("Import initial data set") do
         Dir.glob(File.join(dir, "**/*.json")) do |fname|
-          count = import_fixtures(fname, db)
+          unless fname =~ /.*\.test\.json/
+            count = import_fixtures(fname, db)
+          end
           puts "#{File.basename(fname)} - #{count} documents"
         end
       end

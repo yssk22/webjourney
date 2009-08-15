@@ -9,9 +9,9 @@ module Service
   class People
     class << self
       # get operation
-      # params
-      #  <tt>userId</tt>
-      #  <tt>groupId</tt>
+      # <tt>params</tt> are:
+      #   - <tt>userId</tt>
+      #   - <tt>groupId</tt>
       def get(params={}, token=nil, req=nil)
         params = {
           "userId" => "@me",
@@ -37,6 +37,63 @@ module Service
           result
         end
       end
+
+      #
+      # create operation
+      # <tt>params</tt> are:
+      #   - <tt>userId</tt>
+      #   - <tt>groupId</tt>
+      #   - <tt>person</tt>
+      #
+      # This operation creates opensocial.Activity objects as the targets of a relationship with the specified user.
+      #
+      def create(params = {}, token = nil, req = nil)
+        # TODO to be implemented
+        raise LazyImplementationError.new
+      end
+
+      #
+      # update operation
+      # <tt>params</tt> are:
+      #  - <tt>userId</tt>
+      #  - <tt>groupId</tt>
+      #  - <tt>person</tt>
+      #
+      # This operation update the opensocial.Person object identified by its relationship to the specified user.
+      def update(params = {}, token = nil, req = nil)
+        params = {
+          "userId"  => "@me",
+          "groupId" => "@self",
+          "person"  => nil
+        }.update(params)
+
+        # (userId, groupId) must be the pair of (@me, @self)
+        raise ArgumentError.new("userId must be '@me'")   if params["userId"]  != "@me"
+        raise ArgumentError.new("groupId must be '@self") if params["groupId"] != "@self"
+        raise ArgumentError.new("person must be filled")  if params["person"].nil?
+
+        person = Util.db.load(Util.replace_user_id(params["userId"], token))
+        new_person = update_person_doc(person, params["person"])
+        new_person = Util.db.save(new_person)
+
+        # alias id=_id
+        new_person["id"] = new_person["id"]
+        new_person
+      end
+
+
+      private
+
+      ATTRIBUTES_TO_BE_KEPT = %w(_id _rev type)
+      def update_person_doc(person_doc, attributes)
+        kept_values = {}
+        kept_values = ATTRIBUTES_TO_BE_KEPT.inject({}) do |hash, attr|
+          hash[attr] = person_doc[attr] if person_doc.has_key?(attr)
+          hash
+        end
+        person_doc.update(attributes).update(kept_values)
+      end
+
     end
   end
 end

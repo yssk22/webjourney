@@ -23,8 +23,9 @@ module Service
     # {service name => array of available methods}
     AVAILABLE_SERVICES = {
       :system     => [:listMethods, :methodSignatures, :methodHelp],
-      :people     => [:get],
-      :activities => [:get]
+      :people     => [:get, :create, :update, :delete],
+      :activities => [:get, :create, :update, :delete],
+      :appdata    => [:get, :update, :delete]
     }
 
     class << self

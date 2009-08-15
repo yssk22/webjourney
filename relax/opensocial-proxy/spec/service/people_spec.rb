@@ -28,9 +28,11 @@ describe Service::People, "normalize arguments" do
     result = Service::People.get({"userId" => "@me", "groupId" => "@friends"}, yssk22)
     result.is_a?(Array).should be_true
   end
-
 end
 
+#
+# Spec : people.get
+#
 describe Service::People, "when fetching @self." do
   it "should return a person object for the viewer." do
     result = Service::People.get({"userId" => "@me", "groupId" => "@self"}, yssk22)
@@ -76,4 +78,58 @@ describe Service::People, "when fetching the specified groupId" do
     result = Service::People.get({"userId" => "@me", "groupId" => "foobar"}, john)
     result.length.should == 0
   end
+end
+
+#
+# Spec : people.create
+#
+describe Service::People, "when creating the specified user" do
+  it "should raise LazyImplementationError" do
+    lambda {
+      Service::People.create({}, yssk22)
+    }.should raise_error(Service::LazyImplementationError)
+  end
+end
+
+#
+# Spec : people.update
+#
+describe Service::People, "when updating the specified user" do
+  it "should raise ArgumentError if userId is not @me" do
+    lambda {
+      Service::People.update({"userId" => "foo"})
+    }.should raise_error(ArgumentError)
+  end
+
+  it "should raise ArgumentError if groupId is not @self" do
+    lambda {
+      Service::People.update({"userId" => "@me", "groupId" => "@friends"})
+    }.should raise_error(ArgumentError)
+  end
+
+  it "should raise ArgumentError if person is not specified" do
+    lambda {
+      Service::People.update({"userId" => "@me", "groupId" => "@self"})
+    }.should raise_error(ArgumentError)
+  end
+
+  it "should return the updated person object" do
+    old_doc = Service::People.get({}, yssk22)
+    old_doc["type"].should == "Person"
+    old_doc["displayName"]["formatted"].should == "yssk22"
+    new_doc = Service::People.update({
+                                       "person" => {
+                                         # update yssk22 => 'Yohei Sasaki'
+                                         "displayName" => { "formatted" => "Yohei Sasaki"}
+                                       }
+                                     },yssk22)
+    new_doc["displayName"]["formatted"].should == "Yohei Sasaki"
+    new_doc["_id"].should      == old_doc["_id"]
+    new_doc["type"].should     == old_doc["type"]
+    new_doc["_rev"].should_not == old_doc["_rev"]
+
+    reloaded = Service::People.get({}, yssk22)
+    reloaded["displayName"]["formatted"].should == "Yohei Sasaki"
+  end
+
 end
