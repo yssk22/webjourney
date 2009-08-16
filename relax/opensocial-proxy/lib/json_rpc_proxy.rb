@@ -43,7 +43,7 @@ class JsonRpcProxy
       body   = {"error" => "Invalid JSON RPC request(JSON format could not be parsed.)"}
     rescue => e
       status = 500
-      body   = {"error" => e.message, "trace" => e.backtrace}
+      body   = {"error" => e.message, "trace" => e.backtrace[0..3]}
     end
     # returns Rack style response array.
     body = body.to_json

@@ -2,8 +2,8 @@ development:
   httpd:
     servername: webjourney.local
   couchdb:
-    webjourney: http://admin:time2relax@localhost:5984/webjourney-default
-    opensocial: http://admin:time2relax@localhost:5984/webjourney-default
+    webjourney: http://admin:time2relax@localhost:5984/webjourney-development
+    opensocial: http://admin:time2relax@localhost:5984/webjourney-development
   misc:
     import_test_fixtures : true
 
