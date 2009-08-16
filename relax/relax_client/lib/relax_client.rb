@@ -146,4 +146,44 @@ class RelaxClient
     end
   end
 
+  module Fixture
+    FIXTURE_MARKER   = "is_test_fixture"
+    TEST_DATA_MARKER = "is_test_data"
+    def delete_fixtures
+      [FIXTURE_MARKER, TEST_DATA_MARKER].each do |marker|
+        map = <<-EOS
+function(doc){
+  if(doc.#{marker}){
+    emit(doc._id, {"_id" : doc._id, "_rev": doc._rev, "_deleted" : true})
+  }
+}
+EOS
+        # Get all marked documents with "_deleted".
+        old = self.temp_view(map)
+        # and post them to delete.
+        self.bulk_docs(old["rows"].map { |row| row["value"] }, :all_or_nothing => true)
+      end
+    end
+
+    def insert_fixtures(*files)
+      import_from_file(*files) do |doc|
+        doc[FIXTURE_MARKER] = true
+      end
+    end
+
+    def import_from_file(*files)
+      docs = []
+      files.each do |file|
+        bulk = JSON.parse(File.read(file))
+        raise "Fixture #{file} is not an Array document. Please check the file." unless bulk.is_a?(Array)
+        docs = docs + bulk.map {|doc|
+          yield doc if block_given?
+          doc
+        }
+      end
+      self.bulk_docs(docs, :all_or_nothing => true)
+    end
+  end
+
+  include Fixture
 end

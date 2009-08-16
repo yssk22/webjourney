@@ -12,35 +12,21 @@ TEST_DATA_MARKER = "is_test_data"
 def reset_fixture
   apps_dir = File.join(File.dirname(__FILE__), "../../apps")
   apps = []
-  # clean up fixtures
+  # clean up fixtures for each database
   Dir.glob(File.join(apps_dir, "**/fixtures")) do |fdir|
     app_name = fdir.split("/")[-2]
     apps << app_name
     # Delete old fixtures
     db = RelaxClient.new(app_name)
-    [FIXTURE_MARKER, TEST_DATA_MARKER].each do |marker|
-      map = <<-EOS
-function(doc){
-  if(doc.#{marker}){
-    emit(doc._id, {"_id" : doc._id, "_rev": doc._rev, "_deleted" : true})
-  }
-}
-EOS
-    old = db.temp_view(map)
-    db.bulk_docs(old["rows"].map { |row| row["value"] }, :all_or_nothing => true)
-    end
+    db.delete_fixtures
   end
 
-  # insert fixtures
+  # insert fixtures for each app
   apps.each do |app_name|
     db = RelaxClient.new(app_name)
     docs = []
-    Dir.glob(File.join(apps_dir, app_name, "fixtures/**/*.test.json")) do |file|
-      bulk = JSON.parse(File.read(file))
-      raise "Fixture #{file} is not an Array document. Please check the file." unless bulk.is_a?(Array)
-      docs = docs + bulk.map {|doc| doc[FIXTURE_MARKER] = true; doc}
-    end
-    db.bulk_docs(docs, :all_or_nothing => true)
+    files = Dir.glob(File.join(apps_dir, app_name, "fixtures/**/*.test.json"))
+    db.insert_fixtures(*files)
   end
 end
 alias :reset_fixtures :reset_fixture

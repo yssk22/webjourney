@@ -2,6 +2,16 @@ require 'rubygems'
 require File.join(File.dirname(__FILE__), "../../../relax_client/lib/relax_client")
 module Service
   #
+  # An exception raised when the service is not suppored.
+  #
+  class NotSupportedError < StandardError; end
+
+  #
+  # An exception raised when the service should be supported but not yet.
+  #
+  class LazyImplementationError < NotSupportedError; end
+
+  #
   # Util class provides the common methods used in service implementation classes.
   #
   class Util

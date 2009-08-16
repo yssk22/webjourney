@@ -92,9 +92,9 @@ namespace :initialize do
       step("Import initial data set") do
         Dir.glob(File.join(dir, "**/*.json")) do |fname|
           if fname =~ /.*\.test\.json/
-            count = import_fixtures(fname, db) if IMPORT_TEST_FIXTURES
+            count = db.insert_fixtures(fname) if IMPORT_TEST_FIXTURES
           else
-            count = import_fixtures(fname, db)
+            count = db.import_from_file(fname)
           end
           puts "#{File.basename(fname)} - #{count} documents"
         end
@@ -137,18 +137,4 @@ def confirm(msg, &block)
     puts "Please input y or n."
     confirm(msg, &block)
   end
-end
-
-def import_fixtures(fname, db, is_test=false)
-  docs = nil
-  begin
-    docs = JSON.parse(File.read(fname))
-    raise "Fixtures should be an Array of JSON." unless docs.is_a?(Array)
-  rescue => e
-    puts "JSON error detected in #{fname}"
-    raise e
-  end
-  # Importing by bulk_docs
-  db.bulk_docs(docs, :all_or_nothing => true)
-  docs.length
 end
