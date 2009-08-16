@@ -5,20 +5,20 @@
 #   WEBJOURNEY_ENV : webjourney environment name to select configuration. The default is 'default'.
 #   FORCE : if set true, console confirmations are skipped by enforcing to answer 'y'. (The default is nil)
 #
-
+require 'pathname'
 require 'rubygems'
 require 'json'
-require 'net/http'
 require 'yaml'
+require 'erb'
 require File.join(File.dirname(__FILE__), "relax/relax_client/lib/relax_client")
 
-env = ENV["WEBJOURNEY_ENV"] || "default"
+WEBJOURNEY_ENV = ENV["WEBJOURNEY_ENV"] || "development"
 config = YAML.load(File.read(File.join(File.dirname(__FILE__), "config/webjourney.yml")))
 
 # app and db mappping
 APPNAME_TO_DB = {
-  "webjourney" => config[env]["couchdb"]["webjourney"],
-  "opensocial" => config[env]["couchdb"]["opensocial"]
+  "webjourney" => config[WEBJOURNEY_ENV]["couchdb"]["webjourney"],
+  "opensocial" => config[WEBJOURNEY_ENV]["couchdb"]["opensocial"]
 }
 DB_TO_APPNAMES = {}
 APPNAME_TO_DB.each do |appname, db_uri|
@@ -30,10 +30,28 @@ APPNAME_TO_DB.each do |appname, db_uri|
 end
 
 
-HTTP_ROOT            = "http://#{config[env]["httpd"]["servername"]}"
+HTTP_ROOT            = "http://#{config[WEBJOURNEY_ENV]["httpd"]["servername"]}"
 TOP_PAGE_PATH        = File.join(APPNAME_TO_DB["webjourney"].split("/").last, "_design/webjourney/_show/page/pages:top")
+IMPORT_TEST_FIXTURES = config[WEBJOURNEY_ENV]["misc"]["import_test_fixtures"]
 
-import_test_fixtures = config[env]["misc"]["import_test_fixtures"]
+desc("Initialize Environemnt")
+task :initialize do
+  APPNAME_TO_DB.each do |key, db|
+    dir = File.join(File.dirname(__FILE__), "relax/apps/#{key}")
+    step("Configuration Info about #{key}") do
+      puts "Database  :  #{db}"
+      puts "Directory :  #{dir}"
+    end
+  end
+  Rake::Task["initialize:db"].invoke()
+  Rake::Task["initialize:couchapp"].invoke()
+
+  puts "WebJourney has been initialized successfully."
+  puts "Visit your webjourney here:"
+  puts
+  puts "   #{HTTP_ROOT}/#{TOP_PAGE_PATH}"
+  puts
+end
 
 namespace :initialize do
   desc("Initialize CouchApp design documents")
@@ -73,7 +91,9 @@ namespace :initialize do
       dir = File.join(File.dirname(__FILE__), "relax/apps/#{appname}")
       step("Import initial data set") do
         Dir.glob(File.join(dir, "**/*.json")) do |fname|
-          unless fname =~ /.*\.test\.json/
+          if fname =~ /.*\.test\.json/
+            count = import_fixtures(fname, db) if IMPORT_TEST_FIXTURES
+          else
             count = import_fixtures(fname, db)
           end
           puts "#{File.basename(fname)} - #{count} documents"
@@ -83,31 +103,14 @@ namespace :initialize do
   end
 end
 
-desc("Initialize Environemnt")
-task :initialize do
-  APPNAME_TO_DB.each do |key, db|
-    dir = File.join(File.dirname(__FILE__), "relax/apps/#{key}")
-    step("Configuration Info about #{key}") do
-      puts "Database  :  #{db}"
-      puts "Directory :  #{dir}"
-    end
-  end
-  Rake::Task["initialize:db"].invoke()
-  Rake::Task["initialize:couchapp"].invoke()
-
-  puts "WebJourney has been initialized successfully."
-  puts "Visit your webjourney here:"
-  puts
-  puts "   #{HTTP_ROOT}/#{TOP_PAGE_PATH}"
-  puts
-end
-
-desc("Display Apache VirtualHost Configuration")
-task :display_vhost_config do
-end
-
-desc("Display CouchDB Configuration")
-task :display_couchdb_config do
+task :print_httpd_conf do
+  template_path = File.join(File.dirname(__FILE__), "config/httpd.template.conf")
+  # setup binding parameters
+  httpd = {
+    "servername" => config[WEBJOURNEY_ENV]["httpd"]["servername"],
+    "docroot"    => Pathname.new(File.join(File.dirname(__FILE__), "site")).realpath
+  }
+  ERB.new(File.read(template_path), nil, '-').run(binding)
 end
 
 def step(step, &block)

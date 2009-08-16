@@ -21,7 +21,7 @@ appdirs = Dir.
 # Proxy Monitor
 proxydir = Pathname.new(File.join(File.dirname(__FILE__), "../opensocial-proxy/lib")).realpath.to_s
 
-env = ENV["WEBJOURNEY_ENV"] || "default"
+env = ENV["WEBJOURNEY_ENV"] || "development"
 $config = YAML.load(File.read(File.join(File.dirname(__FILE__), "../../config/webjourney.yml")))[env]["couchdb"]
 
 def push_app(appdir)

@@ -16,7 +16,7 @@ class RelaxClient
   #
   #  - <tt>app_name</tt> : one of the CouchApp application in the relax/apps directory.
   #
-  def initialize(app_name, env = ENV["WEBJOURNEY_ENV"] || "default")
+  def initialize(app_name, env = ENV["WEBJOURNEY_ENV"] || "development")
     @uri      = @@config[env]["couchdb"][app_name]
     @app_name = app_name
   end
