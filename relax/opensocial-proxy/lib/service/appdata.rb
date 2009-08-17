@@ -16,7 +16,7 @@ module Service
           "keys"    => nil,
         }.update(params)
 
-        app_id   = token.app_id
+        app_id   = Util.replace_app_id(params["appId"], token)
         user_ids = Util.normalize_user_ids(params["userId"], token)
         user_ids = Util.resolve_user_ids_by_group_id(user_ids, params["groupId"])
 

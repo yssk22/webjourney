@@ -30,10 +30,8 @@ module Service
         end
 
         if !params["userId"].is_a?(Array) && params["groupId"] == "@self"
-          # returns person object
           result.first
         else
-          # returns array of person objects.
           result
         end
       end

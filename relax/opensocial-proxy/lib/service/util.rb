@@ -68,7 +68,7 @@ module Service
     end
 
     #
-    # Replace placeholder (that starts with '@') to the actual value derived from the request token
+    # Replace placeholder (that starts with '@') for userId to the actual value derived from the request token
     #
     def replace_user_id(value, token)
       return value unless is_placeholder?(value)
@@ -85,7 +85,20 @@ module Service
     end
 
     #
-    # Replace placeholder (that starts with '@') to the actual value.
+    # Replace placeholder (that starts with '@') for appId to the actual value derived from the request token
+    #
+    def replace_app_id(value, token)
+      return value unless is_placeholder?(value)
+      case value
+      when "@app"
+        token.app_id
+      else
+        raise ArgumentError.new("Unknown placeholder (appId='#{value}')")
+      end
+    end
+
+    #
+    # Replace placeholder (that starts with '@') for groupId to the actual value.
     #
     def replace_group_id(value)
       return value unless is_placeholder?(value)
