@@ -1,0 +1,13 @@
+= Third party packages are in this directory.
+
+== Modificaiton and Redistribution Convensions.
+
+When WebJourney project modified the source filem, "A", the original is saved "A.org" file.
+
+
+== Original package site
+
+|Directory		| Site URL |
+|shindig-1.1-php	| http://incubator.apache.org/shindig/ |
+|couchdb-0.9.0		| http://couchdb.apache.org/ |
+

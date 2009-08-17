@@ -261,16 +261,20 @@ var JsonRpcContainer = function(baseUrl, domain, supportedFieldsArray) {
     var userIds = newIdSpec.getField('userId');
     var groupId = newIdSpec.getField('groupId');
 
-    // Upconvert to array for convenience
-    if (!opensocial.Container.isArray(userIds)) {
-      userIds = [userIds];
-    }
-
-    for (var i = 0; i < userIds.length; i++) {
-      if (userIds[i] === 'OWNER') {
-        userIds[i] = '@owner';
-      } else if (userIds[i] === 'VIEWER') {
-        userIds[i] = '@viewer';
+    // convert userIds to placeholder if they are reserverd words.
+    if(opensocial.Container.isArray(userIds)){
+      for (var i = 0; i < userIds.length; i++) {
+        if (userIds[i] === 'OWNER') {
+          userIds[i] = '@owner';
+        } else if (userIds[i] === 'VIEWER') {
+          userIds[i] = '@viewer';
+        }
+      }
+    }else{
+      if(userIds === "OWNER" ){
+        userIds = '@owner';
+      } else if (userIds === 'VIEWER'){
+        userIds = '@viewer';
       }
     }
 
