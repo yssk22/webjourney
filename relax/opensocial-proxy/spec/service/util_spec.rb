@@ -42,3 +42,21 @@ describe Service::Util, "when resolving user ids by group id" do
     lambda { Service::Util.resolve_user_ids_by_group_id(["a"], "@unknown", nil)}.should raise_error(ArgumentError)
   end
 end
+
+describe Service::Util, "replace appId by token" do
+  it "should return token.app_id when the value is @app" do
+    id = Service::Util.replace_app_id("@app", yssk22)
+    id.should == "test"
+  end
+
+  it "should return the argument valeu when the value is not a placeholder" do
+    id = Service::Util.replace_app_id("app", yssk22)
+    id.should == "app"
+  end
+
+  it "should raise ArgumentError when the value is an invalid placeholder" do
+    lambda {
+      Service::Util.replace_app_id("@foo", yssk22)
+    }.should raise_error(ArgumentError)
+  end
+end
