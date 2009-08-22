@@ -13,6 +13,7 @@ module Service
         params = {
           "userId"  => "@me",
           "groupId" => "@self",
+          "appId"   => "@app",
           "keys"    => nil,
         }.update(params)
 
