@@ -43,13 +43,40 @@ describe Service::Util, "when resolving user ids by group id" do
   end
 end
 
-describe Service::Util, "replace appId by token" do
+describe Service::Util, "replacing userId with a security token" do
+  it "should return token.viewer_id when the value is @me or @viewer" do
+    id = Service::Util.replace_user_id("@me", yssk22)
+    id.should == yssk22.viewer_id
+    id = Service::Util.replace_user_id("@viewer", yssk22)
+    id.should == yssk22.viewer_id
+  end
+
+  it "should return token.owner_id when the value is @owner" do
+    id = Service::Util.replace_user_id("@owner", yssk22)
+    id.should == yssk22.owner_id
+  end
+
+  it "should return the argument value when the value is not a placeholder" do
+    id = Service::Util.replace_user_id("foo", yssk22)
+    id.should == "foo"
+  end
+
+  it "should raise ArgumentError when the value is an invalid placeholder" do
+    lambda {
+      Service::Util.replace_user_id("@foo", yssk22)
+    }.should raise_error(ArgumentError)
+  end
+
+
+end
+
+describe Service::Util, "replacing appId with a security token" do
   it "should return token.app_id when the value is @app" do
     id = Service::Util.replace_app_id("@app", yssk22)
     id.should == "test"
   end
 
-  it "should return the argument valeu when the value is not a placeholder" do
+  it "should return the argument value when the value is not a placeholder" do
     id = Service::Util.replace_app_id("app", yssk22)
     id.should == "app"
   end
