@@ -26,6 +26,10 @@ module Service
         raw_result = Util.db.view("people_by_id",
                                   :keys => user_ids)
         result = raw_result["rows"].map do |row|
+          # supporting PPL200
+          # Shindig JsonRpc Requires isOwner and isViewer field.
+          row["value"]["isOwner"]  = (row["key"] == token.owner_id)
+          row["value"]["isViewer"] = (row["key"] == token.viewer_id)
           row["value"]
         end
 

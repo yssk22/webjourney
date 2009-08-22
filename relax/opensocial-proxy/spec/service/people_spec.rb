@@ -131,5 +131,25 @@ describe Service::People, "when updating the specified user" do
     reloaded = Service::People.get({}, yssk22)
     reloaded["displayName"]["formatted"].should == "Yohei Sasaki"
   end
+end
 
+# -- porting from OpenSocial Compliance Test
+describe Service::People, "for opensocial-0.8-compliance" do
+  # Support [PPL200] [P0 ]:: newFetchPersonRequest - String ID suite.
+  # see ticket #2
+  it "should support isOwner/isViewer fields for shindig javascripts" do
+    result = Service::People.get({"userId" => "@me", "groupId" => "@self"},
+                                 yssk22)
+    result.has_key?("isOwner").should be_true
+    result.has_key?("isViewer").should be_true
+    result["isOwner"].should be_true
+    result["isViewer"].should be_true
+
+    result = Service::People.get({"userId" => "example.org:yssk22", "groupId" => "@self"},
+                                 joe_doe)
+    result.has_key?("isOwner").should be_true
+    result.has_key?("isViewer").should be_true
+    result["isOwner"].should be_false
+    result["isViewer"].should be_false
+  end
 end
