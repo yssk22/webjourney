@@ -74,15 +74,19 @@ module Service
         params = {
           "userId"      => "@me",
           "groupId"     => "@self",
-          "appId"       => "@app",
           "activity"    => nil
         }.update(params)
-        app_id   = Util.replace_app_id(params["appId"], token)
-        user_id  = Util.normalize_user_ids(params["userId"], token).first
+        # read only fields
+        app_id   = Util.replace_app_id("@app", token)
+        user_id  = Util.normalize_user_ids("@me", token).first
+        now      = Time.now
         activity = params["activity"].update({
                                                "type"   => "Activity",
                                                "userId" => user_id,
-                                               "appId"  => app_id
+                                               "appId"  => app_id,
+                                               "created_at" => now,
+                                               "updated_at" => now,
+                                               "postedTime" => now
                                              })
         Util.db.save(activity)
         return activity

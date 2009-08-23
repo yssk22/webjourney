@@ -70,6 +70,21 @@ describe Service::Activities, "when creating activity with titleId" do
     result["appId"].should   == yssk22.app_id
   end
 
+  it "should ignore the ReadOnly fields (userId, appId, postedTime)" do
+    result = Service::Activities.create({ "activity" =>
+                                          {
+                                            "titleId"      => "title1",
+                                            "userId"       => "foo",
+                                            "appId"        => "bar",
+                                            "postedTime"   => "time1",
+                                            "is_test_data" => true
+                                          }
+                                        }, yssk22)
+    result["userId"].should_not      == "foo"
+    result["appId"].should_not       == "bar"
+    result["postedTime"].should_not  == "time1"
+  end
+
   it "should create an activity of the owner" do
     result = Service::Activities.create({ "userId" => "@owner",
                                           "activity" =>
