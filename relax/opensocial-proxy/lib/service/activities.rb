@@ -77,11 +77,11 @@ module Service
           "appId"       => "@app",
           "activity"    => nil
         }.update(params)
-        # read only fields
         app_id   = Util.replace_app_id(params["appId"], token)
         user_id  = Util.normalize_user_ids(params["userId"], token).first
         now      = Time.now
         activity = params["activity"].update({
+                                               # readonly fields
                                                "type"   => "Activity",
                                                "userId" => user_id,
                                                "appId"  => app_id,
