@@ -32,11 +32,19 @@ module Service
           row["value"]["isViewer"] = (row["key"] == token.viewer_id)
           row["value"]
         end
+        total = raw_result["total_rows"]
+        index = raw_result["offset"]
 
         if !params["userId"].is_a?(Array) && params["groupId"] == "@self"
           result.first
         else
-          result
+          # TODO we should fix result information.
+          {
+            "totalResults" => total,
+            "startIndex"   => index,
+            "itemsPerPage" => result.length,
+            "list"         => result
+          }
         end
       end
 

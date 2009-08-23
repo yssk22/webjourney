@@ -14,19 +14,30 @@ joe_doe = security_token("example.org:joe-doe")
 john    = security_token("example.org:john")
 
 describe Service::People, "normalize arguments" do
-  it "should returns an Array when userId is an array." do
+  it "should returns a Collection Hash when userId is an array." do
     result = Service::People.get({"userId" => ["@me"]}, yssk22)
-    result.is_a?(Array).should be_true
+    result.is_a?(Hash).should be_true
+    # puts result.inspect
+    %w(totalResults startIndex itemsPerPage).each do |key|
+      result[key].should_not be_nil
+      result[key].is_a?(Integer).should be_true
+    end
+    result["list"].is_a?(Array)
   end
 
-  it "should returns an Hash when userId is an array." do
+  it "should returns an Hash when userId is a string." do
     result = Service::People.get({"userId" => "@me"}, yssk22)
     result.is_a?(Hash).should be_true
   end
 
   it "should return an Hash when groupId is not @self." do
     result = Service::People.get({"userId" => "@me", "groupId" => "@friends"}, yssk22)
-    result.is_a?(Array).should be_true
+    result.is_a?(Hash).should be_true
+    %w(totalResults startIndex itemsPerPage).each do |key|
+      result[key].should_not be_nil
+      result[key].is_a?(Integer).should be_true
+    end
+    result["list"].is_a?(Array)
   end
 end
 
@@ -43,8 +54,8 @@ end
 describe Service::People, "when fetching @friends." do
   it "should return yssk22's list of friends" do
     result = Service::People.get({"userId" => "@me", "groupId" => "@friends"}, yssk22)
+    result = result["list"]
     result.is_a?(Array).should be_true
-
     # Data expectation.
     result.length.should == 2
     result.map { |r| r["id"] }.include?("example.org:joe-doe").should be_true
@@ -60,6 +71,7 @@ describe Service::People, "when fetching the specified userId" do
 
   it "should return yssk22's list of friends" do
     result = Service::People.get({"userId" => "example.org:yssk22", "groupId" => "@friends"}, john)
+    result = result["list"]
 
     result.length.should == 2
     result.map { |r| r["id"] }.include?("example.org:joe-doe").should be_true
@@ -70,12 +82,14 @@ end
 describe Service::People, "when fetching the specified groupId" do
   it "should return john's list of 'blocks'." do
     result = Service::People.get({"userId" => "@me", "groupId" => "blocks"}, john)
+    result = result["list"]
     result.length.should == 1
     result.map { |r| r["id"] }.include?("example.org:yssk22").should be_true
   end
 
   it "should return an empty array." do
     result = Service::People.get({"userId" => "@me", "groupId" => "foobar"}, john)
+    result = result["list"]
     result.length.should == 0
   end
 end
