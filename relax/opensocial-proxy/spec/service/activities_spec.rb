@@ -20,17 +20,17 @@ yssk22_inv = security_token("example.org:yssk22", :app_id => "invalid")
 
 describe Service::Activities, "when fetching @self activities" do
   it "should return activities for the viewer" do
-    result = Service::Activities.get({"userId" => "@me", "groupId" => "@self"}, yssk22)
+    result = Service::Activities.get({"userId" => "@me", "groupId" => "@self"}, yssk22)["list"]
     result.length.should == 2
     result.map { |r| r["id"] }.include?("test_activity_1").should be_true
     result.map { |r| r["id"] }.include?("test_activity_2").should be_true
 
-    result = Service::Activities.get({"userId" => "@me", "groupId" => "@self"}, joe_doe)
+    result = Service::Activities.get({"userId" => "@me", "groupId" => "@self"}, joe_doe)["list"]
     result.length == 0
   end
 
   it "should return activities for the specified user" do
-    result = Service::Activities.get({"userId" => "example.org:yssk22", "groupId" => "@self"}, joe_doe)
+    result = Service::Activities.get({"userId" => "example.org:yssk22", "groupId" => "@self"}, joe_doe)["list"]
     result.length.should == 2
     result.map { |r| r["id"] }.include?("test_activity_1").should be_true
     result.map { |r| r["id"] }.include?("test_activity_2").should be_true
@@ -41,7 +41,7 @@ describe Service::Activities, "when fetching @self activities" do
                                        "userId" => "example.org:yssk22",
                                        "groupId" => "@self",
                                        "activityIds" => ["test_activity_2"]
-                                     }, joe_doe)
+                                     }, joe_doe)["list"]
     result.length.should == 1
     result.map { |r| r["id"] }.include?("test_activity_2").should be_true
   end
@@ -50,7 +50,38 @@ end
 
 describe Service::Activities, "when fetching with the token including the invalid app_id" do
   it "should return the empty" do
-    result = Service::Activities.get({"userId" => "@me", "groupId" => "@self"}, yssk22_inv)
+    result = Service::Activities.get({"userId" => "@me", "groupId" => "@self"}, yssk22_inv)["list"]
     result.length.should == 0
+  end
+end
+
+describe Service::Activities, "when creating activity with titleId" do
+  it "should create an activity of the viewer" do
+    result = Service::Activities.create({ "activity" =>
+                                          {
+                                            "titleId"      => "title1",
+                                            "is_test_data" => true
+                                          }
+                                        }, yssk22)
+    result.is_a?(Hash).should be_true
+    result["type"].should    == "Activity"
+    result["titleId"].should == "title1"
+    result["userId"].should  == yssk22.viewer_id
+    result["appId"].should   == yssk22.app_id
+  end
+
+  it "should create an activity of the owner" do
+    result = Service::Activities.create({ "userId" => "@owner",
+                                          "activity" =>
+                                          {
+                                            "titleId"      => "title1",
+                                            "is_test_data" => true
+                                          }
+                                        }, yssk22)
+    result.is_a?(Hash).should be_true
+    result["type"].should    == "Activity"
+    result["titleId"].should == "title1"
+    result["userId"].should  == yssk22.owner_id
+    result["appId"].should   == yssk22.app_id
   end
 end
