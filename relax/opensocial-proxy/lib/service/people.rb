@@ -30,8 +30,8 @@ module Service
         query[:skip]  = filters[:startIndex] if filters[:startIndex]
 
         raw_result = Util.db.view("people_by_id",query)
-        total_results = raw_result["total_rows"]
-        start_index   = raw_result["offset"]
+        total_results = user_ids.length
+        start_index   = query[:skip] || 0
         result = raw_result["rows"].map do |row|
           # supporting PPL200
           # Shindig JsonRpc Requires isOwner and isViewer field.
@@ -43,7 +43,6 @@ module Service
         if !params["userId"].is_a?(Array) && params["groupId"] == "@self"
           result.first
         else
-          # TODO we should fix result information.
           {
             "totalResults" => total_results,
             "startIndex"   => start_index,
