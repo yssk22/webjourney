@@ -9,6 +9,9 @@ module Service
   class Appdata
     # The service class name should be not AppData but Appdata because of System.apply method convention.
     class << self
+      #
+      # appdata.get
+      #
       def get(params={}, token=nil, req=nil)
         params = {
           "userId"  => "@me",
@@ -58,7 +61,7 @@ module Service
         else # result is nil
           {}
         end
-      end
+      end # def get
     end
   end
 end

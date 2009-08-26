@@ -57,7 +57,7 @@ describe Service::People, "when fetching @friends." do
     result = result["list"]
     result.is_a?(Array).should be_true
     # Data expectation.
-    result.length.should == 2
+    result.length.should == 33
     result.map { |r| r["id"] }.include?("example.org:joe-doe").should be_true
     result.map { |r| r["id"] }.include?("example.org:john").should be_true
   end
@@ -73,7 +73,7 @@ describe Service::People, "when fetching the specified userId" do
     result = Service::People.get({"userId" => "example.org:yssk22", "groupId" => "@friends"}, john)
     result = result["list"]
 
-    result.length.should == 2
+    result.length.should == 33
     result.map { |r| r["id"] }.include?("example.org:joe-doe").should be_true
     result.map { |r| r["id"] }.include?("example.org:john").should be_true
   end
@@ -91,6 +91,44 @@ describe Service::People, "when fetching the specified groupId" do
     result = Service::People.get({"userId" => "@me", "groupId" => "foobar"}, john)
     result = result["list"]
     result.length.should == 0
+  end
+end
+
+describe Service::People, "when fetching with query options" do
+  before do
+    @all = Service::People.get({"userId" => "@me", "groupId" => "@friends"},
+                              yssk22)
+    @all = @all["list"]
+  end
+  it "should return 10 friends of yssk22" do
+    result = Service::People.get({"userId" => "@me", "groupId" => "@friends",
+                                  "count"  => 10 }, yssk22)
+    result = result["list"]
+    result.length.should == 10
+    0.upto(9) do |i|
+      result[i].should == @all[i]
+    end
+  end
+
+  it "should return 10 friends of yssk22" do
+    result = Service::People.get({"userId" => "@me", "groupId" => "@friends",
+                                  "startIndex" =>  30}, yssk22)
+    result = result["list"]
+    result.length.should == 3
+    30.upto(32) do |i|
+      result[i - 30].should == @all[i]
+    end
+  end
+
+
+  it "should return 3 friends from 5th to 7th " do
+    result = Service::People.get({"userId" => "@me", "groupId" => "@friends",
+                                  "startIndex" =>  5, "count" => 3}, yssk22)
+    result = result["list"]
+    result.length.should == 3
+    5.upto(7) do |i|
+      result[i-5].should == @all[i]
+    end
   end
 end
 

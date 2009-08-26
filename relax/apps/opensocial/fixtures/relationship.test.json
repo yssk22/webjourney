@@ -20,6 +20,18 @@
     "to"    : "example.org:john",
     "tags"  : ["friends"]
   },
+  /*
+  <% 0.upto(30) do |i| %>
+   */
+  {
+    "type"  : "Relationship",
+    "from"  : "example.org:yssk22",
+    "to"    : "example.org:testuser_<%= sprintf('%03d', i) %>",
+    "tags"  : ["friends"]
+  },
+  /*
+  <% end %>
+  */
 
   /**
    * Relationship definitioin for joe-doe
@@ -30,7 +42,6 @@
     "to"    : "example.org:yssk22",
     "tags"  : ["friends"]
   },
-
   /**
    * Relationship definitioin for john
    */

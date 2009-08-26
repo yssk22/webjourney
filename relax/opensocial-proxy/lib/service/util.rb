@@ -27,6 +27,24 @@ module Service
   end
 
   module Util::Ids
+    POSITIVE_INT_FILTER_KEYS   = %w(count startIndex networkDistance)
+    STRING_FILTER_KEYS = %w(sortBy filterBy)
+    #
+    # Returns the parameters in the parameters
+    #
+    def extract_filters(params = {})
+      filter = {}
+      POSITIVE_INT_FILTER_KEYS.each do |key|
+        v = params[key].to_i
+        filter[key.to_sym] = v if params.has_key?(key) && v >= 0
+      end
+      STRING_FILTER_KEYS.each do |key|
+        v = params[key].to_s
+        filter[key.to_sym] = params[key] if params.has_key?(key) && v.length > 0
+      end
+      filter
+    end
+
     #
     # Normalize the use ids
     #
@@ -46,7 +64,7 @@ module Service
     #
     # Returns the list of user ids for the specified group name.
     #
-    def resolve_user_ids_by_group_id(user_ids, group_id, option = {})
+    def resolve_user_ids_by_group_id(user_ids, group_id, filter = {})
       if is_placeholder?(group_id)
         case group_id
         when "@self"
@@ -57,6 +75,7 @@ module Service
       end
 
       # return the list using "people_ids_in_relationship" view
+      result = []
       result = user_ids.map { |uid|
         opts = {
           :startkey => [uid, group_id],
@@ -64,7 +83,7 @@ module Service
         }
         db.view("people_ids_in_relationship",opts)["rows"].map { |r| r["key"].last }
       }
-      result.flatten
+      result.flatten!
     end
 
     #

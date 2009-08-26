@@ -16,6 +16,24 @@
     },
     "gender" : "male"
   },
+  /**
+   * Test Users for yssk22's friends
+   * <% 0.upto(30) do |i| %>
+   */
+  {
+    "type"  : "Person",
+    // singluar person fields
+    // required
+    "_id"   : "example.org:testuser_<%= sprintf('%03d', i) %>",
+    "displayName" : {
+      "formatted" : "Test User <%= sprintf('%03d', i) %>"
+    },
+    // optional
+    "gender" : "male"
+  },
+  /*
+   * <% end %>
+   */
 
   {
     "type"  : "Person",
@@ -42,4 +60,5 @@
     // optional
     "gender" : "male"
   }
+
 ]

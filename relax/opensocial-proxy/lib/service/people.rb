@@ -18,13 +18,20 @@ module Service
           "groupId" => "@self",
         }.update(params)
 
+        filters  = Util.extract_filters(params)
         user_ids = Util.normalize_user_ids(params["userId"], token)
-        user_ids = Util.resolve_user_ids_by_group_id(user_ids, params["groupId"])
+        user_ids = Util.resolve_user_ids_by_group_id(user_ids, params["groupId"],
+                                                     filters)
 
         # Get the opensocial.Person objects.
         # TODO search options such as sortOrder, count, ...
-        raw_result = Util.db.view("people_by_id",
-                                  :keys => user_ids)
+        query = { :keys => user_ids }
+        query[:limit] = filters[:count] if filters[:count]
+        query[:skip]  = filters[:startIndex] if filters[:startIndex]
+
+        raw_result = Util.db.view("people_by_id",query)
+        total_results = raw_result["total_rows"]
+        start_index   = raw_result["offset"]
         result = raw_result["rows"].map do |row|
           # supporting PPL200
           # Shindig JsonRpc Requires isOwner and isViewer field.
@@ -32,16 +39,14 @@ module Service
           row["value"]["isViewer"] = (row["key"] == token.viewer_id)
           row["value"]
         end
-        total = raw_result["total_rows"]
-        index = raw_result["offset"]
 
         if !params["userId"].is_a?(Array) && params["groupId"] == "@self"
           result.first
         else
           # TODO we should fix result information.
           {
-            "totalResults" => total,
-            "startIndex"   => index,
+            "totalResults" => total_results,
+            "startIndex"   => start_index,
             "itemsPerPage" => result.length,
             "list"         => result
           }
