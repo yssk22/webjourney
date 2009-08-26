@@ -9,12 +9,16 @@
        {
          "id" : "opensocial-compliance-v0.8",
          "url" : "http://opensocial-resources.googlecode.com/svn/tests/trunk/suites/0.8/compliance/reference.xml",
-         "title" : "OpenSocial Compliance (v0.8)"
-       },
-       {
-         "id"  : "OpenSocial-dev-app-v0.8",
-         "url" : "http://osda.appspot.com/gadget/osda-0.8.xml",
-         "title" : "OpenSocial Dev App"
+         "title" : "OpenSocial Compliance (v0.8)",
+         "prefs" : {
+           /* Spec test suite these User Preferencs */
+           "myCounter" : 100,  /* PREF010 */
+           "size"      : 2,    /* PREF011 */
+           "myFloat"   : 3.43, /* PREF020 */
+           "myString"  : "This is my string.", /* PREF030 */
+           "myBool"    : true,       /* PREF040 */
+           "myTestArray" : ["zdnet", "pc", "Apple Insider"] /* PREF050 */
+         }
        }
     ]}
   },

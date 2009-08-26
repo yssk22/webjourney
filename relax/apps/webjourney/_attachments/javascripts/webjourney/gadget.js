@@ -213,6 +213,22 @@ WebJourney.Gadget.prototype = {
       "view"      : this.getView()
 //      "v"         : this.getSpecVersion()
     };
+    //http://webjourney.local/shindig/gadgets/ifr?container=default&mid=opensocial-compliance-v0.8&nocache=1&url=http%3A%2F%2Fopensocial-resources.googlecode.com%2Fsvn%2Ftests%2Ftrunk%2Fsuites%2F0.8%2Fcompliance%2Freference.xml&country=ALL&lang=ALL&view=canvas&up_myString=myString&up_size=2&up_myBool=true&up_myFloat=3.43&up_myTestArray=zdnet%257Cpc%257CApple%2520Insider&up_myCounter=100&st=o%3Dexample.org%253Ayssk22%26v%3Dexample.org%253Ayssk22%26a%3Dopensocial-compliance-v0.8%26d%3Dexample.com%26u%3Dhttp%253A%252F%252Fopensocial-resources.googlecode.com%252Fsvn%252Ftests%252Ftrunk%252Fsuites%252F0.8%252Fcompliance%252Freference.xml%26m%3Dpages%253AOpenSocial-Compliance-v0.8.0%26t%3D1251299533333&
+    /* set preference using shindig style parameter (up_{key}={value}) */
+    if( this._params.prefs ){
+      for(var key in this._params.prefs){
+        var val = this._params.prefs[key];
+        // TODO shindig parse the parameter value with gadgets.util.escapeString,
+        // so we should implement a compatible method to gadgets.util.unescapeString(value):
+        if(val){
+          if( val instanceof Array ){
+            params["up_" + key] = val.join("|");
+          }else{
+            params["up_" + key] = val;
+          }
+        }
+      }
+    }
 
     if( this.getSecurityToken() ){
       params["st"] = this.getSecurityToken();
