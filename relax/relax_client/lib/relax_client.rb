@@ -2,6 +2,7 @@ require 'rubygems'
 require 'restclient'
 require 'json'
 require 'cgi'
+require 'erb'
 #
 # This class provide the features to access the CouchDB behind the opensocial proxy,
 # especially used for accessing the relax applications implemented in relax/apps directory.
@@ -174,7 +175,7 @@ EOS
     def import_from_file(*files)
       docs = []
       files.each do |file|
-        bulk = JSON.parse(File.read(file))
+        bulk = JSON.parse(ERB.new(File.read(file)).result)
         raise "Fixture #{file} is not an Array document. Please check the file." unless bulk.is_a?(Array)
         docs = docs + bulk.map {|doc|
           yield doc if block_given?
