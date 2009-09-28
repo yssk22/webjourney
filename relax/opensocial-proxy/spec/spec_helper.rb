@@ -2,10 +2,6 @@ require 'rubygems'
 require 'spec'
 require File.join(File.dirname(__FILE__), "../lib/security_token")
 require File.join(File.dirname(__FILE__), "../../relax_client/lib/relax_client")
-
-FIXTURE_MARKER   = "is_test_fixture"
-TEST_DATA_MARKER = "is_test_data"
-
 #
 # clean up fixture/test data and reload from fixtures.
 #
@@ -24,7 +20,6 @@ def reset_fixture
   # insert fixtures for each app
   apps.each do |app_name|
     db = RelaxClient.new(app_name)
-    docs = []
     files = Dir.glob(File.join(apps_dir, app_name, "fixtures/**/*.test.json"))
     db.insert_fixtures(*files)
   end

@@ -1,9 +1,0 @@
-K 10
-svn:ignore
-V 46
-.deps
-Makefile.in
-Makefile
-couchspawnkillable
-
-END

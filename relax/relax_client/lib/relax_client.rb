@@ -3,11 +3,15 @@ require 'restclient'
 require 'json'
 require 'cgi'
 require 'erb'
+
+require File.join(File.dirname(__FILE__), "./fixture")
+
 #
 # This class provide the features to access the CouchDB behind the opensocial proxy,
 # especially used for accessing the relax applications implemented in relax/apps directory.
 #
 class RelaxClient
+  include Fixture
   @@config = YAML.load(File.read(File.join(File.dirname(__FILE__), "../../../config/webjourney.yml")))
 
   attr_reader :uri
@@ -65,12 +69,14 @@ class RelaxClient
   # Save the documents using _bulk_docs API
   #
   def bulk_docs(docs, option = {})
-    uri = build_uri("_bulk_docs")
+    uri  = build_uri("_bulk_docs")
+    body = {
+      "docs" => docs,
+    }
+    body["all_or_nothing"] = true if option[:all_or_nothing]
+
     JSON.parse(RestClient.post(uri,
-                               {
-                                 "docs" => docs,
-                                 "all_or_nothing" => (option[:all_or_nothing] == true)
-                               }.to_json, :content_type => "application/json"))
+                               body.to_json, :content_type => "application/json"))
   end
 
   #
@@ -146,45 +152,4 @@ class RelaxClient
       "#{uri}?#{query}"
     end
   end
-
-  module Fixture
-    FIXTURE_MARKER   = "is_test_fixture"
-    TEST_DATA_MARKER = "is_test_data"
-    def delete_fixtures
-      [FIXTURE_MARKER, TEST_DATA_MARKER].each do |marker|
-        map = <<-EOS
-function(doc){
-  if(doc.#{marker}){
-    emit(doc._id, {"_id" : doc._id, "_rev": doc._rev, "_deleted" : true})
-  }
-}
-EOS
-        # Get all marked documents with "_deleted".
-        old = self.temp_view(map)
-        # and post them to delete.
-        self.bulk_docs(old["rows"].map { |row| row["value"] }, :all_or_nothing => true)
-      end
-    end
-
-    def insert_fixtures(*files)
-      import_from_file(*files) do |doc|
-        doc[FIXTURE_MARKER] = true
-      end
-    end
-
-    def import_from_file(*files)
-      docs = []
-      files.each do |file|
-        bulk = JSON.parse(ERB.new(File.read(file)).result)
-        raise "Fixture #{file} is not an Array document. Please check the file." unless bulk.is_a?(Array)
-        docs = docs + bulk.map {|doc|
-          yield doc if block_given?
-          doc
-        }
-      end
-      self.bulk_docs(docs, :all_or_nothing => true)
-    end
-  end
-
-  include Fixture
 end

@@ -13,7 +13,7 @@ joe_doe = security_token("example.org:joe-doe")
 describe Service::Messages, "sending a message" do
   it "should return nil even if the message successfully sent." do
     result = Service::Messages.send({ "message" => {
-                                      TEST_DATA_MARKER => true,
+                                      RelaxClient::Fixture::TEST_DATA_MARKER => true,
                                       :title => "foo",
                                       :body => "bar",
                                       :recipients => [joe_doe.owner_id]
