@@ -1,0 +1,185 @@
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/repos/asf/!svn/ver/814300/couchdb/trunk/test/etap
+END
+030-doc-from-json.t
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/asf/!svn/ver/795258/couchdb/trunk/test/etap/030-doc-from-json.t
+END
+001-load.t
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/repos/asf/!svn/ver/794030/couchdb/trunk/test/etap/001-load.t
+END
+063-kt-get-leaves.t
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/asf/!svn/ver/794030/couchdb/trunk/test/etap/063-kt-get-leaves.t
+END
+040-util.t
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/repos/asf/!svn/ver/813051/couchdb/trunk/test/etap/040-util.t
+END
+021-btree-reductions.t
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/repos/asf/!svn/ver/794030/couchdb/trunk/test/etap/021-btree-reductions.t
+END
+041-uuid-gen.t
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/repos/asf/!svn/ver/813051/couchdb/trunk/test/etap/041-uuid-gen.t
+END
+010-file-basics.t
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/repos/asf/!svn/ver/794030/couchdb/trunk/test/etap/010-file-basics.t
+END
+080-config-get-set.t
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/asf/!svn/ver/797053/couchdb/trunk/test/etap/080-config-get-set.t
+END
+111-replication-changes-feed.t
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/repos/asf/!svn/ver/813051/couchdb/trunk/test/etap/111-replication-changes-feed.t
+END
+041-uuid-gen-seq.ini
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/asf/!svn/ver/813051/couchdb/trunk/test/etap/041-uuid-gen-seq.ini
+END
+041-uuid-gen-utc.ini
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/asf/!svn/ver/813051/couchdb/trunk/test/etap/041-uuid-gen-utc.ini
+END
+011-file-headers.t
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/asf/!svn/ver/794030/couchdb/trunk/test/etap/011-file-headers.t
+END
+083-config-no-files.t
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/asf/!svn/ver/794030/couchdb/trunk/test/etap/083-config-no-files.t
+END
+100-ref-counter.t
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/repos/asf/!svn/ver/794030/couchdb/trunk/test/etap/100-ref-counter.t
+END
+070-couch-db.t
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/repos/asf/!svn/ver/810485/couchdb/trunk/test/etap/070-couch-db.t
+END
+081-config-override.t
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/asf/!svn/ver/797053/couchdb/trunk/test/etap/081-config-override.t
+END
+110-replication-httpc.t
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/repos/asf/!svn/ver/810485/couchdb/trunk/test/etap/110-replication-httpc.t
+END
+090-task-status.t
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/repos/asf/!svn/ver/794030/couchdb/trunk/test/etap/090-task-status.t
+END
+062-kt-remove-leaves.t
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/repos/asf/!svn/ver/794030/couchdb/trunk/test/etap/062-kt-remove-leaves.t
+END
+050-stream.t
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/repos/asf/!svn/ver/797053/couchdb/trunk/test/etap/050-stream.t
+END
+031-doc-to-json.t
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/repos/asf/!svn/ver/797053/couchdb/trunk/test/etap/031-doc-to-json.t
+END
+082-config-register.t
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/asf/!svn/ver/814300/couchdb/trunk/test/etap/082-config-register.t
+END
+112-replication-missing-revs.t
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/repos/asf/!svn/ver/813051/couchdb/trunk/test/etap/112-replication-missing-revs.t
+END
+020-btree-basics.t
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/asf/!svn/ver/814078/couchdb/trunk/test/etap/020-btree-basics.t
+END
+081-config-override.1.ini
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/repos/asf/!svn/ver/787914/couchdb/trunk/test/etap/081-config-override.1.ini
+END
+081-config-override.2.ini
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/repos/asf/!svn/ver/794030/couchdb/trunk/test/etap/081-config-override.2.ini
+END
+061-kt-missing-leaves.t
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/repos/asf/!svn/ver/794030/couchdb/trunk/test/etap/061-kt-missing-leaves.t
+END
+060-kt-merging.t
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/repos/asf/!svn/ver/794030/couchdb/trunk/test/etap/060-kt-merging.t
+END
+065-kt-stemming.t
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/repos/asf/!svn/ver/794030/couchdb/trunk/test/etap/065-kt-stemming.t
+END
+064-kt-counting.t
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/repos/asf/!svn/ver/794030/couchdb/trunk/test/etap/064-kt-counting.t
+END

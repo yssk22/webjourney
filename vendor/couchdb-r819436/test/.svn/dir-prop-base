@@ -1,0 +1,10 @@
+K 10
+svn:ignore
+V 44
+.deps
+Makefile.in
+Makefile
+*.beam
+local.ini
+
+END

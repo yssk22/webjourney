@@ -1,0 +1,17 @@
+K 10
+svn:ignore
+V 115
+.deps
+.libs
+Makefile
+Makefile.in
+couch.app
+couch.app.tpl
+couchjs
+edoc-info
+erlang.png
+stylesheet.css
+*.beam
+*.html
+
+END

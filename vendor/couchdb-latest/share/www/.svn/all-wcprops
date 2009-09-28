@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/repos/asf/!svn/ver/814364/couchdb/trunk/share/www
+END
+document.html
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/repos/asf/!svn/ver/796635/couchdb/trunk/share/www/document.html
+END
+couch_tests.html
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/repos/asf/!svn/ver/794057/couchdb/trunk/share/www/couch_tests.html
+END
+status.html
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/repos/asf/!svn/ver/794057/couchdb/trunk/share/www/status.html
+END
+database.html
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/repos/asf/!svn/ver/796898/couchdb/trunk/share/www/database.html
+END
+replicator.html
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/repos/asf/!svn/ver/794057/couchdb/trunk/share/www/replicator.html
+END
+config.html
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/repos/asf/!svn/ver/794057/couchdb/trunk/share/www/config.html
+END
+index.html
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/repos/asf/!svn/ver/794030/couchdb/trunk/share/www/index.html
+END
+_sidebar.html
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/repos/asf/!svn/ver/797024/couchdb/trunk/share/www/_sidebar.html
+END
+custom_test.html
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/repos/asf/!svn/ver/804727/couchdb/trunk/share/www/custom_test.html
+END
+favicon.ico
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/repos/asf/!svn/ver/726143/couchdb/trunk/share/www/favicon.ico
+END

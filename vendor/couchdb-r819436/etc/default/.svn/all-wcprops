@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/repos/asf/!svn/ver/794057/couchdb/trunk/etc/default
+END
+couchdb
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/repos/asf/!svn/ver/784601/couchdb/trunk/etc/default/couchdb
+END
+Makefile.am
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/repos/asf/!svn/ver/794057/couchdb/trunk/etc/default/Makefile.am
+END

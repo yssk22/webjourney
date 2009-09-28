@@ -1,0 +1,18 @@
+K 10
+svn:ignore
+V 129
+Makefile
+Makefile.in
+couchdb
+couchdb.1
+couchdb.tpl
+couchdb.bat.tpl
+couchjs
+couchjs.1
+couchjs.tpl
+couchjs_dev
+couchpw
+.libs
+.deps
+
+END

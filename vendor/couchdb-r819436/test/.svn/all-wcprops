@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/repos/asf/!svn/ver/819343/couchdb/trunk/test
+END
+runner.sh
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/repos/asf/!svn/ver/809158/couchdb/trunk/test/runner.sh
+END
+query_server_spec.rb
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/repos/asf/!svn/ver/803685/couchdb/trunk/test/query_server_spec.rb
+END
+Makefile.am
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/repos/asf/!svn/ver/809158/couchdb/trunk/test/Makefile.am
+END
+test.js
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/repos/asf/!svn/ver/794057/couchdb/trunk/test/test.js
+END
+run_native_process.es
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/repos/asf/!svn/ver/806732/couchdb/trunk/test/run_native_process.es
+END

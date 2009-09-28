@@ -1,0 +1,35 @@
+K 10
+svn:ignore
+V 230
+INSTALL
+ChangeLog
+LICENCE
+Makefile
+Makefile.in
+acinclude.m4
+aclocal.m4
+autom4te.cache
+build-aux
+config.h
+config.h.in
+config.log
+config.status
+configure
+couchdb-*.tar.gz
+couchdb-*.zip
+cover
+libtool
+stamp-h1
+*.gz
+tmp
+erl_crash.dump
+
+K 13
+svn:mergeinfo
+V 206
+/couchdb/branches/0.9.x:775634
+/couchdb/branches/design_resources:751716-751803
+/couchdb/branches/form:729440-730015
+/couchdb/branches/list-iterator:782292-784593
+/couchdb/branches/tail_header:775760-778477
+END

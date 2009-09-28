@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/repos/asf/!svn/ver/801456/couchdb/trunk/src/erlang-oauth
+END
+oauth.app
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/repos/asf/!svn/ver/800938/couchdb/trunk/src/erlang-oauth/oauth.app
+END
+oauth_http.erl
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/asf/!svn/ver/800938/couchdb/trunk/src/erlang-oauth/oauth_http.erl
+END
+oauth_uri.erl
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/asf/!svn/ver/800938/couchdb/trunk/src/erlang-oauth/oauth_uri.erl
+END
+oauth.erl
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/repos/asf/!svn/ver/800938/couchdb/trunk/src/erlang-oauth/oauth.erl
+END
+oauth_rsa_sha1.erl
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/repos/asf/!svn/ver/800938/couchdb/trunk/src/erlang-oauth/oauth_rsa_sha1.erl
+END
+oauth_unix.erl
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/asf/!svn/ver/800938/couchdb/trunk/src/erlang-oauth/oauth_unix.erl
+END
+oauth_hmac_sha1.erl
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/repos/asf/!svn/ver/800938/couchdb/trunk/src/erlang-oauth/oauth_hmac_sha1.erl
+END
+Makefile.am
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/asf/!svn/ver/801456/couchdb/trunk/src/erlang-oauth/Makefile.am
+END
+oauth_plaintext.erl
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/repos/asf/!svn/ver/800938/couchdb/trunk/src/erlang-oauth/oauth_plaintext.erl
+END

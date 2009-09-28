@@ -1,0 +1,155 @@
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/repos/asf/!svn/ver/818249/couchdb/trunk/src/mochiweb
+END
+mochiweb_multipart.erl
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/repos/asf/!svn/ver/806513/couchdb/trunk/src/mochiweb/mochiweb_multipart.erl
+END
+mochihex.erl
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/repos/asf/!svn/ver/726143/couchdb/trunk/src/mochiweb/mochihex.erl
+END
+mochiweb_request.erl
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/repos/asf/!svn/ver/791350/couchdb/trunk/src/mochiweb/mochiweb_request.erl
+END
+mochifmt.erl
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/repos/asf/!svn/ver/806513/couchdb/trunk/src/mochiweb/mochifmt.erl
+END
+mochiweb_cookies.erl
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/repos/asf/!svn/ver/800938/couchdb/trunk/src/mochiweb/mochiweb_cookies.erl
+END
+mochiweb_skel.erl
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/asf/!svn/ver/791350/couchdb/trunk/src/mochiweb/mochiweb_skel.erl
+END
+mochiweb_response.erl
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/repos/asf/!svn/ver/726143/couchdb/trunk/src/mochiweb/mochiweb_response.erl
+END
+mochijson2.erl
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/repos/asf/!svn/ver/818249/couchdb/trunk/src/mochiweb/mochijson2.erl
+END
+mochinum.erl
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/repos/asf/!svn/ver/791350/couchdb/trunk/src/mochiweb/mochinum.erl
+END
+mochifmt_std.erl
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/asf/!svn/ver/726143/couchdb/trunk/src/mochiweb/mochifmt_std.erl
+END
+mochiweb_html.erl
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/asf/!svn/ver/806513/couchdb/trunk/src/mochiweb/mochiweb_html.erl
+END
+mochiweb_sup.erl
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/asf/!svn/ver/726143/couchdb/trunk/src/mochiweb/mochiweb_sup.erl
+END
+mochifmt_records.erl
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/repos/asf/!svn/ver/726143/couchdb/trunk/src/mochiweb/mochifmt_records.erl
+END
+mochiweb_charref.erl
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/repos/asf/!svn/ver/791350/couchdb/trunk/src/mochiweb/mochiweb_charref.erl
+END
+mochiweb_headers.erl
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/repos/asf/!svn/ver/806513/couchdb/trunk/src/mochiweb/mochiweb_headers.erl
+END
+Makefile.am
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/repos/asf/!svn/ver/794057/couchdb/trunk/src/mochiweb/Makefile.am
+END
+mochijson.erl
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/repos/asf/!svn/ver/791350/couchdb/trunk/src/mochiweb/mochijson.erl
+END
+mochiweb_util.erl
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/asf/!svn/ver/806513/couchdb/trunk/src/mochiweb/mochiweb_util.erl
+END
+mochiweb_echo.erl
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/asf/!svn/ver/791350/couchdb/trunk/src/mochiweb/mochiweb_echo.erl
+END
+mochiweb.app
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/repos/asf/!svn/ver/747575/couchdb/trunk/src/mochiweb/mochiweb.app
+END
+mochiweb_socket_server.erl
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/repos/asf/!svn/ver/791350/couchdb/trunk/src/mochiweb/mochiweb_socket_server.erl
+END
+mochiweb_http.erl
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/asf/!svn/ver/747575/couchdb/trunk/src/mochiweb/mochiweb_http.erl
+END
+mochiweb_app.erl
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/asf/!svn/ver/726143/couchdb/trunk/src/mochiweb/mochiweb_app.erl
+END
+mochiweb.erl
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/repos/asf/!svn/ver/726143/couchdb/trunk/src/mochiweb/mochiweb.erl
+END
+reloader.erl
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/repos/asf/!svn/ver/726143/couchdb/trunk/src/mochiweb/reloader.erl
+END

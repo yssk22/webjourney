@@ -1,0 +1,9 @@
+K 10
+svn:ignore
+V 75
+Makefile
+Makefile.in
+org.apache.couchdb.plist
+org.apache.couchdb.plist.tpl
+
+END

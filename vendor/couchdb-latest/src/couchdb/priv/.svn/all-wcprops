@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/repos/asf/!svn/ver/805410/couchdb/trunk/src/couchdb/priv
+END
+couchspawnkillable.sh
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/repos/asf/!svn/ver/805243/couchdb/trunk/src/couchdb/priv/couchspawnkillable.sh
+END
+couchspawnkillable_win.c
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/repos/asf/!svn/ver/805243/couchdb/trunk/src/couchdb/priv/couchspawnkillable_win.c
+END
+Makefile.am
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/asf/!svn/ver/805410/couchdb/trunk/src/couchdb/priv/Makefile.am
+END
