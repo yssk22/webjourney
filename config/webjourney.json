@@ -3,6 +3,9 @@
          "webjourney" : "http://localhost:5984/webjourney-default",
          "opensocial" : "http://localhost:5984/webjourney-default"
      },
+     "apps" : {
+         "sticky" :"http://localhost:5984/webjourney-sticky-default"
+     },
      "httpd": {
          "servername" : "localhost"
      },
