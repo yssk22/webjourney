@@ -137,7 +137,7 @@ namespace :app do
       File.open(xml_path, "w") do |f|
         f.write(xml)
       end
-      puts "[INFO] generated on #{xml_path}."
+      puts "[INFO] Generating a gadget xml file on #{xml_path}."
     end
   end
 
