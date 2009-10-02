@@ -43,18 +43,11 @@ EOS
           end
         }
       end
-      # puts ""
-      # puts "docs to be updated : #{docs.length}"
       docs.each do |r|
         r = { "id" => r["_id"], "rev" => r["_rev"] }
-        # puts ">> #{r.to_json}"
       end
 
       result = self.bulk_docs(docs, :all_or_nothing => false)
-      # puts "updated result     : #{result.length}"
-      result.each do |r|
-        # puts "<< #{r.to_json}"
-      end
     end
   end
 end

@@ -12,32 +12,34 @@ require 'yaml'
 require 'erb'
 require File.join(File.dirname(__FILE__), "relax/relax_client/lib/relax_client")
 
+#
+# initialize constants from configuration
+#
 WEBJOURNEY_ENV = ENV["WEBJOURNEY_ENV"] || "development"
 config = YAML.load(File.read(File.join(File.dirname(__FILE__), "config/webjourney.yml")))
 
-# app and db mappping
-APPNAME_TO_DB = {
+# container and db mappping
+CONTAINER_TO_DB = {
   "webjourney" => config[WEBJOURNEY_ENV]["couchdb"]["webjourney"],
   "opensocial" => config[WEBJOURNEY_ENV]["couchdb"]["opensocial"]
 }
-DB_TO_APPNAMES = {}
-APPNAME_TO_DB.each do |appname, db_uri|
-    if DB_TO_APPNAMES.has_key?(db_uri)
-      DB_TO_APPNAMES[db_uri] << appname
+DB_TO_CONTAINERS = {}
+CONTAINER_TO_DB.each do |container, db_uri|
+    if DB_TO_CONTAINERS.has_key?(db_uri)
+      DB_TO_CONTAINERS[db_uri] << container
     else
-      DB_TO_APPNAMES[db_uri] = [appname]
+      DB_TO_CONTAINERS[db_uri] = [container]
     end
 end
 
-
 HTTP_ROOT            = "http://#{config[WEBJOURNEY_ENV]["httpd"]["servername"]}"
-TOP_PAGE_PATH        = File.join(APPNAME_TO_DB["webjourney"].split("/").last, "_design/webjourney/_show/page/pages:top")
+TOP_PAGE_PATH        = File.join(CONTAINER_TO_DB["webjourney"].split("/").last, "_design/webjourney/_show/page/pages:top")
 IMPORT_TEST_FIXTURES = config[WEBJOURNEY_ENV]["misc"]["import_test_fixtures"]
 
 desc("Initialize Environemnt")
 task :initialize do
-  APPNAME_TO_DB.each do |key, db|
-    dir = File.join(File.dirname(__FILE__), "relax/apps/#{key}")
+  CONTAINER_TO_DB.each do |key, db|
+    dir = File.join(File.dirname(__FILE__), "relax/containers/#{key}")
     step("Configuration Info about #{key}") do
       puts "Database  :  #{db}"
       puts "Directory :  #{dir}"
@@ -46,18 +48,19 @@ task :initialize do
   Rake::Task["initialize:db"].invoke()
   Rake::Task["initialize:couchapp"].invoke()
 
-  puts "WebJourney has been initialized successfully."
-  puts "Visit your webjourney here:"
-  puts
-  puts "   #{HTTP_ROOT}/#{TOP_PAGE_PATH}"
-  puts
+  step("WebJourney has been initialized successfully.") do
+    puts "Visit your webjourney here:"
+    puts
+    puts "   #{HTTP_ROOT}/#{TOP_PAGE_PATH}"
+    puts
+  end
 end
 
 namespace :initialize do
-  desc("Initialize CouchApp design documents")
+  desc("Initialize couchapp design documents")
   task :couchapp do
-    APPNAME_TO_DB.each do |key, db|
-      dir = File.join(File.dirname(__FILE__), "relax/apps/#{key}")
+    CONTAINER_TO_DB.each do |key, db|
+      dir = File.join(File.dirname(__FILE__), "relax/containers/#{key}")
       step("Push the application") do
         sh("couchapp push #{dir} #{db}")
       end
@@ -67,8 +70,8 @@ namespace :initialize do
   desc("Initialize Database")
   task :db do
     # Database creation for each database
-    DB_TO_APPNAMES.each do |db_uri, appnames|
-      db = RelaxClient.new(appnames.first)
+    DB_TO_CONTAINERS.each do |db_uri, container_names|
+      db = RelaxClient.new(container_names.first)
       step "Database Check" do
         if db.exist?
           confirmed = confirm("Continue with dropping database?") do
@@ -86,23 +89,24 @@ namespace :initialize do
     end
 
     # Data Loading
-    APPNAME_TO_DB.each do |appname, db_uri|
-      db = RelaxClient.new(appname)
-      dir = File.join(File.dirname(__FILE__), "relax/apps/#{appname}")
+    CONTAINER_TO_DB.each do |container_name, db_uri|
+      db = RelaxClient.new(container_name)
+      dir = File.join(File.dirname(__FILE__), "relax/containers/#{container_name}")
       step("Import initial data set") do
         Dir.glob(File.join(dir, "**/*.json")) do |fname|
           if fname =~ /.*\.test\.json/
-            count = db.insert_fixtures(fname) if IMPORT_TEST_FIXTURES
+            docs = db.insert_fixtures(fname) if IMPORT_TEST_FIXTURES
           else
-            count = db.import_from_file(fname)
+            docs = db.import_from_file(fname)
           end
-          puts "#{File.basename(fname)} - #{count} documents"
+          puts "#{File.basename(fname)} - #{docs.length} documents"
         end
       end
     end
   end
 end
 
+desc("Print the VirtualHost configuration for Apache httpd.conf")
 task :print_httpd_conf do
   template_path = File.join(File.dirname(__FILE__), "config/httpd.template.conf")
   # setup binding parameters
@@ -113,12 +117,22 @@ task :print_httpd_conf do
   ERB.new(File.read(template_path), nil, '-').run(binding)
 end
 
+# End of Task
+# ****************************************************
+# Belows are the utility method for tasks.
+
+#
+# Execute the block with announcing the step description.
+#
 def step(step, &block)
   puts "*** #{step}"
   block.call()
   puts ""
 end
 
+#
+# Execute the block with the y/n confirmation.
+#
 def confirm(msg, &block)
   if ENV["FORCE"] == "true"
     puts "#{msg} [y/n]y"
