@@ -1,0 +1,12 @@
+{
+     "containers" : {
+         "webjourney" : "http://localhost:5984/webjourney-default",
+         "opensocial" : "http://localhost:5984/webjourney-default"
+     },
+     "httpd": {
+         "servername" : "localhost"
+     },
+     "misc" : {
+         "import_test_fixtures" : false
+     }
+}

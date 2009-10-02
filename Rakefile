@@ -2,7 +2,6 @@
 # WebJourney Utility Task Script
 #
 # Common Environemnt Arguments
-#   WEBJOURNEY_ENV : webjourney environment name to select configuration. The default is 'default'.
 #   FORCE : if set true, console confirmations are skipped by enforcing to answer 'y'. (The default is nil)
 #
 require 'pathname'
@@ -15,26 +14,27 @@ require File.join(File.dirname(__FILE__), "relax/relax_client/lib/relax_client")
 #
 # initialize constants from configuration
 #
-WEBJOURNEY_ENV = ENV["WEBJOURNEY_ENV"] || "development"
-config = YAML.load(File.read(File.join(File.dirname(__FILE__), "config/webjourney.yml")))
+CONFIG_PATH       = File.join(File.dirname(__FILE__), "config/webjourney.json")
+CONFIG_LOCAL_PATH = File.join(File.dirname(__FILE__), "config/webjourney.local.json")
+config = RelaxClient.config
 
 # container and db mappping
 CONTAINER_TO_DB = {
-  "webjourney" => config[WEBJOURNEY_ENV]["couchdb"]["webjourney"],
-  "opensocial" => config[WEBJOURNEY_ENV]["couchdb"]["opensocial"]
+  "webjourney" => config["containers"]["webjourney"],
+  "opensocial" => config["containers"]["opensocial"]
 }
 DB_TO_CONTAINERS = {}
 CONTAINER_TO_DB.each do |container, db_uri|
-    if DB_TO_CONTAINERS.has_key?(db_uri)
-      DB_TO_CONTAINERS[db_uri] << container
-    else
-      DB_TO_CONTAINERS[db_uri] = [container]
-    end
+  if DB_TO_CONTAINERS.has_key?(db_uri)
+    DB_TO_CONTAINERS[db_uri] << container
+  else
+    DB_TO_CONTAINERS[db_uri] = [container]
+  end
 end
 
-HTTP_ROOT            = "http://#{config[WEBJOURNEY_ENV]["httpd"]["servername"]}"
+HTTP_ROOT            = "http://#{config["httpd"]["servername"]}"
 TOP_PAGE_PATH        = File.join(CONTAINER_TO_DB["webjourney"].split("/").last, "_design/webjourney/_show/page/pages:top")
-IMPORT_TEST_FIXTURES = config[WEBJOURNEY_ENV]["misc"]["import_test_fixtures"]
+IMPORT_TEST_FIXTURES = config["misc"]["import_test_fixtures"]
 
 desc("Initialize Environemnt")
 task :initialize do
@@ -71,7 +71,7 @@ namespace :initialize do
   task :db do
     # Database creation for each database
     DB_TO_CONTAINERS.each do |db_uri, container_names|
-      db = RelaxClient.new(container_names.first)
+      db = RelaxClient.for_container(container_names.first)
       step "Database Check" do
         if db.exist?
           confirmed = confirm("Continue with dropping database?") do
@@ -90,16 +90,19 @@ namespace :initialize do
 
     # Data Loading
     CONTAINER_TO_DB.each do |container_name, db_uri|
-      db = RelaxClient.new(container_name)
+      db = RelaxClient.for_container(container_name)
       dir = container_dir(container_name)
       step("Import initial data set") do
         Dir.glob(File.join(dir, "**/*.json")) do |fname|
+          docs = nil
           if fname =~ /.*\.test\.json/
             docs = db.insert_fixtures(fname) if IMPORT_TEST_FIXTURES
           else
             docs = db.import_from_file(fname)
           end
-          puts "#{File.basename(fname)} - #{docs.length} documents"
+          if docs
+            puts "#{File.basename(fname)} - #{docs.length} documents"
+          end
         end
       end
     end
@@ -158,7 +161,7 @@ namespace :print do
     template_path = File.join(File.dirname(__FILE__), "config/httpd.template.conf")
     # setup binding parameters
     httpd = {
-      "servername" => config[WEBJOURNEY_ENV]["httpd"]["servername"],
+      "servername" => config["httpd"]["servername"],
       "docroot"    => Pathname.new(File.join(File.dirname(__FILE__), "site")).realpath
     }
     ERB.new(File.read(template_path), nil, '-').run(binding)

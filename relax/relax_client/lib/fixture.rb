@@ -28,6 +28,7 @@ EOS
         doc[FIXTURE_MARKER] = true
         doc
       end
+      result
     end
 
     def import_from_file(*files)
@@ -46,8 +47,8 @@ EOS
       docs.each do |r|
         r = { "id" => r["_id"], "rev" => r["_rev"] }
       end
-
       result = self.bulk_docs(docs, :all_or_nothing => false)
+      result
     end
   end
 end

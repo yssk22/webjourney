@@ -15,7 +15,7 @@ module Service
   # Util class provides the common methods used in service implementation classes.
   #
   class Util
-    @@db = RelaxClient.new("opensocial")
+    @@db = RelaxClient.for_container("opensocial")
     class << self
       #
       # Returns the database client for backend opensocial database.
