@@ -91,7 +91,7 @@ namespace :initialize do
     # Data Loading
     CONTAINER_TO_DB.each do |container_name, db_uri|
       db = RelaxClient.new(container_name)
-      dir = File.join(File.dirname(__FILE__), "relax/containers/#{container_name}")
+      dir = container_dir(container_name)
       step("Import initial data set") do
         Dir.glob(File.join(dir, "**/*.json")) do |fname|
           if fname =~ /.*\.test\.json/
@@ -106,6 +106,51 @@ namespace :initialize do
   end
 end
 
+namespace :app do
+  desc("Generate a new OpenSocial application directory")
+  task :generate do
+    name = ENV["NAME"]
+    puts "NAME={app_name} should be specified." if blank?(name)
+    target = app_dir(name)
+    app = {
+      "name" => name,
+      "description" => "Your application description"
+    }
+
+    # couchapp generation
+    if File.exist?(target)
+      puts "[INFO] couchapp generation was skipped."
+    else
+      sh("couchapp generate #{target}")
+    end
+
+    # gadget xml generation
+    xml_path      = File.join(target, "_attachments/gadget.xml")
+    if File.exist?(xml_path)
+      puts "[INFO] gadget xml generation was skipped."
+    else
+      xml_template  = dir("config/gadget.template.xml")
+      xml = ERB.new(File.read(xml_template), nil, '-').result(binding)
+      File.open(xml_path, "w") do |f|
+        f.write(xml)
+      end
+      puts "[INFO] generated on #{xml_path}."
+    end
+  end
+
+  desc("Register a OpenSocial application in the current environment.")
+  task :register do
+  end
+
+  desc("Unregister a OpenSocial application from the current environment.")
+  task :unregister do
+  end
+
+  desc("List the OpenSocial applications in the current environment.")
+  task :list do
+  end
+
+end
 
 namespace :print do
   desc("Print the VirtualHost configuration for Apache httpd.conf")
@@ -123,6 +168,21 @@ end
 # End of Task
 # ****************************************************
 # Belows are the utility method for tasks.
+def blank?(str)
+  str.nil? || str == ""
+end
+
+def dir(name)
+  File.join(File.dirname(__FILE__), name)
+end
+
+def container_dir(name)
+  File.join(File.dirname(__FILE__), "relax/containers/#{name}")
+end
+
+def app_dir(name)
+  File.join(File.dirname(__FILE__), "relax/apps/#{name}")
+end
 
 #
 # Execute the block with announcing the step description.
