@@ -1,4 +1,7 @@
 {
-    "name": "Sticky",
-    "description": "This gadget provides sticky HTML/Markdown/etc formatted contents"
+    "name"        : "Sticky",
+    "description" : "This gadget provides sticky HTML/Markdown/etc formatted contents",
+    "category"    : "Utility",
+    "tags"        : ["sample"],
+    "author"      : "yssk22"
 }

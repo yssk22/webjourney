@@ -58,10 +58,29 @@ namespace :apps do
 
     desc("Initialize OpenSocial applications")
     task :app do
-      APP_TO_DB.each do |key, db|
-        dir = app_dir(key)
-        step("Push the application") do
-          sh("couchapp push #{dir} #{db}")
+      webjourney =
+      APP_TO_DB.each do |app_name, db_uri|
+        db  = RelaxClient.for_app(app_name)
+        dir = app_dir(app_name)
+
+        # Deploy CouchApp
+        step("Push #{app_name} application.") do
+          sh("couchapp push #{dir} #{db_uri}")
+        end
+
+        # Register WebJourney Application Directory
+        step("Register #{app_name} application on WebJourney Application Collection.") do
+          app_doc = JSON(File.read(File.join(dir, "couchapp.json")))
+          doc_id = "app:#{app_name}"
+          app_doc["_id"]  = doc_id
+          app_doc["type"] = "Application"
+          # TODO Register the internal xml URI must be insecure!!
+          # This should be fixed to register the external XML URI.
+          app_doc["gadget_xml"] = File.join(db_uri, "_design", app_name, "gadget.xml")
+          old_doc = db.load(doc_id) rescue {}
+          new_doc = old_doc.update(app_doc)
+          db.save(new_doc)
+          puts "Gadget XML: #{app_doc['gadget_xml']}"
         end
       end
    end
