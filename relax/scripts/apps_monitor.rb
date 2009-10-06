@@ -8,6 +8,8 @@
 require 'pathname'
 require 'osx/foundation'
 require 'yaml'
+require 'rubygems'
+require 'json'
 OSX.require_framework '/System/Library/Frameworks/CoreServices.framework/Frameworks/CarbonCore.framework'
 include OSX
 
@@ -17,16 +19,23 @@ appdirs = Dir.
   glob(File.join(File.dirname(__FILE__), "../apps/*")).
   select { |dir| File.directory?(dir) }.
   map    { |dir| Pathname.new(dir).realpath.to_s}
+appdirs = appdirs + Dir.
+  glob(File.join(File.dirname(__FILE__), "../containers/*")).
+  select { |dir| File.directory?(dir) }.
+  map    { |dir| Pathname.new(dir).realpath.to_s}
 
 # Proxy Monitor
 proxydir = Pathname.new(File.join(File.dirname(__FILE__), "../opensocial-proxy/lib")).realpath.to_s
 
-env = ENV["WEBJOURNEY_ENV"] || "development"
-$config = YAML.load(File.read(File.join(File.dirname(__FILE__), "../../config/webjourney.yml")))[env]["couchdb"]
+
+global_config = File.join(File.dirname(__FILE__), "../../config/webjourney.json")
+local_config  = File.join(File.dirname(__FILE__), "../../config/webjourney.local.json")
+$config = JSON(File.read(global_config)).
+  update(JSON(File.read(local_config)))
 
 def push_app(appdir)
   appname = appdir.split("/").last
-  uri = $config[appname]
+  uri = $config["containers"][appname] || $config["apps"][appname]
   puts ">> Update : #{appname}"
   system("cd #{appdir}; (couchapp push #{uri} 2>&1) > /dev/null")
   puts ">> OK"
@@ -43,8 +52,8 @@ file_updated = lambda {  |stream, ctx, numEvents, paths, marks, eventIDs|
   numEvents.times do |n|
     dir = paths[n]
     appdirs.each do |appdir|
-      push_app(appdir) if dir =~ /^#{appdir}/
-      reload_rack(proxydir)            if dir =~ /^#{proxydir}/
+      push_app(appdir)       if dir =~ /^#{appdir}/
+      reload_rack(proxydir)  if dir =~ /^#{proxydir}/
     end
   end
 }
