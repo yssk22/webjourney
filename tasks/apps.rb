@@ -1,3 +1,4 @@
+require 'rexml/document'
 APP_TO_DB = RelaxClient.config["apps"]
 DB_TO_APPS = {}
 APP_TO_DB.each do |app, db_uri|
@@ -60,7 +61,6 @@ namespace :apps do
     task :app do
       webjourney =
       APP_TO_DB.each do |app_name, db_uri|
-        db  = RelaxClient.for_app(app_name)
         dir = app_dir(app_name)
 
         # Deploy CouchApp
@@ -69,14 +69,26 @@ namespace :apps do
         end
 
         # Register WebJourney Application Directory
+        db  = RelaxClient.for_container("webjourney")
         step("Register #{app_name} application on WebJourney Application Collection.") do
-          app_doc = JSON(File.read(File.join(dir, "couchapp.json")))
-          doc_id = "app:#{app_name}"
+          # app_doc = JSON(File.read(File.join(dir, "couchapp.json")))
+          app_xml = REXML::Document.new(File.read(File.join(dir, "_attachments/gadget.xml")))
+          prefs = REXML::XPath.first(app_xml, "//Module/ModulePrefs")
+          doc_id  = "app:#{app_name}"
+          app_doc = {
+            "_id"  => doc_id,
+            "type" => "Application"
+          }
           app_doc["_id"]  = doc_id
           app_doc["type"] = "Application"
           # TODO Register the internal xml URI must be insecure!!
           # This should be fixed to register the external XML URI.
           app_doc["gadget_xml"] = File.join(db_uri, "_design", app_name, "gadget.xml")
+
+          # copy metadata in xml definition.
+          %w(title title_url description author author_email category).each do |attr|
+            app_doc[attr] = prefs.attributes[attr]
+          end
           old_doc = db.load(doc_id) rescue {}
           new_doc = old_doc.update(app_doc)
           db.save(new_doc)
@@ -85,5 +97,4 @@ namespace :apps do
       end
    end
   end
-
 end
