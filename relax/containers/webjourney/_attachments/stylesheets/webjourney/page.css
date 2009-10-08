@@ -78,6 +78,20 @@ div.container-edit-mode {
     border: dotted 3px #d8e8f9;
 }
 
+/**
+ * Gadget behaviors
+ */
+/* delete button */
+div.container ul.gadget-title-bar-buttons span.ui-icon-close {
+    display: none;
+}
+div.container-edit-mode ul.gadget-title-bar-buttons span.ui-icon-close {
+    display: block;
+}
+
+/* minimize button */
+div.container ul.gadget-title-bar-buttons span.ui-icon-minus {}
+div.container-edit-mode ul.gadget-title-bar-buttons span.ui-icon-minus {}
 
 /**
  * Banner

@@ -11,7 +11,7 @@
 // the License.
 
 // Usage: The passed in function is called when the page is ready.
-// CouchApp passes in the app object, which takes care of linking to 
+// CouchApp passes in the app object, which takes care of linking to
 // the proper database, and provides access to the CouchApp helpers.
 // $.CouchApp(function(app) {
 //    app.db.view(...)
@@ -32,7 +32,7 @@
            f(this.getUTCMinutes())   + ':' +
            f(this.getUTCSeconds())   + ' +0000';
   };
-  
+
   function Design(db, name) {
     this.view = function(view, opts) {
       db.view(name+'/'+view, opts);
@@ -40,20 +40,20 @@
   };
 
   var login;
-  
+
   function init(app) {
     $(function() {
       var dbname = document.location.href.split('/')[3];
       var dname = unescape(document.location.href).split('/')[5];
       var db = $.couch.db(dbname);
       var design = new Design(db, dname);
-      
+
       // docForm applies CouchDB behavior to HTML forms.
       function docForm(formSelector, opts) {
         var localFormDoc = {};
         opts = opts || {};
         opts.fields = opts.fields || [];
-        
+
         // turn the form into deep json
         // field names like 'author-email' get turned into json like
         // {"author":{"email":"quentin@example.com"}}
@@ -72,7 +72,7 @@
             frontObj[frontName] = val;
           });
         };
-        
+
         // Apply the behavior
         $(formSelector).submit(function(e) {
           e.preventDefault();
@@ -84,7 +84,7 @@
               if (opts.success) opts.success(resp, localFormDoc);
             }
           })
-          
+
           return false;
         });
 
@@ -95,15 +95,15 @@
           opts.fields.forEach(function(field) {
             var parts = field.split('-');
             var run = true, frontObj = doc, frontName = parts.shift();
-            while (frontObj && parts.length > 0) {                
+            while (frontObj && parts.length > 0) {
               frontObj = frontObj[frontName];
               frontName = parts.shift();
             }
             if (frontObj && frontObj[frontName])
               form.find("[name="+field+"]").val(frontObj[frontName]);
-          });            
+          });
         };
-        
+
         if (opts.id) {
           db.openDoc(opts.id, {
             success: function(doc) {
@@ -119,7 +119,7 @@
         var instance = {
           deleteDoc : function(opts) {
             opts = opts || {};
-            if (confirm("Really delete this document?")) {                
+            if (confirm("Really delete this document?")) {
               db.removeDoc(localFormDoc, opts);
             }
           },
@@ -130,31 +130,34 @@
         }
         return instance;
       }
-      
+
       function prettyDate(time){
-      	var date = new Date(time),
-      		diff = (((new Date()).getTime() - date.getTime()) / 1000),
-      		day_diff = Math.floor(diff / 86400);
+        var date = new Date(time),
+                diff = (((new Date()).getTime() - date.getTime()) / 1000),
+                day_diff = Math.floor(diff / 86400);
 
         // if ( isNaN(day_diff) || day_diff < 0 || day_diff >= 31 ) return;
 
-      	return day_diff < 1 && (
-      			diff < 60 && "just now" ||
-      			diff < 120 && "1 minute ago" ||
-      			diff < 3600 && Math.floor( diff / 60 ) + " minutes ago" ||
-      			diff < 7200 && "1 hour ago" ||
-      			diff < 86400 && Math.floor( diff / 3600 ) + " hours ago") ||
-      		day_diff == 1 && "yesterday" ||
-      		day_diff < 21 && day_diff + " days ago" ||
-      		day_diff < 45 && Math.ceil( day_diff / 7 ) + " weeks ago" ||
-      		day_diff < 730 && Math.ceil( day_diff / 31 ) + " months ago" ||
-      		Math.ceil( day_diff / 365 ) + " years ago";
+        return day_diff < 1 && (
+                        diff < 60 && "just now" ||
+                        diff < 120 && "1 minute ago" ||
+                        diff < 3600 && Math.floor( diff / 60 ) + " minutes ago" ||
+                        diff < 7200 && "1 hour ago" ||
+                        diff < 86400 && Math.floor( diff / 3600 ) + " hours ago") ||
+                day_diff == 1 && "yesterday" ||
+                day_diff < 21 && day_diff + " days ago" ||
+                day_diff < 45 && Math.ceil( day_diff / 7 ) + " weeks ago" ||
+                day_diff < 730 && Math.ceil( day_diff / 31 ) + " months ago" ||
+                Math.ceil( day_diff / 365 ) + " years ago";
       };
-      
+
       app({
         showPath : function(funcname, docid) {
           // I wish this was shared with path.js...
           return '/'+[dbname, '_design', dname, '_show', funcname, docid].join('/')
+        },
+        listPath : function(funcname, viewname){
+          return '/'+[dbname, '_design', dname, '_list', funcname, viewname].join('/')
         },
         slugifyString : function(string) {
           return string.replace(/\W/g,'-').
@@ -173,7 +176,7 @@
               $.cookies.set("login", "", '/'+dbname)
               fail && fail(s, e, r);
             }
-          }});        
+          }});
         },
         loggedInNow : function(loggedIn, loggedOut) {
           login = login || $.cookies.get("login");

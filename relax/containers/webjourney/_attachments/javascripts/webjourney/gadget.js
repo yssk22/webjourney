@@ -49,6 +49,13 @@ WebJourney.Gadget.prototype = {
   },
 
   /**
+   * Returns the url linked to the title.
+   */
+  getTitleURL : function(){
+    return this._params.title_url;
+  },
+
+  /**
    * Returns Gadget View
    */
   getView : function(){
@@ -281,7 +288,15 @@ WebJourney.Gadget.prototype = {
       }
     );
 
+    var del = this._createTitleBarButton("ui-icon-close",
+                                        function(){
+                                          if(confirm("Are you sure?")){
+                                            Page.deleteGadget(self);
+                                          }
+                                        });;
+
     return buttons.append(
+      del,
       minimize
     );
   },

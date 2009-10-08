@@ -1,0 +1,18 @@
+<form>
+  <div class="image">
+    <img src="<%= image_path %>" width="120" height="60" />
+  </div>
+  <div>
+    <% if( doc.module_prefs._attrs.title_url ) { %>
+    <h2><a href="<%=h(doc.module_prefs._attrs.title_url) %>" target="_new"><%= h(doc.module_prefs._attrs.title) %></a></h2>
+    <% }else{ %>
+    <h2><%= h(doc.module_prefs._attrs.title) %></h2>
+    <% } %>
+    <div class="description">
+      <%= doc.module_prefs._attrs.description  %>
+    </div>
+    <div class="action">
+      <button type="button" onclick="Page.addGadget(<%= h(toJSON(doc)) %>)">Add</button>
+    </div>
+  </div>
+</form>

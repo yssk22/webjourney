@@ -72,8 +72,6 @@ namespace :apps do
         db  = RelaxClient.for_container("webjourney")
         step("Register #{app_name} application on WebJourney Application Collection.") do
           # app_doc = JSON(File.read(File.join(dir, "couchapp.json")))
-          app_xml = REXML::Document.new(File.read(File.join(dir, "_attachments/gadget.xml")))
-          prefs = REXML::XPath.first(app_xml, "//Module/ModulePrefs")
           doc_id  = "app:#{app_name}"
           app_doc = {
             "_id"  => doc_id,
@@ -86,9 +84,15 @@ namespace :apps do
           app_doc["gadget_xml"] = File.join(db_uri, "_design", app_name, "gadget.xml")
 
           # copy metadata in xml definition.
+          app_xml      = REXML::Document.new(File.read(File.join(dir, "_attachments/gadget.xml")))
+          module_prefs = REXML::XPath.first(app_xml, "//Module/ModulePrefs")
+          # ModulePref
+          module_prefs_doc = { "_attrs" => {} }
           %w(title title_url description author author_email category).each do |attr|
-            app_doc[attr] = prefs.attributes[attr]
+            module_prefs_doc["_attrs"][attr] = module_prefs.attributes[attr]
           end
+          app_doc["module_prefs"] = module_prefs_doc
+          # TODO UserPref
           old_doc = db.load(doc_id) rescue {}
           new_doc = old_doc.update(app_doc)
           db.save(new_doc)

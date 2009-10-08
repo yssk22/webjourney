@@ -27,7 +27,6 @@ function(doc, req) {
           gadget["securityToken"] = st;
         }
       }
-      log("foobar");
       doc._revisions = undefined;
       var html = template(templates.page, {
                             page : doc,

@@ -36,9 +36,11 @@ $config = JSON(File.read(global_config)).
 def push_app(appdir)
   appname = appdir.split("/").last
   uri = $config["containers"][appname] || $config["apps"][appname]
-  puts ">> Update : #{appname}"
-  system("cd #{appdir}; (couchapp push #{uri} 2>&1) > /dev/null")
-  puts ">> OK"
+  command = "couchapp push '#{appdir}' '#{uri}'"
+  puts ">> [Update]"
+  puts ">> #{command}"
+  system(command)
+  puts "<< [Done]"
 end
 
 def reload_rack(proxydir)
