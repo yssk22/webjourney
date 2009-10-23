@@ -1,6 +1,6 @@
 [
   {
-    "_id"     : "test_app_data_1",
+    "_id"     : "app_data:test:example.org:yssk22:key1",
     "type"    : "AppData",
     "userId"  : "example.org:yssk22",
     "appId"   : "test",
@@ -8,7 +8,7 @@
     "value"   : "value1"
   },
   {
-    "_id"     : "test_app_data_2",
+    "_id"     : "app_data:test:example.org:yssk22:key2",
     "type"    : "AppData",
     "userId"  : "example.org:yssk22",
     "appId"   : "test",

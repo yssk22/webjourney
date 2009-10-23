@@ -150,6 +150,17 @@ class RelaxClient
     end
   end
 
+  # Fetch the document with _all_docs API
+  def all_docs(options = {})
+    uri = build_uri("_all_docs", options)
+    keys = options.delete(:keys)
+    if keys
+      JSON.parse(RestClient.post(uri, {:keys => keys }.to_json, :content_type => "application/json"))
+    else
+      JSON.parse(RestClient.get(uri))
+    end
+  end
+
   def temp_view(map, reduce = nil, options = {})
     uri = build_uri("_temp_view", options)
     doc = {:map => map}
