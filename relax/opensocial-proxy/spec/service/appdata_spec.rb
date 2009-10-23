@@ -54,6 +54,7 @@ end
 
 describe Service::Appdata, "when updating @self app data" do
   it "should store one value of the app data for the viewer" do
+    reset_fixtures
     Service::Appdata.update({
                               "userId" => "@me", "groupId" => "@self",
                               "data" => {"foo" => "bar"},
@@ -69,6 +70,7 @@ describe Service::Appdata, "when updating @self app data" do
   end
 
   it "should store multiple value of the app data for the viewer" do
+    reset_fixtures
     Service::Appdata.update({
                               "userId" => "@me", "groupId" => "@self",
                               "data" => {
@@ -85,6 +87,37 @@ describe Service::Appdata, "when updating @self app data" do
     result.keys.length.should == 2
     result["foo"].should == "bar"
     result["hoge"].should == "fuga"
+  end
+
+  it "should update values of the app data for the viewer" do
+    reset_fixtures
+    result = Service::Appdata.get({ "userId"  => "@me",
+                                    "groupId" => "@self",
+                                    "keys" => ["foo"]}, yssk22)
+    result.has_key?("foo").should be_false
+
+    Service::Appdata.update({
+                              "userId" => "@me", "groupId" => "@self",
+                              "data" => {"foo" => "bar"},
+                              "is_test_data" => true
+                            }, yssk22)
+    result = Service::Appdata.get({ "userId"  => "@me",
+                                    "groupId" => "@self",
+                                    "keys" => ["foo"]}, yssk22)
+    result.keys.length.should == 1
+    result.should == { "foo" => "bar" }
+
+    Service::Appdata.update({
+                              "userId" => "@me", "groupId" => "@self",
+                              "data" => {"foo" => "bar_updated"},
+                              "is_test_data" => true
+                            }, yssk22)
+    result = Service::Appdata.get({ "userId"  => "@me",
+                                    "groupId" => "@self",
+                                    "keys" => ["foo"]}, yssk22)
+    result.keys.length.should == 1
+    result.should == { "foo" => "bar_updated" }
+
   end
 
 end
