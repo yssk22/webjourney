@@ -17,13 +17,10 @@ function(head, req) {
              send(ejs.render({}));
              var row;
              while(row = getRow()){
-               var paths = row.value["gadget_xml"].split("/");
-               paths.pop();
-               paths.push("gadget.png");
                ejs = new EJS({text: templates.add_gadget_from_directory.row});
                send(ejs.render({
                                  doc: row.value,
-                                 image_path : paths.join("/")
+                                 image_path : row.value["gadget_image"] || (assetPath() + "/images/no_image_gadget.png")
                                }));
              }
              ejs = new EJS({text: templates.add_gadget_from_directory.tail});

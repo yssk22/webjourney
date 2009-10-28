@@ -71,32 +71,29 @@ namespace :apps do
         # Register WebJourney Application Directory
         db  = RelaxClient.for_container("webjourney")
         step("Register #{app_name} application on WebJourney Application Collection.") do
-          # app_doc = JSON(File.read(File.join(dir, "couchapp.json")))
-          doc_id  = "app:#{app_name}"
-          app_doc = {
-            "_id"  => doc_id,
-            "type" => "Application"
-          }
-          app_doc["_id"]  = doc_id
-          app_doc["type"] = "Application"
-          # TODO Register the internal xml URI must be insecure!!
-          # This should be fixed to register the external XML URI.
-          app_doc["gadget_xml"] = File.join(db_uri, "_design", app_name, "gadget.xml")
-
-          # copy metadata in xml definition.
-          app_xml      = REXML::Document.new(File.read(File.join(dir, "_attachments/gadget.xml")))
-          module_prefs = REXML::XPath.first(app_xml, "//Module/ModulePrefs")
-          # ModulePref
-          module_prefs_doc = { "_attrs" => {} }
-          %w(title title_url description author author_email category).each do |attr|
-            module_prefs_doc["_attrs"][attr] = module_prefs.attributes[attr]
+          couchapp = JSON(File.read(File.join(dir, "couchapp.json")))
+          couchapp["gadgets"].each do |gadget|
+            gadget_title = gadget["title"]
+            doc_id  = "app:#{app_name}:#{gadget_title}"
+            app_doc = {
+              "_id"  => doc_id,
+              "type" => "Application"
+            }
+            # TODO Register the internal xml URI must be insecure!!
+            # This should be fixed to register the external XML URI.
+            app_doc["gadget_xml"] = File.join(db_uri, "_design", app_name, gadget["xml"])
+            # ModulePref
+            module_prefs_doc = { "_attrs" => {} }
+            %w(title title_url description author author_email category).each do |attr|
+              module_prefs_doc["_attrs"][attr] = gadget[attr] || couchapp[attr]
+            end
+            # TODO UserPref
+            app_doc["module_prefs"] = module_prefs_doc
+            old_doc = db.load(doc_id) rescue {}
+            new_doc = old_doc.update(app_doc)
+            db.save(new_doc)
+            puts "Gadget XML: #{app_doc['gadget_xml']}"
           end
-          app_doc["module_prefs"] = module_prefs_doc
-          # TODO UserPref
-          old_doc = db.load(doc_id) rescue {}
-          new_doc = old_doc.update(app_doc)
-          db.save(new_doc)
-          puts "Gadget XML: #{app_doc['gadget_xml']}"
         end
       end
    end
