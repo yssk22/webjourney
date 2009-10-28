@@ -12,7 +12,10 @@
   </ModulePrefs>
   <Content type="html">
     <![CDATA[
-    <p>Hello World!!</p>
+    <div id="content">
+      Now Loading ...
+    </div>
+    <div id="editor" style="display:none"></div>
     ]]>
   </Content>
 </Module>

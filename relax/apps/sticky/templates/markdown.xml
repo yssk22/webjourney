@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <%= modulePrefs(["osapi", "dynamic-height"]) %>
+  <Content type="html">
+    <![CDATA[
+    <div id="show_content">
+      <div class="content"><p>Now Loading ...</p></div>
+      <div class="actions">
+        <button type="button" id="edit_content_button">Edit</button>
+      </div>
+    </div>
+    <div id="edit_content" style="display:none">
+      <textarea name="content" class="content" style=""></textarea>
+      <div class="actions">
+        <button id="save_content_button">Save</button>
+        <button id="cancel_content_button">Cancel</button>
+      </div>
+    </div>
+    <%= require_js("../../../_utils/script/jquery.js") %>
+    <%= require_js("vendor/showdown-v0.9/compressed/showdown.js") %>
+    <%= require_js("markdown.js") %>
+    <%= require_css("sticky.css") %>
+    ]]>
+  </Content>
+</Module>
