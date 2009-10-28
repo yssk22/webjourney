@@ -13,16 +13,13 @@ function(doc, req) {
           log(i);
           var gadget = doc.gadgets[location][i];
           // TODO fix adhoc implementation to publish security tokens.
-          // - fill the requester from req object.
-          // - fill the correct domain name from configurations.
-          // - what does the "module id" means ?
           var st = createSecurityToken(
-            doc.owner,
-            "example.org:yssk22",
-            gadget.id,
-            "example.com",
-            gadget.url,
-            doc._id
+            doc.owner,             // owner
+            doc.owner,            // viewer
+            gadget.url,            // appId
+            "example.com",         // domainId
+            gadget.url,            // appUrl
+            doc._id                // moduleId
           );
           gadget["securityToken"] = st;
         }
