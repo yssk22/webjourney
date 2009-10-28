@@ -1,6 +1,6 @@
 /**
  * @fileoverview WebJourney Gadget Container (Page) implementation
- */
+ **/
 WebJourney.Page = WebJourney.Page || function(){
   this.initialize.apply(this, arguments);
 };
@@ -211,15 +211,15 @@ WebJourney.Page.prototype = {
         // make sortable
         var self = this;
         jQuery("div.container").sortable(jQuery.extend(WebJourney.Page._GADGET_SORTABLE_OPTION,
-        {
-          start  : function(e, ui){ jQuery(ui.helper).width("200px"); },
-          stop   : function(e, ui){ jQuery(ui.helper).width("100%");  },
-          update : function(e, ui){
-            // synchronize gadget instance data
-            self._populateBoundDataFromGadgetBlocks();
-            self.setChanged(true);
-          }
-        }));
+                                                       {
+                                                         start  : function(e, ui){ jQuery(ui.helper).width("200px"); },
+                                                         stop   : function(e, ui){ jQuery(ui.helper).width("100%");  },
+                                                         update : function(e, ui){
+                                                           // synchronize gadget instance data
+                                                           self._populateBoundDataFromGadgetBlocks();
+                                                           self.setChanged(true);
+                                                         }
+                                                       }));
       }
       this.adjustLayout();
     }
@@ -263,11 +263,16 @@ WebJourney.Page.prototype = {
     var wrapper     = jQuery("#wrapper");
     var wrapperMain = jQuery("#wrapper-main");
 
-    if( this._gadgets["left"].length == 0 ){
-      left.hide();
-    }
-    if( this._gadgets["right"].length == 0 ){
-      right.hide();
+    if( this._editMode ){
+      left.show();
+      right.show();
+    }else{
+      if( this._gadgets["left"].length == 0 ){
+        left.hide();
+      }
+      if( this._gadgets["right"].length == 0 ){
+        right.hide();
+      }
     }
 
     var lwidth = left.css("display")  == "block" ? left.outerWidth(true)  : 0;
@@ -385,7 +390,7 @@ WebJourney.Page.prototype = {
       this._renderGadgets(lkey);
       this.refresh(lkey);
       this.setChanged(true);
-     }
+    }
   }
 
 };
