@@ -5,26 +5,11 @@
    "type"  : "Page",
    "owner" : "administrator",
    "gadgets" : {
-     "top"    : [ { "id"    : "pages:top:top-0",
-                    "url" : "/_design/webjourney/gadgets/helloworld.xml",
-                    "title" : "top0"} ],
-     "bottom" : [ { "id"    : "pages:top:bottom-0",
-                    "url" : "/_design/webjourney/gadgets/helloworld.xml",
-                    "title" : "bottom0" } ],
-     "left"   : [ { "id"    : "pages:top:left-0",
-                    "url" : "/_design/webjourney/gadgets/helloworld.xml",
-                    "title" : "left0" } ],
-     "right"  : [ { "id"    : "pages:top:right-0",
-                    "url" : "/_design/webjourney/gadgets/helloworld.xml",
-                    "title" : "right0" } ],
-     "center" : [
-       { "id" : "pages:top:center-0",
-         "url" : "/_design/webjourney/gadgets/sticky.xml",
-         "title" : "center0" },
-       { "id" : "pages:top:center-1",
-         "url" : "/_design/webjourney/gadgets/helloworld.xml",
-         "title" : "center1" }
-     ]
+     "top"    : [],
+     "bottom" : [],
+     "left"   : [],
+     "right"  : [],
+     "center" : []
    }
  }
 ]
