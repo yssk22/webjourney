@@ -46,27 +46,26 @@ module Service
           # multi-key fetches for a reduce view must include group=true
           # and it cannot reduce with grouping.
           # thus, merging rows into one hash
-          option[:group] = true
           result = Util.db.view("app_data_by_ids", option)["rows"]
-          result = { "value" =>
-            result.inject({}){ |hash, item|
-              item["value"].each do |k,v|
-                hash[k] = v
-              end
-              hash
-            }
+          result = result.inject({}){ |hash, item|
+            key = item["key"].last
+            val = item["value"]
+            hash[key] = val
+            hash
           }
         else
           # TODO optimization is required when user_ids is the large list.
           option = {}
-          result = user_ids.map { |uid|
+          result = user_ids.inject({}) { |hash, uid|
             option[:startkey] = [uid, app_id]
             option[:endkey]   = [uid, app_id, "\u9999"]
-            Util.db.view("app_data_by_ids", option)["rows"].first
+            Util.db.view("app_data_by_ids", option)["rows"].each do |row|
+              key = row["key"].last
+              val = row["value"]
+              hash[key] = val
+            end
+            hash
           }
-          # TODO merge the result when two or more user ids are specified.
-          # This should be fixed.
-          result = result.first
         end
 
         # TODO consider the following case.
@@ -77,11 +76,7 @@ module Service
         #    uesrId="user2" has appdata, {"app_key" => "value2"}
         #   In this case, when userId=["user1", "user2"], groupId="@self" is specified,
         #   what should appdata.get return?
-        if result
-          result["value"]
-        else # result is nil
-          {}
-        end
+        return result || {}
       end # def get
 
       def update(params={}, token=nil, req=nil)
