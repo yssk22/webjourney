@@ -1,5 +1,8 @@
 var INITIAL_CONTENT = "No content";
 var CONVERTER = new Showdown.converter();
+var prefs = new gadgets.Prefs();
+var CONTENT_KEY = "content_" + prefs.getModuleId();
+
 function format(content){
   return CONVERTER.makeHtml(content);
 }
@@ -34,12 +37,12 @@ function loadContent(callback){
   var params = {
     userId: "@owner",
     groupId: "@self",
-    keys: ["content"]
+    keys: [CONTENT_KEY]
   };
 
   osapi.appdata.get(params).execute(
     function(data){
-      var content = data["content"] || INITIAL_CONTENT;
+      var content = data[CONTENT_KEY] || INITIAL_CONTENT;
       jQuery("#show_content .content").html(format(content));
       jQuery("#edit_content .content").text(content);
       callback && callback(content);
@@ -51,10 +54,9 @@ function saveContent(callback){
   var params = {
     userId: "@owner",
     groupId: "@self",
-    data: {
-      content: content
-    }
+    data: {}
   };
+  params["data"][CONTENT_KEY] = content;
   osapi.appdata.update(params).execute(
     function(data){
       jQuery("#show_content .content").html(format(content));
