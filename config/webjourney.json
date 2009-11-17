@@ -1,14 +1,23 @@
 {
+     // container application databases
      "containers" : {
-         "webjourney" : "http://localhost:5984/webjourney-default",
-         "opensocial" : "http://localhost:5984/webjourney-default"
+         "webjourney" : "webjourney-container-default",
+         "opensocial" : "webjourney-container-default"
      },
-     "apps" : {
-         "sticky" :"http://localhost:5984/webjourney-sticky-default"
+     // gadget application databases
+     "gadgets" : {
+         "sticky" : "webjourney-gadgets-default"
      },
+
+     // httpd setting for the service interface.
      "httpd": {
-         "servername" : "localhost"
+         "use_ssl"    : false,
+         "servername" : "webjourney.local",
+         "admin_user" : "admin",
+         "admin_pass" : "time2relax"
      },
+
+     // miscellaneous settings
      "misc" : {
          "import_test_fixtures" : false
      }

@@ -12,8 +12,8 @@ require File.join(File.dirname(__FILE__), "./fixture")
 #
 class RelaxClient
   include Fixture
-  default_path = File.join(File.dirname(__FILE__), "../../../config/webjourney.json")
-  local_path   = File.join(File.dirname(__FILE__), "../../../config/webjourney.local.json")
+  default_path = File.join(File.dirname(__FILE__), "../config/webjourney.json")
+  local_path   = File.join(File.dirname(__FILE__), "../config/webjourney.local.json")
   @@config = JSON(File.read(default_path))
   @@config.update(JSON(File.read(local_path))) if File.exist?(local_path)
 
@@ -27,25 +27,31 @@ class RelaxClient
   # Returns a new client instasnce for the specified container.
   #
   def self.for_container(name)
-    self.new(name, true)
+    self.new("containers", name, true)
   end
 
   #
-  # Returns a new client instasnce for the specified application.
+  # Returns a new client instasnce for the specified gadget app.
   #
-  def self.for_app(name)
-    self.new(name, false)
+  def self.for_gadget(name)
+    self.new("gadgets", name, false)
   end
 
   #
   # Constructor
   #
-  #  - <tt>app_name</tt> : one of the CouchApp application in the relax/apps directory.
-  #
-  def initialize(app_name, container_app = false)
-    key = "apps"
-    key = "containers" if container_app
-    @uri      = @@config[key][app_name]
+  def initialize(key, app_name, is_gadget = false)
+    servername = @@config["httpd"]["servername"]
+    if @@config["httpd"]["admin_user"]
+      servername = "#{@@config["httpd"]["admin_user"]}:#{@@config["httpd"]["admin_pass"]}@#{servername}"
+    end
+
+    prefix = if @@config["httpd"]["use_ssl"]
+               "https://#{servername}"
+             else
+               "http://#{servername}"
+             end
+    @uri      = File.join(prefix, @@config[key][app_name])
     @app_name = app_name
   end
 

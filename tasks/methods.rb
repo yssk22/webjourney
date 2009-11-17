@@ -15,8 +15,8 @@ end
 #
 # Returns the specified app directory path.
 #
-def app_dir(app)
-  File.join(File.dirname(__FILE__), "../relax/apps/#{app}")
+def gadget_dir(app)
+  File.join(File.dirname(__FILE__), "../relax/gadgets/#{app}")
 end
 
 #

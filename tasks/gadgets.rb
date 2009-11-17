@@ -1,22 +1,22 @@
 require 'rexml/document'
-APP_TO_DB = RelaxClient.config["apps"]
+APP_TO_DB = RelaxClient.config["gadgets"]
 DB_TO_APPS = {}
-APP_TO_DB.each do |app, db_uri|
-  DB_TO_APPS[db_uri] = (DB_TO_APPS[db_uri] || []) << app
+APP_TO_DB.each do |app, db_name|
+  DB_TO_APPS[db_name] = (DB_TO_APPS[db_name] || []) << app
 end
 
-namespace :apps do
+namespace :gadgets do
   desc("Initialize OpenSocial Applications")
   task :initialize do
-    Rake::Task["apps:initialize:db"].invoke
-    Rake::Task["apps:initialize:app"].invoke
+    Rake::Task["gadgets:initialize:db"].invoke
+    Rake::Task["gadgets:initialize:app"].invoke
   end
 
   desc("Generate a new OpenSocial application directory")
   task :generate do
     name = ENV["NAME"]
     puts "NAME={app_name} should be specified." if blank?(name)
-    target = app_dir(name)
+    target = gadget_dir(name)
     app = {
       "name" => name,
       "description" => "Your application description"
@@ -46,13 +46,13 @@ namespace :apps do
   namespace :initialize do
     desc("Initialize OpenSocial application databases")
     task :db do
-      DB_TO_APPS.each do |db_uri, app_names|
-        db = RelaxClient.for_app(app_names.first)
+      DB_TO_APPS.each do |db_name, app_names|
+        db = RelaxClient.for_gadget(app_names.first)
         init_database(db)
       end
-      APP_TO_DB.each do |app_name, db_uri|
-        db = RelaxClient.for_app(app_name)
-        dir = app_dir(app_name)
+      APP_TO_DB.each do |app_name, db_name|
+        db = RelaxClient.for_gadget(app_name)
+        dir = gadget_dir(app_name)
         import_dataset(db, dir)
       end
     end
@@ -60,12 +60,12 @@ namespace :apps do
     desc("Initialize OpenSocial applications")
     task :app do
       webjourney =
-      APP_TO_DB.each do |app_name, db_uri|
-        dir = app_dir(app_name)
-
+      APP_TO_DB.each do |app_name, db_name|
+        dir = gadget_dir(app_name)
+        db  = RelaxClient.for_gadget(app_name)
         # Deploy CouchApp
         step("Push #{app_name} application.") do
-          sh("couchapp push #{dir} #{db_uri}")
+          sh("couchapp push #{dir} #{db.uri}")
         end
 
         # Register WebJourney Application Directory
@@ -81,7 +81,7 @@ namespace :apps do
             }
             # TODO Register the internal xml URI must be insecure!!
             # This should be fixed to register the external XML URI.
-            app_doc["gadget_xml"] = File.join(db_uri, "_design", app_name, gadget["xml"])
+            app_doc["gadget_xml"] = File.join(db.uri, "_design", app_name, gadget["xml"])
             # ModulePref
             module_prefs_doc = { "_attrs" => {} }
             %w(title title_url description author author_email category).each do |attr|

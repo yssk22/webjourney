@@ -16,31 +16,41 @@ include OSX
 
 # CouchApp monitor
 appdirs = Dir.
-  glob(File.join(File.dirname(__FILE__), "../apps/*")).
+  glob(File.join(File.dirname(__FILE__), "../relax/gadgets/*")).
   select { |dir| File.directory?(dir) }.
   map    { |dir| Pathname.new(dir).realpath.to_s}
 appdirs = appdirs + Dir.
-  glob(File.join(File.dirname(__FILE__), "../containers/*")).
+  glob(File.join(File.dirname(__FILE__), "../relax/containers/*")).
   select { |dir| File.directory?(dir) }.
   map    { |dir| Pathname.new(dir).realpath.to_s}
 
 # Proxy Monitor
-proxydir = Pathname.new(File.join(File.dirname(__FILE__), "../opensocial-proxy/lib")).realpath.to_s
+proxydir = Pathname.new(File.join(File.dirname(__FILE__), "../proxy/rack/lib")).realpath.to_s
 
 
-global_config = File.join(File.dirname(__FILE__), "../../config/webjourney.json")
-local_config  = File.join(File.dirname(__FILE__), "../../config/webjourney.local.json")
+global_config = File.join(File.dirname(__FILE__), "../config/webjourney.json")
+local_config  = File.join(File.dirname(__FILE__), "../config/webjourney.local.json")
 $config = JSON(File.read(global_config)).
   update(JSON(File.read(local_config)))
 
 def push_app(appdir)
   appname = appdir.split("/").last
-  uri = $config["containers"][appname] || $config["apps"][appname]
-  command = "couchapp push '#{appdir}' '#{uri}'"
-  puts ">> [Update]"
-  puts ">> #{command}"
-  system(command)
-  puts "<< [Done]"
+  uri = nil
+  if $config["containers"][appname]
+    uri = RelaxClient.for_container(appname).uri
+  elsif $config["gadgets"][appname]
+    uri = RelaxClient.for_gadgets(appname).uri
+  else
+    # nothing to do
+  end
+
+  if uri
+    puts ">> [Update]"
+    puts ">> #{command}"
+    command = "couchapp push '#{appdir}' '#{uri}'"
+    system(command)
+    puts "<< [Done]"
+  end
 end
 
 def reload_rack(proxydir)
