@@ -10,6 +10,7 @@ require 'osx/foundation'
 require 'yaml'
 require 'rubygems'
 require 'json'
+require File.join(File.dirname(__FILE__), "../lib/relax_client")
 OSX.require_framework '/System/Library/Frameworks/CoreServices.framework/Frameworks/CarbonCore.framework'
 include OSX
 
@@ -45,9 +46,9 @@ def push_app(appdir)
   end
 
   if uri
+    command = "couchapp push '#{appdir}' '#{uri}'"
     puts ">> [Update]"
     puts ">> #{command}"
-    command = "couchapp push '#{appdir}' '#{uri}'"
     system(command)
     puts "<< [Done]"
   end
