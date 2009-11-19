@@ -2,7 +2,8 @@
      // container application databases
      "containers" : {
          "webjourney" : "webjourney-container-default",
-         "opensocial" : "webjourney-container-default"
+         "opensocial" : "webjourney-container-default",
+         "accounts"   : "webjourney-accounts-default"
      },
      // gadget application databases
      "gadgets" : {
