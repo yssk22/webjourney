@@ -38,20 +38,54 @@ class RelaxClient
   end
 
   #
-  # Constructor
+  # Return server uri
   #
-  def initialize(key, app_name, is_gadget = false)
+  def self.server_uri
     servername = @@config["httpd"]["servername"]
     if @@config["httpd"]["admin_user"]
       servername = "#{@@config["httpd"]["admin_user"]}:#{@@config["httpd"]["admin_pass"]}@#{servername}"
     end
 
-    prefix = if @@config["httpd"]["use_ssl"]
-               "https://#{servername}"
-             else
-               "http://#{servername}"
-             end
-    @uri      = File.join(prefix, @@config[key][app_name])
+    if @@config["httpd"]["use_ssl"]
+      "https://#{servername}"
+    else
+      "http://#{servername}"
+    end
+  end
+
+  #
+  # Get the server configuration for the specifiedkey.
+  #
+  def self.get_server_config(key)
+    uri = File.join(server_uri, "_config", key)
+    JSON.parse(RestClient.get(uri))
+  end
+
+  #
+  # Set the server configuration for the specifiedkey.
+  #
+  def self.set_server_config(key, val=nil)
+    uri = File.join(server_uri, "_config", key)
+    if val
+      RestClient.put(uri, val.to_json)
+    else
+      RestClient.delete(uri)
+    end
+  end
+
+  #
+  # Restart the server
+  #
+  def self.restart
+    uri = File.join(server_uri, "_restart")
+    JSON.parse(RestClient.post(uri, nil))
+  end
+
+  #
+  # Constructor
+  #
+  def initialize(key, app_name, is_gadget = false)
+    @uri      = File.join(RelaxClient.server_uri, @@config[key][app_name])
     @app_name = app_name
   end
 
