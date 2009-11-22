@@ -1,6 +1,7 @@
 namespace :all do
   desc("Initialize All components")
   task :initialize do
+    Rake::Task["couchdb:configure"].invoke
     Rake::Task["containers:initialize"].invoke
     Rake::Task["gadgets:initialize"].invoke
     step("WebJourney has been initialized successfully.") do
