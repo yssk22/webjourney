@@ -46,7 +46,7 @@ def push_app(appdir)
   end
 
   if uri
-    command = "couchapp push '#{appdir}' '#{uri}'"
+    command = "couchapp push '#{appdir}' '#{uri}' -v"
     puts ">> [Update]"
     puts ">> #{command}"
     system(command)
