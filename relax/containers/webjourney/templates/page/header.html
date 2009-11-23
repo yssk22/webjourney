@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Style-Type"  content="text/css" />
+    <meta http-equiv="Content-Script-Type" content="text/javascript" />
+    <link href="<%= assetPath %>/stylesheets/webjourney/page.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="<%= assetPath %>/stylesheets/webjourney/form.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="<%= assetPath %>/stylesheets/webjourney/gadget.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="<%= assetPath %>/stylesheets/webjourney/add_gadget_dialog.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="<%= assetPath %>/stylesheets/vendor/jquery-ui-themes/cupertino/jquery-ui-1.7.2.custom.css" media="screen" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+      div#container-left   { width : 200px; }
+      div#container-right  { width : 200px; }
+    </style>
+    <title><%= h(title) %></title>
+  </head>
+  <body>
+    <div id="header" class="header">
+      <div id="logo"><a href="."><img src="<%= assetPath %>/images/logo.png" /></a></div>
+      <div id="site-actions">
+        <% if( current_user.name ) { %>
+        <a href="javascript:void(0);" onclick="Page.logout();">Logout</a>
+        <% } else{ %>
+        <a href="javascript:void(0);" onclick="Page.showLoginDialog();">Login</a>
+        <% } %>
+      </div>
+      <div id="page-message"></div>
+      <div id="page-actions">
+        <div class="show-mode">
+          <button onclick="Page.edit();" type="button">Edit</button>
+        </div>
+        <div class="edit-mode">
+          <button onclick="Page.showAddGadgetDialog();" type="button">Add Gadget</button>
+          <button onclick="Page.save();" type="button">Save</button>
+          <button onclick="Page.cancelEdit();" type="button">Cancel</button>
+        </div>
+      </div>
+    </div>

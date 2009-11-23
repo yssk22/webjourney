@@ -1,0 +1,66 @@
+<!-- dialogs -->
+<div class="dialogs">
+  <div id="login_dialog" title="Login">
+    <div id="login_dialog_tabs">
+      <ul>
+        <li><a href="#login_auth">Authentication</a></li>
+        <li><a href="#login_register">Registration</a></li>
+      </ul>
+      <div id="login_auth">
+        <form action="javascript:void(0);">
+          <fieldset>
+            <legend>Login</legend>
+            <div>
+              User Name:<br/>
+              <input name="name" type="text"></input>
+            </div>
+            <div>
+              Password: <br/>
+              <input name="password" type="password"></input>
+            </div>
+            <div>
+              <input name="login" value="Login" type="submit"></input>
+            </div>
+          </fieldset>
+        </form>
+      </div><!-- login_login -->
+      <div id="login_register">
+        <form action="javascript:void(0);">
+          <fieldset>
+            <legend>Register</legend>
+            <div>
+              User Name:<br/>
+              <input name="name" type="text"></div>
+            <div>
+              Password: <br/>
+              <input name="password" type="password"></input>
+            </div>
+            <div>
+              Password (Confirm): <br/>
+              <input name="password_confirm" type="password"></input>
+            </div>
+            <div>
+              <input name="login" value="Register" type="submit"></input>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+    </div><!-- login_dialog_tabs -->
+  </div><!-- login_dialog -->
+  <div id="add_gadget_dialog" title="Add Gadget">
+    <div id="add_gadget_dialog_tabs">
+      <ul>
+        <li><a href="#add_gadget_from_directory">From Directory</a></li>
+        <li><a href="#add_gadget_from_uri">From URI</a></li>
+      </ul>
+      <div id="add_gadget_from_directory">
+      </div>
+      <div id="add_gadget_from_uri">
+        <form action="javascript:void(0);">
+          <input  type="text" name="gadget_xml_uri" style="width: 90%"></input>
+          <button type="button">Add</button>
+        </form>
+      </div>
+    </div>
+  </div><!-- add_gadget_dialog -->
+</div>
