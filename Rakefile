@@ -14,6 +14,7 @@ require File.join(File.dirname(__FILE__), "tasks/methods")
 require File.join(File.dirname(__FILE__), "tasks/all")
 require File.join(File.dirname(__FILE__), "tasks/containers")
 require File.join(File.dirname(__FILE__), "tasks/gadgets")
+require File.join(File.dirname(__FILE__), "tasks/accounts")
 require File.join(File.dirname(__FILE__), "tasks/print")
 require File.join(File.dirname(__FILE__), "tasks/couchdb")
 

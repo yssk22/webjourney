@@ -74,6 +74,48 @@ class RelaxClient
   end
 
   #
+  # Create a cookie user
+  #
+  def self.create_user(user, password, options = {})
+    roles = (options[:roles] || []).inject("") { |str, r|
+      str = str + "&roles=" + CGI.escape(r)
+    }
+    body = "username=" + CGI.escape(user) + "&password=" + CGI.escape(password)
+    if options[:email]
+      body = body + "&email=" + CGI.escape(options[:email])
+    end
+    body = body + roles
+    uri = File.join(server_uri, "_user")
+    begin
+      JSON.parse(RestClient.post(uri, body))
+    rescue RestClient::RequestFailed => e
+      JSON.parse(e.response.body)
+    end
+  end
+
+
+  #
+  # Update the cookie user
+  #
+  def self.update_user(user, password, options = {})
+    roles = (options[:roles] || []).inject("") { |str, r|
+      str = str + "&roles=" + CGI.escape(r)
+    }
+    body = "password=" + CGI.escape(password)
+    if options[:email]
+      body = body + "&email=" + CGI.escape(options[:email])
+    end
+    body = body + roles
+    uri = File.join(server_uri, "_user", user)
+    begin
+      JSON.parse(RestClient.put(uri, body))
+    rescue RestClient::RequestFailed => e
+      JSON.parse(e.response.body)
+    end
+  end
+
+  
+  #
   # Restart the server
   #
   def self.restart

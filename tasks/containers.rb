@@ -24,6 +24,8 @@ namespace :containers do
         dir = container_dir(container_name)
         import_dataset(db, dir)
       end
+      # User data initialization
+      Rake::Task["accounts:wj_admin:initialize"].invoke
     end
 
     desc("Initialize container applications")

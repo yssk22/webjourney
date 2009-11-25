@@ -2,10 +2,11 @@ function(doc, req) {
   // !code vendor/couchapp/template.js
   // !code vendor/couchapp/path.js
   // !code lib/helpers/securityToken.js
-
   // !code vendor/crayon/lib/escape.js
   // !code vendor/crayon/lib/template.js
+  
   // !json templates.page
+
   var bindings = {
     request : req,
     current_user : req.userCtx,

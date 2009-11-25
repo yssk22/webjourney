@@ -1,0 +1,15 @@
+[
+  {
+   "_id" : "top",
+   "title" : "WebJourney Site Top",
+   "type"  : "Page",
+   "owner" : "wj_admin",
+   "gadgets" : {
+       "top"    : [],
+       "bottom" : [],
+       "left"   : [],
+       "right"  : [],
+       "center" : []
+   }
+  }
+]
