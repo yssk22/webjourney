@@ -21,8 +21,7 @@ namespace :containers do
       end
       CONTAINER_TO_DB.each do |container_name, db_name|
         db = RelaxClient.for_container(container_name)
-        dir = container_dir(container_name)
-        import_dataset(db, dir)
+        import_dataset(db, File.join(File.dirname(__FILE__), "../config/install/container", container_name))
       end
       # User data initialization
       Rake::Task["accounts:wj_admin:initialize"].invoke
@@ -34,7 +33,7 @@ namespace :containers do
         dir = container_dir(container_name)
         db = RelaxClient.for_container(container_name).uri
         step("Push the application") do
-          sh("couchapp push #{dir} #{db}")
+          couchapp_push(dir, db);
         end
       end
     end

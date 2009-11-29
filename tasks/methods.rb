@@ -1,4 +1,18 @@
 #
+# Launch couchapp push command
+#
+def couchapp_push(dir, uri)
+  begin
+    sh("couchapp push --verbose #{dir} #{uri}")
+  rescue => e
+    # ignore 255 exit code from couchapp 0.5
+    if $?.to_i >> 8 != 255
+      raise e
+    end
+  end
+end
+
+#
 # Returns true when str is nil or empty.
 #
 def blank?(str)
@@ -44,7 +58,7 @@ end
 #
 def import_dataset(db, dir)
   step("Import Data Sets") do
-    Dir.glob(File.join(dir, "fixtures/**/*.json")) do |fname|
+    Dir.glob(File.join(dir, "**/*.json")) do |fname|
       docs = nil
       if fname =~ /.*\.test\.json/
         docs = db.insert_fixtures(fname) if IMPORT_TEST_FIXTURES

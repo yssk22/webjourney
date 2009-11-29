@@ -1,5 +1,5 @@
 [
-  {
+{
    "_id" : "top",
    "title" : "WebJourney Site Top",
    "type"  : "Page",
@@ -11,5 +11,5 @@
        "right"  : [],
        "center" : []
    }
-  }
+}
 ]

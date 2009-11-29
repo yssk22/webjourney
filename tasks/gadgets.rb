@@ -53,7 +53,7 @@ namespace :gadgets do
       APP_TO_DB.each do |app_name, db_name|
         db = RelaxClient.for_gadget(app_name)
         dir = gadget_dir(app_name)
-        import_dataset(db, dir)
+        import_dataset(db, File.join(File.dirname(__FILE__), "../config/install/container", app_name))
       end
     end
 
@@ -65,7 +65,7 @@ namespace :gadgets do
         db  = RelaxClient.for_gadget(app_name)
         # Deploy CouchApp
         step("Push #{app_name} application.") do
-          sh("couchapp push #{dir} #{db.uri}")
+          couchapp_push(dir, db.uri)
         end
 
         # Register WebJourney Application Directory
