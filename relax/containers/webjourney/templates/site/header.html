@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link href="<%= assetPath %>/stylesheets/webjourney/site.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="<%= assetPath %>/stylesheets/webjourney/page.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="<%= assetPath %>/stylesheets/webjourney/gadget.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="<%= assetPath %>/stylesheets/webjourney/form.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="<%= assetPath %>/stylesheets/vendor/jquery-ui-themes/cupertino/jquery-ui-1.7.2.custom.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="<%= assetPath %>/stylesheets/webjourney/ui.css" media="screen" rel="stylesheet" type="text/css" />
+    <title><%= site.title ? site.title : "WebJourney" %></title>
+  </head>
+  <body>
+    <div id="header" class="header">
+      <div id="site-actions">
+        <% if( current_user.name ) { %>
+        <%= current_user.name %>
+        <a href="javascript:void(0);" onclick="Site.logout();">Logout</a>
+        <% } else{ %>
+        <a href="<%= assetPath %>/_show/login#login">Login</a>
+        / <a href="<%= assetPath %>/_show/login#signup">Sign Up</a>
+        <% } %>
+      </div>
+      <div id="logo"><a href="<%= assetPath %>/_show/page/top"><img src="<%= assetPath %>/images/logo.png" /></a></div>
+    </div>

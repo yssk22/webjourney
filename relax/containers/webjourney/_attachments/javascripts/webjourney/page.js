@@ -24,16 +24,6 @@ WebJourney.Page._ADD_GADGET_DIALOG_OPTION =  {
   modal      : true,
   resizable  : false
 };
-WebJourney.Page._LOGIN_DIALOG_OPTION =  {
-  width      : 600,
-  height     : 400,
-  autoOpen   : false,
-  modal      : true,
-  resizable  : false
-};
-
-WebJourney.Page._ADD_GADGET_DIALOG_TABS_OPTION =  {};
-WebJourney.Page._LOGIN_DIALOG_TABS_OPTIONS = {};
 
 
 WebJourney.Page.prototype = {
@@ -55,9 +45,6 @@ WebJourney.Page.prototype = {
     this._message  = new WebJourney.Message("#page-message");
     jQuery("#add_gadget_dialog").dialog(WebJourney.Page._ADD_GADGET_DIALOG_OPTION);
     jQuery("#add_gadget_dialog_tabs").tabs(WebJourney.Page._ADD_GADGET_DIALOG_TABS_OPTION);
-    jQuery("#login_dialog").dialog(WebJourney.Page._LOGIN_DIALOG_OPTION);
-    jQuery("#login_dialog_tabs").tabs(WebJourney.Page._LOGIN_DIALOG_TABS_OPTION);
-    jQuery("#login_auth form").bind("submit", function(){ self.onSubmitLoginAuth(); });
 
     // Gadget Initialize
     this._initializeGadgets();
@@ -135,20 +122,6 @@ WebJourney.Page.prototype = {
   },
 
   /**
-  * Show Login Dialog
-  */
-  showLoginDialog : function(){
-    jQuery("#login_dialog").dialog("open");
-  },
-
-  /**
-  * Hide Login Dialog
-  */
-  hideLoginDialog : function(){
-    jQuery("#login_dialog").dialog("close");
-  },
-
-  /**
   * Add a gadget to this page.
   */
   addGadget : function(doc_or_uri){
@@ -175,29 +148,6 @@ WebJourney.Page.prototype = {
   },
 
   /**
-   *  login
-   */
-  login : function(){
-    var form = jQuery("#login_dialog form");
-    var user = jQuery("input[name='name']").val();
-    var pass = jQuery("input[name='password']").val();
-    var result = CouchDB.login(user, pass);
-    if( result.ok ){
-      // go to profile page.
-      window.location.href = "../profile/" + user;
-    }else{
-      alert(result.reason);
-    }
-  },
-
-  /**
-   * logout
-   */
-  logout : function()
-{
-  },
-
-  /**
   * Returns a location key and index
   */
   findGadgetLocationByGadgetId : function(gadget_id){
@@ -215,16 +165,6 @@ WebJourney.Page.prototype = {
       }
     }
     return null;
-  },
-
-  onSubmitLoginAuth : function(){
-    this.login();
-    return false;
-  },
-
-  onSubmitLoginRegister : function(){
-    this.register();
-    return false;
   },
 
   /**

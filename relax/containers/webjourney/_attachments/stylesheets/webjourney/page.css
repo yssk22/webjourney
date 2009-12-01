@@ -1,35 +1,3 @@
-body {
-  font-size: 9pt;
-}
-a img {
-    border: none;
-}
-
-/**
- * Main three blocks
- **/
-div#header {
-    clear:both;
-}
-
-div#site-actions {
-  
-}
-
-div#main {
-    clear:both;
-    width: 100%;
-    overflow:hidden;
-    margin-top: 10px;
-    padding-top: 10px;
-    margin-bottom: 10px;
-    padding-bottom: 10px;
-}
-
-div#footer {
-    clear:both;
-}
-
 div#page-actions {
     float:right;
 }
@@ -85,26 +53,3 @@ div.container-edit-mode {
     border: dotted 3px #d8e8f9;
 }
 
-/**
- * Gadget behaviors
- */
-/* delete button */
-div.container ul.gadget-title-bar-buttons span.ui-icon-close {
-    display: none;
-}
-div.container-edit-mode ul.gadget-title-bar-buttons span.ui-icon-close {
-    display: block;
-}
-
-/* minimize button */
-div.container ul.gadget-title-bar-buttons span.ui-icon-minus {}
-div.container-edit-mode ul.gadget-title-bar-buttons span.ui-icon-minus {}
-
-/**
- * Banner
- */
-div.powered-by {
-    color: #ccccaa;
-    text-align: center;
-    font-size: x-small;
-}

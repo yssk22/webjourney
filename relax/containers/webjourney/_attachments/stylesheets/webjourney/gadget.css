@@ -1,5 +1,11 @@
 div.gadget {
     margin-bottom: 10px;
+    background-color: #ffffff;
+    background-image: none;
+}
+
+div.gadget div.gadget-title-bar{
+    padding: 5px 0 5px 0;
 }
 
 div.gadget-title-bar-label{
@@ -14,10 +20,18 @@ span.gadget-title-bar-buttons{
     font-size: 7pt;
 }
 
+div.gadget-body {
+}
+
 div.gadget-body iframe {
     width : 100%;
     height: 100%;
 }
+
+div.gadget-body div.gadget-embedded-content {
+    margin: 5px 10px 5px 10px;
+}
+
 
 div.container-edit-mode div.gadget div.gadget-title-bar{
     cursor: move;
@@ -35,3 +49,18 @@ ul.gadget-title-bar-buttons li{
     margin: 3px;
     cursor: pointer;
 }
+
+/**
+ * Gadget behaviors
+ */
+/* delete button */
+div.container ul.gadget-title-bar-buttons span.ui-icon-close {
+    display: none;
+}
+div.container-edit-mode ul.gadget-title-bar-buttons span.ui-icon-close {
+    display: block;
+}
+
+/* minimize button */
+div.container ul.gadget-title-bar-buttons span.ui-icon-minus {}
+div.container-edit-mode ul.gadget-title-bar-buttons span.ui-icon-minus {}
