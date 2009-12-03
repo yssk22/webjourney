@@ -18,6 +18,11 @@
          "admin_pass" : "time2relax"
      },
 
+     // couchdb specific setting
+     "couchdb": {
+         "session_timeout" : 3600 // (1 hours)
+     },
+
      // miscellaneous settings
      "misc" : {
          "import_test_fixtures" : false

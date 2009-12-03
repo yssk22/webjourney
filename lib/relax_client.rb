@@ -65,11 +65,15 @@ class RelaxClient
   # Set the server configuration for the specifiedkey.
   #
   def self.set_server_config(key, val=nil)
-    uri = File.join(server_uri, "_config", key)
-    if val
-      RestClient.put(uri, val.to_json)
-    else
-      RestClient.delete(uri)
+    begin
+      uri = File.join(server_uri, "_config", key)
+      if val
+        RestClient.put(uri, val.to_json)
+      else
+        RestClient.delete(uri)
+      end
+    rescue RestClient::RequestFailed => e
+      raise e
     end
   end
 

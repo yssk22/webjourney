@@ -8,6 +8,8 @@ namespace :couchdb do
                                   "webjourney")
     RelaxClient.set_server_config("couch_httpd_auth/authentication_db",
                                   "webjourney-accounts-default")
+    RelaxClient.set_server_config("couch_httpd_auth/timeout",
+                                  (RelaxClient.config["couchdb"]["session_timeout"] || 3600).to_s)
     Rake::Task["couchdb:restart"].invoke
   end
 
