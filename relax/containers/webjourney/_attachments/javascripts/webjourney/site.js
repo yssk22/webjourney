@@ -1,10 +1,9 @@
 WebJourney.Site = WebJourney.Site || function(){
    this.initialize.apply(this, arguments);
 };
-WebJourney.Site.Foo = "bar";
 
 WebJourney.Site.prototype = {
-   initialize: function(app){
+   initialize: function(app, current_user){
       var self = this;
       var path = window.location.pathname.split("/");
       this.CouchApp = app;
@@ -14,6 +13,15 @@ WebJourney.Site.prototype = {
       this._js_root  = [this._app_root, "javascripts"].join("/");
       this._css_root = [this._app_root, "stylesheets"].join("/");
       this._domain   = window.location.host;
+      if( current_user ){
+         this._user = current_user;
+      }else{
+        this._user = {
+           db: ["", path[1]].join("/"),
+           name: "",
+           roles: []
+        };
+      }
    },
 
    logout: function(){
@@ -39,11 +47,15 @@ WebJourney.Site.prototype = {
 
    getUserId : function(username){
       // domain prefiexed user id
-      return this._domain + ":" + username;
+      if(username){
+         return this._domain + ":" + username;
+      }
+      else{
+         return this._domain + ":" + this._user.name;
+      }
+   },
+
+   getCurrentUser : function(){
+      return this._user;
    }
 };
-
-Site = null;
-$.CouchApp(function(app){
-   Site = new WebJourney.Site(app);
-});

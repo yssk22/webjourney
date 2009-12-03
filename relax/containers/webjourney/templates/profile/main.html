@@ -1,0 +1,29 @@
+<div id="main">
+  <div class="ui-widget ui-widget-content ui-corner-all gadget">
+    <div class="ui-widget ui-state-default ui-widget-header ui-corner-all gadget-title-bar">
+      <div class="gadget-title-bar-label">
+        <span>Update Your Profile</span>
+      </div>
+    </div>
+    <div class="ui-widget gadget-body">
+      <div class="gadget-embedded-content">
+          <div id="profile_editor">
+            <div class="sform">
+              <form id="update_profile" method="POST" action="#create_profile">
+                <p class="legend">
+                  <strong>Note:</strong>
+                  You can update your own profile.
+                  Required fields are marked as <em>*</em>.
+                </p>
+                <%= render(templates.profile.form, {profile: profile}) %>
+                <div class="buttonrow">
+                  <button type="submit">Update</button>
+                </div>
+              </form>
+            </div>
+          </div><!-- register -->
+        </div><!-- tabs -->
+      </div>
+    </div>
+  </div>
+</div>

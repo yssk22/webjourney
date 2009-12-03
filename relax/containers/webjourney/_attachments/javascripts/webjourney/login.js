@@ -14,11 +14,13 @@ ACCOUNT_RULES = {
 
 jQuery(function(){
    jQuery("#tabs").tabs();
-   jQuery("div#login form").submit(function(){
+   jQuery("div#login form").submit(function(e){
+      e.preventDefault();
       login(jQuery(this));
       return false;
    });
-   jQuery("div#signup form").submit(function(){
+   jQuery("div#signup form").submit(function(e){
+      e.preventDefault();
       signUp(jQuery(this));
       return false;
    });
