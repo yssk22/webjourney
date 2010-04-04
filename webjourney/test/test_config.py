@@ -21,6 +21,10 @@ class ConfigTestCase(unittest.TestCase):
         self.assertEqual(self.config.container_url, 
                          u"http://admin:password@localhost:5984/webjourney-container")
 
+    def test_test_container_url(self):
+        self.assertEqual(self.config.test_container_url, 
+                         u"http://admin:password@localhost:5984/webjourney-container-test")
+
     def test_site_top_url(self):
         self.assertEqual(self.config.site_top_url, 
                          u"http://localhost/webjourney-container/_design/webjourney/_show/top")

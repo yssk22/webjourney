@@ -29,6 +29,7 @@ class JsonConfig(object):
 class WjConfig(JsonConfig):
     def __init__(self, default, *files):
         super(WjConfig, self).__init__(default, *files)
+
     @property
     def container_url(self):
         """ Returns deployment container url
@@ -38,6 +39,11 @@ class WjConfig(JsonConfig):
                                           self._config["deployment"]["host"],
                                           self._config["deployment"]["port"],
                                           self._config["db"]["container"])
+    @property
+    def test_container_url(self):
+        """ Returns deployment container url for unit testing
+        """
+        return "%s-test" % self.container_url
     
     @property
     def site_top_url(self):
