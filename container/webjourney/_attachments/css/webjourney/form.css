@@ -1,0 +1,46 @@
+/* block container type form */
+form.container {
+}
+
+form.container div.item {
+    margin-bottom: 10px;
+}
+
+form.container div.item label{
+    display: block;
+    float: left;
+    width: 120px;
+    margin-right: 20px;
+    text-align: right;
+}
+form.container div.item label:after{
+    content: ":";
+}
+
+form.container div.item div{
+    margin-left: 140px;
+}
+
+form.container div.item div p.note{
+    margin: 0 5px;
+    font-size: small;
+    font-style: italic;
+    color: #999999;
+}
+
+
+form.container div.buttonpane{
+    margin-left: 140px;
+}
+
+.ui-button-text-only .ui-button-text {
+    padding: 0.2em 0.6em;
+}
+
+form.container input, 
+form.container select, 
+form.container textarea, 
+form.container button { 
+    font-family: Trebuchet MS,Verdana,Arial,sans-serif; 
+    font-size: 1em; 
+}

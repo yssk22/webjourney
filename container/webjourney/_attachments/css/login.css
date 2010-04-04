@@ -1,0 +1,24 @@
+form#login {
+    width: 400px;
+}
+
+div#login-widget{
+    overflow:auto;
+    height:400px;
+    width:420px;
+    position:absolute;
+    top:50%;
+    left:50%;
+    margin-top:-200px;
+    margin-left:-205px;
+}
+
+footer.site {
+    border: none;
+    position: absolute;
+    top:50%;
+    left:50%;
+    margin-top:20px;
+    margin-left:-250px;
+    width:500px;   
+}

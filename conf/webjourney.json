@@ -1,0 +1,19 @@
+{
+   "service" : {
+       "host" : "localhost"
+   },
+
+   "deployment" : {
+       "host" : "localhost",
+       "port" : 5984,
+       "admin": {
+           "name" : "admin",
+           "password" : "password"
+       }
+   },
+
+   "db": {
+       "container" : "webjourney-container",
+       "applications" : "webjourney-apps"
+   }
+}

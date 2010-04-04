@@ -2,8 +2,7 @@
 .DS_Store*
 .htaccess
 .couchapprc
-
-tmp
+*.pyc
 
 
 

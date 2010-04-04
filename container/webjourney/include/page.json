@@ -1,0 +1,9 @@
+{
+    "site.title": "WebJourney",
+    "page.title": "WebJourney",
+    "page.description": "WebJourney is an opensocial container implementation on top of Apache CouchDB.",
+    "page.keyword" : "couchdb,javascript",
+    "page.theme" : "black-tie",
+    "page.stylesheets":  [],
+    "page.javascripts" : []
+}

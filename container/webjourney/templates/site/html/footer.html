@@ -1,0 +1,23 @@
+</div><!-- id=main -->
+<footer class="site">
+  <div id="copyright">
+    Copyright &copy; 2007-2010 <a href="http://twitter.com/yssk22">Yohei Sasaki</a> All Rights Reserved.
+  </div>
+  <div id="powered-by">
+    Powered by <a href="http://github.com/yssk22/webjourney">WebJourney 0.7.0</a>
+    on <a href="http://couchdb.apache.org/">Apache CouchDB</a>.
+  </div>
+</footer>
+<script type="text/javascript" src="/_utils/script/jquery.couch.js"></script>
+<script type="text/javascript" src="{{assetPath}}/vendor/couchapp/jquery.couch.app.js"></script>
+<script type="text/javascript" src="{{assetPath}}/vendor/couchapp/jquery.couch.app.util.js"></script>
+<script type="text/javascript" src="{{assetPath}}/vendor/couchapp/jquery.mustache.js"></script>
+<script type="text/javascript" src="{{assetPath}}/vendor/couchapp/jquery.evently.js"></script>
+<script type="text/javascript" src="{{assetPath}}/js/webjourney.js"></script>
+<script type="text/javascript" src="{{assetPath}}/js/jquery.webjourney.js"></script>
+{{%IMPLICIT-ITERATOR iterator=file}}
+{{#page.javascripts}}
+<script type="text/javascript" src="{{assetPath}}/{{file}}"></script>
+{{/page.javascripts}}
+</body>
+</html>

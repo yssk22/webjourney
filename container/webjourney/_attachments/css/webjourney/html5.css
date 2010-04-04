@@ -1,0 +1,5 @@
+/** html5 adaptation **/
+section, nav, article, aside, header, footer {
+    display: block;
+}
+

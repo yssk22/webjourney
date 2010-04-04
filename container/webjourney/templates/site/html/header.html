@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>{{page.title}} - WebJourney</title>
+    <link href="{{assetPath}}/../vendor/jquery-ui-themes-1.8/themes/{{page.theme}}/jquery-ui.css" rel="stylesheet" type="text/css" media="all">
+    <link href="{{assetPath}}/css/webjourney.css" rel="stylesheet" type="text/css" media="all">
+    {{%IMPLICIT-ITERATOR iterator=file}}
+    {{#page.stylesheets}}
+    <link href="{{assetPath}}/{{file}}" rel="stylesheet" type="text/css" media="all"> 
+    {{/page.stylesheets}}
+    <script type="text/javascript" src="{{assetPath}}/../vendor/jquery-ui-1.8/js/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="{{assetPath}}/../vendor/jquery-ui-1.8/js/jquery-ui-1.8.custom.min.js"></script>
+  </head>
+<body>
+<header id="header" class="site">
+  <div class="title">
+    <h1>{{site.title}}</h1>
+  </div>
+  <nav>
+    {{{page.account_navigation}}}
+  </nav>
+</header>
+<div id="main" class="site">
+
+

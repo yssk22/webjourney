@@ -1,0 +1,19 @@
+{
+   "service" : {
+       "host" : "relax"
+   },
+
+   "deployment" : {
+       "host" : "relax",
+       "port" : 5985,
+       "admin": {
+           "name" : "yssk22",
+           "password" : "hogefuga02s"
+       }
+   },
+
+   "db": {
+       "container" : "webjourney-container",
+       "applications" : "webjourney-apps"
+   }
+}

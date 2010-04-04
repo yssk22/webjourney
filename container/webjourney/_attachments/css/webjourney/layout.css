@@ -1,0 +1,41 @@
+body {
+    font-size: 9pt;
+}
+
+header.site, footer.site {
+    font-family: serif;
+    color: #666666;
+    width: 100%;
+}
+
+header.site a, footer.site a {
+    color: #333333;
+}
+
+header.site {
+    margin-bottom: 7px;
+}
+
+footer.site {
+    margin-top: 7px;
+    line-height: 140%;
+    padding-top: 5px;
+    border-top: solid 1px #aaaaaa;
+    font-size: 9pt;
+    text-align: center;
+}
+
+header.site div.title{
+    float: left;
+}
+header.site div.title h1{
+    padding: 0px;
+    margin: 0px;
+}
+header.site nav {
+    text-align:right;
+}
+
+div#main {
+    clear: both;
+}
