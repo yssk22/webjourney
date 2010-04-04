@@ -4,12 +4,14 @@
 #
 # This software is licensed as described in the file LICENSE, which
 # you should have received as part of this distribution.
+
 import os
 import sys
 import getopt
 
-import wj
-from wj.couchapputil import push
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+import webjourney
+from webjourney.couchapputil import push
 
 def usage():
     sys.stderr.write('python update.py [-c <CONTAINER>] [-a <APP>]\n')
@@ -43,7 +45,7 @@ dst = None
 if container:
     src = os.path.join(os.path.dirname(__file__), "../container",
                                 container)
-    dst = wj.config.container_url
+    dst = webjourney.config.container_url
 
 else:
     src = os.path.join(os.path.dirname(__file__), "../app",

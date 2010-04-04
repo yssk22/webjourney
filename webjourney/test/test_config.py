@@ -9,20 +9,20 @@ import os
 import sys
 import unittest
 
-sys.path.append(os.path.join(os.path.dirname(__file__), "../"))
-
-import wj
+sys.path.append(os.path.join(os.path.dirname(__file__), "../../"))
+import webjourney
 
 class ConfigTestCase(unittest.TestCase):
     def setUp(self):
+        self.config = webjourney.WjConfig(webjourney.CONTAINER_CONF_PATH)
         pass
 
     def test_container_url(self):
-        self.assertEqual(wj.config.container_url, 
+        self.assertEqual(self.config.container_url, 
                          u"http://admin:password@localhost:5984/webjourney-container")
 
     def test_site_top_url(self):
-        self.assertEqual(wj.config.site_top_url, 
+        self.assertEqual(self.config.site_top_url, 
                          u"http://localhost/webjourney-container/_design/webjourney/_show/top")
 
         

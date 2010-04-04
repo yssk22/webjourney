@@ -8,22 +8,23 @@ import os
 import sys
 import subprocess
 
-import wj
-from wj.couchapputil import push
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+import webjourney
+from webjourney.couchapputil import push
 
 # install container
-print "Deploying container application to %s" % wj.config.container_url
-push("container/webjourney", wj.config.container_url)
-push("container/vendor", wj.config.container_url)
+print "Deploying container application to %s" % webjourney.config.container_url
+push("container/webjourney", webjourney.config.container_url)
+push("container/vendor", webjourney.config.container_url)
 
 # TODO: install apps
-print "Deploying open social applications to %s" % wj.config.container_url
+print "Deploying open social applications to %s" % webjourney.config.container_url
 
 print """
 All installation processes have been completed successfully.
 Please visit the top page at:
 
 %s
-""" % wj.config.site_top_url
+""" % webjourney.config.site_top_url
 
 exit(0)

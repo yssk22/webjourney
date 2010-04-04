@@ -8,7 +8,7 @@
 import json
 import os
 
-APP_ROOT = os.path.join(os.path.dirname(__file__), "../../")
+APP_ROOT = os.path.join(os.path.dirname(__file__), "../")
 CONTAINER_CONF_PATH = os.path.join(APP_ROOT, "conf/webjourney.json") 
 CONTAINER_LCONF_PATH = os.path.join(APP_ROOT, "conf/webjourney.local.json") 
 
@@ -27,9 +27,8 @@ class JsonConfig(object):
         return _config
 
 class WjConfig(JsonConfig):
-    def __init__(self):
-        super(WjConfig, self).__init__(CONTAINER_CONF_PATH, 
-                                       CONTAINER_LCONF_PATH)
+    def __init__(self, default, *files):
+        super(WjConfig, self).__init__(default, *files)
     @property
     def container_url(self):
         """ Returns deployment container url
@@ -53,4 +52,5 @@ class WjConfig(JsonConfig):
                           sport,
                           self._config["db"]["container"])
 
-config = WjConfig()        
+config = WjConfig(CONTAINER_CONF_PATH, 
+                  CONTAINER_LCONF_PATH)        
