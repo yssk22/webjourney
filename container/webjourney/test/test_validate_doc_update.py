@@ -6,6 +6,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "../../../"))
 import webjourney.test_helper as helper
 
 class TestValidateDocUpdate(helper.TestCaseBase):
+    helper.reset_db(os.path.join(os.path.dirname(__file__), ".."))
     # fixtures = "foo"
     def test_type_validation(self):
         doc = self.assertSaveDoc(False, {"foo": "bar"})
@@ -18,5 +19,4 @@ class TestValidateDocUpdate(helper.TestCaseBase):
         self.assertEqual(doc["reason"], "The 'type' field cannot be changed.");
 
 if __name__ == "__main__":
-    helper.reset_db(os.path.join(os.path.dirname(__file__), ".."))
     unittest.main()
