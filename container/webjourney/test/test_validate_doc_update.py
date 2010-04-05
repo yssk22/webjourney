@@ -12,11 +12,13 @@ class TestValidateDocUpdate(helper.TestCaseBase):
         doc = self.assertSaveDoc(False, {"foo": "bar"})
         self.assertEqual(doc["reason"], "The 'type' field is required.");
 
-        doc = self.assertSaveDoc(True, {"foo": "bar", "type": "foo"})
+        doc = self.assertSaveDoc(False, {"foo": "bar", "type": "foo"})
+        self.assertEqual(doc["reason"], "Unknown type 'foo'.");
 
-        doc["type"] = "bar"
-        doc = self.assertSaveDoc(False,  doc)
-        self.assertEqual(doc["reason"], "The 'type' field cannot be changed.");
+    def test_person_validation(self):
+        doc = self.assertSaveDoc(False, {"foo": "bar", "type": "Person"});
+        self.assertEqual(doc["reason"], "The 'displayName' field is required.");
+        
 
 if __name__ == "__main__":
     unittest.main()

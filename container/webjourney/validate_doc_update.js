@@ -1,20 +1,22 @@
 function(newDoc, oldDoc, userCtx, secObj){
+   var crayon = require('vendor/crayon/lib/crayon');
    var m = require('lib/validations/common');
    var v = new m.Validator(newDoc, oldDoc, userCtx, secObj);
    v.required("type");
    v.unchanged("type");
-   /*
-   // require type specific validator
-   Validator = require('lib/validations/' + type);
-   v = new Validator(newDoc, oldDoc, userCtx, secObj);
+
+   var type = newDoc.type;
+   if( this.lib.validations[type] == undefined ){
+      throw({forbidden: "Unknown type '" + type + "'."});
+   }
+   var m1 = require('lib/validations/' + type);
 
    if(!oldDoc){
-      v.validateOnCreate();
+      m1.validateOnCraete && m1.validateOnCreate(v);
    }else if(newDoc._deleted){
-      v.validateOnDelete();
+      m1.validateOnDelete && m1.validateOnDelete(v);
    }else {
-      v.validateOnUpdate();
+      m1.validateOnUpdate && m1.validateOnUpdate(v);
    }
-   v.validate();
-   */
+   m1.validate && m1.validate(v);
 }
