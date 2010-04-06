@@ -32,6 +32,17 @@ Validator.prototype = {
             this.forbidden(message);
          }
       };
+   },
+
+   formatted : function(){
+      var r = arguments[arguments.length - 1];
+      for (var i=0; i < arguments.length-1; i++) {
+         var field = arguments[i];
+         var message = "The '"+field+"' field is invalid format.";
+         if (!(this.newDoc[field] && this.newDoc[field].match(r))){
+            this.forbidden(message);
+         }
+      }
    }
 };
 

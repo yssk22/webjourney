@@ -1,5 +1,4 @@
 function(newDoc, oldDoc, userCtx, secObj){
-   var crayon = require('vendor/crayon/lib/crayon');
    var m = require('lib/validations/common');
    var v = new m.Validator(newDoc, oldDoc, userCtx, secObj);
    v.required("type");
@@ -11,6 +10,7 @@ function(newDoc, oldDoc, userCtx, secObj){
    }
    var m1 = require('lib/validations/' + type);
 
+   m1.validate && m1.validate(v);
    if(!oldDoc){
       m1.validateOnCraete && m1.validateOnCreate(v);
    }else if(newDoc._deleted){
@@ -18,5 +18,4 @@ function(newDoc, oldDoc, userCtx, secObj){
    }else {
       m1.validateOnUpdate && m1.validateOnUpdate(v);
    }
-   m1.validate && m1.validate(v);
 }
