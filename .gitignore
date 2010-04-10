@@ -3,6 +3,7 @@
 .htaccess
 .couchapprc
 *.pyc
+.*
 
 
 
