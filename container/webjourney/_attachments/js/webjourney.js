@@ -3,7 +3,7 @@ $(function(){
    $("header#header nav a.logout").click(logout);
    $("button.ui-button").button();
 });
-$.CouchApp(function(app){
+$.couch.app(function(app){
    App = app;
 });
 
@@ -12,6 +12,7 @@ function log(msg){
       console.log(msg);
    }
 }
+
 function logout(){
    $.couch.logout({
       success: function(resp){

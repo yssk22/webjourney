@@ -8,7 +8,21 @@ function(doc, req){
    bindings["page.title"] = "Top";
    log(bindings["page.stylesheets"]);
    if( doc ){
-      return "doc found";
+      if( doc.type == "Person" ){
+         bindings["page.title"] = doc._id.split(":")[1] + "'s home page";
+         var expected = "profile:" + req.userCtx.name;
+         if( doc._id == expected ){
+            return t.render(ddoc.templates.site.html.header, bindings) +
+               t.render(ddoc.templates.pages.top.mine, bindings) +
+               t.render(ddoc.templates.site.html.footer, bindings);
+         }else{
+            return t.render(ddoc.templates.site.html.header, bindings) +
+               t.render(ddoc.templates.pages.top.other, bindings) +
+               t.render(ddoc.templates.site.html.footer, bindings);
+         }
+      }else{
+         return e.not_found(ddoc, bindings);
+      }
    }else{
       if( req.path.length == 6 ){
          // id specified but not found.
