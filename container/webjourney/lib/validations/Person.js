@@ -1,4 +1,4 @@
 exports.validate = function(v){
    v.required("displayName");
-   v.formatted("_id", /profile:[a-zA-Z0-9_]{4,}/);
+   v.equals("_id", "profile:" + v.userCtx.name );
 };

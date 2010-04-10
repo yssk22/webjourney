@@ -19,17 +19,13 @@ class TestValidateDocUpdate(helper.TestCaseBase):
         doc = self.assertSaveDoc(False, {"foo": "bar", "type": "Person"});
         self.assertEqual(doc["reason"], "The 'displayName' field is required.");
 
-        doc = self.assertSaveDoc(False, {"_id": "*foo_bar", 
+        doc = self.assertSaveDoc(False, {"_id": "*foo", 
                                          "displayName": "foo", 
                                          "type": "Person"});
-        self.assertEqual(doc["reason"], "The '_id' field is invalid format.");
+        self.assertEqual(doc["reason"], "The '_id' field is invalid.");
 
-        doc = self.assertSaveDoc(False, {"_id": "+foo_bar", 
-                                         "displayName": "foo", 
-                                         "type": "Person"});
-        self.assertEqual(doc["reason"], "The '_id' field is invalid format.");
-
-        doc = self.assertSaveDoc(True, {"_id": "profile:_foo_bar", 
+        self.login("yssk22", "password")
+        doc = self.assertSaveDoc(True, {"_id": "profile:yssk22", 
                                         "displayName": "foo", 
                                         "type": "Person"});
 

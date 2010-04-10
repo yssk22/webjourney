@@ -14,22 +14,33 @@ class Server(couchdbkit.Server):
         # monkey patch for add_authorization
         self.res.add_filter(obj_auth)
 
+# URL includes admin authentication
 TEST_DB_URL = urlparse(webjourney.config.test_container_url)
+TEST_DB_NAME = TEST_DB_URL.path[1:]
 
-Server  = Server("%s://%s" % (TEST_DB_URL.scheme, 
-                              TEST_DB_URL.netloc))
-TestDB = None
+def adminServer():
+    return Server("%s://%s" % (TEST_DB_URL.scheme, 
+                               TEST_DB_URL.netloc))
+def userServer(username = None, password = None):
+    loc = TEST_DB_URL.netloc.split("@")[1]
+    if username and password:
+        loc = "%s:%s@%s" % (username, password, loc)
+    loc = "%s://%s" % (TEST_DB_URL.scheme, loc)
+    return Server(loc)
+
+def database(server = adminServer()):
+    return server[TEST_DB_NAME]
 
     
 def reset_db(*app_dirs):
+    s = adminServer()
     try:
-        Server.delete_db(TEST_DB_URL.path[1:])
+        s.delete_db(TEST_DB_NAME)
     except couchdbkit.resource.ResourceNotFound, e:
         # ignore
         pass
 
-    global TestDB
-    TestDB = Server.create_db(TEST_DB_URL.path[1:])
+    s.create_db(TEST_DB_NAME)
 
     for dir in app_dirs:
         couchapputil.push(dir, urlunparse(TEST_DB_URL))
@@ -42,12 +53,24 @@ def load_fixtures(dir, reset = True):
 
 class TestCaseBase(unittest.TestCase):
     def setUp(self):
-        self.db = TestDB
+        self.db = database(userServer())
         # self.db.flush()
         fixtures = getattr(self, "fixtures", [])
         pass
 
     def tearDown(self):
+        pass
+
+    def login(self, username, password):
+        """ switch the test database connection with the specified user.
+        """
+        self.db = database(userServer(username, password))
+        pass
+
+    def logout(self):
+        """ switch the test database connection with anonymous.
+        """
+        self.db = database(userServer())
         pass
 
     def assertSaveDoc(self, 
