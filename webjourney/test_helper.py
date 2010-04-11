@@ -1,6 +1,7 @@
 import unittest
 import json
 import couchdbkit
+from server import Server
 from restkit import BasicAuth
 from restkit.errors import ResourceError
 from urlparse import urlparse, urlunparse
@@ -9,28 +10,22 @@ from urlparse import urlparse, urlunparse
 import webjourney
 import couchapputil
 
-class Server(couchdbkit.Server):
-    def add_authorization(self, obj_auth):
-        # monkey patch for add_authorization
-        self.res.add_filter(obj_auth)
-
 # URL includes admin authentication
 TEST_DB_URL = urlparse(webjourney.config.test_container_url)
 TEST_DB_NAME = TEST_DB_URL.path[1:]
 
 def adminServer():
-    return Server("%s://%s" % (TEST_DB_URL.scheme, 
+    return webjourney.server.Server("%s://%s" % (TEST_DB_URL.scheme, 
                                TEST_DB_URL.netloc))
 def userServer(username = None, password = None):
     loc = TEST_DB_URL.netloc.split("@")[1]
     if username and password:
         loc = "%s:%s@%s" % (username, password, loc)
     loc = "%s://%s" % (TEST_DB_URL.scheme, loc)
-    return Server(loc)
+    return webjourney.server.Server(loc)
 
 def database(server = adminServer()):
     return server[TEST_DB_NAME]
-
     
 def reset_db(*app_dirs):
     s = adminServer()

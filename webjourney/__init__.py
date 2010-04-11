@@ -4,7 +4,6 @@
 # This software is licensed as described in the file LICENSE, which
 # you should have received as part of this distribution.
 
-
 import json
 import os
 
@@ -38,7 +37,8 @@ class WjConfig(JsonConfig):
                                           self._config["deployment"]["admin"]["password"],
                                           self._config["deployment"]["host"],
                                           self._config["deployment"]["port"],
-                                          self._config["db"]["container"])
+                                          self._config["db"]["container"])        
+
     @property
     def test_container_url(self):
         """ Returns deployment container url for unit testing
