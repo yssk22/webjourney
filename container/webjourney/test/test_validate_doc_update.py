@@ -1,6 +1,7 @@
 import os
 import sys
 import unittest
+import time
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../../../"))
 import webjourney.test_helper as helper
@@ -35,6 +36,7 @@ class TestValidateDocUpdate(helper.TestCaseBase):
                                         "type": "Person"});
 
     def test_activity_validation(self):
+        now = int(time.time())
         doc = self.assertSaveDoc(False, {"type": "Activity",
                                          "userId": "foo"});
         self.assertEqual(doc["reason"], "login required.");
@@ -42,15 +44,18 @@ class TestValidateDocUpdate(helper.TestCaseBase):
         self.login("yssk22", "password")
         # _id field cannot be specified.
         doc = self.assertSaveDoc(False, {"_id": "p:foo", "type": "Activity",
+                                         "postedTime" : now,
                                          "userId": "yssk22" });
         self.assertEqual(doc["reason"], "The '_id' field is invalid format.");
 
         # userId field must be the same as user name.
         doc = self.assertSaveDoc(False, {"type": "Activity",
+                                         "postedTime" : now,
                                          "userId": "foo" });
         self.assertEqual(doc["reason"], "The 'userId' field is invalid.");
 
         doc = self.assertSaveDoc(True, {"type": "Activity",
+                                        "postedTime" : now,
                                         "userId": "yssk22" });
         
 

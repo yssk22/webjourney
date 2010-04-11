@@ -1,7 +1,8 @@
 exports.validate = function(v){
    v.loginRequired();
    v.required("userId");
-   v.equals("userId", v.userCtx.name );
+   v.equals("userId", v.userCtx.name);
+   v.required("postedTime");
 };
 
 exports.validateOnCreate = function(v){
