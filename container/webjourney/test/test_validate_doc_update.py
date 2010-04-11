@@ -25,12 +25,12 @@ class TestValidateDocUpdate(helper.TestCaseBase):
         self.assertEqual(doc["reason"], "The '_id' field is invalid.");
 
         self.login("yssk22", "password")
-        doc = self.assertSaveDoc(False, {"_id": "profile:foo", 
+        doc = self.assertSaveDoc(False, {"_id": "p:foo", 
                                          "displayName": "foo", 
                                          "type": "Person"});
         self.assertEqual(doc["reason"], "The '_id' field is invalid.");
 
-        doc = self.assertSaveDoc(True, {"_id": "profile:yssk22", 
+        doc = self.assertSaveDoc(True, {"_id": "p:yssk22", 
                                         "displayName": "foo", 
                                         "type": "Person"});
 
