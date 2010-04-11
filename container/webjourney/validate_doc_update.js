@@ -12,7 +12,7 @@ function(newDoc, oldDoc, userCtx, secObj){
 
    m1.validate && m1.validate(v);
    if(!oldDoc){
-      m1.validateOnCraete && m1.validateOnCreate(v);
+      m1.validateOnCreate && m1.validateOnCreate(v);
    }else if(newDoc._deleted){
       m1.validateOnDelete && m1.validateOnDelete(v);
    }else {
