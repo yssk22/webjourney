@@ -6,7 +6,7 @@ function onLoginSubmit(){
       name : name,
       password : pass,
       success : function() {
-         var path = App.showPath("top", "profile:" + encodeURIComponent(name));
+         var path = App.showPath("top", "p:" + encodeURIComponent(name));
          log("Succ - " + path);
          $("#login").nowLoading("clear");
          $("#login p.msg").infoMsg("Now redirecting your page ...");

@@ -1,0 +1,29 @@
+div.profile {
+}
+
+div.profile div.sidebar {
+    width: 250px;
+    float: left;
+}
+
+div.profile div.sidebar div.card{
+    margin-top: 10px;
+    margin-left: 25px;
+    margin-right: 25px;
+    width: 200px;
+    text-align: center;
+}
+
+div.profile div.sidebar div.card div.photo div.upload {
+    text-align:right;
+}
+
+div.profile div.sidebar div.card div.signature span.name{
+    font-size: large;
+}
+
+
+
+div.profile div.contents {
+    margin-left: 280px;
+}

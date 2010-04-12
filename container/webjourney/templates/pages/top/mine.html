@@ -1,12 +1,42 @@
-<div class="ui-widget ui-corner-all">
-  <div class="wj-page-widget ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
-    <h2>Welcome to {{page.user.name}}</h2>
+<div class="profile">
+  <div class="sidebar ui-widget-content ui-corner-all">
+    <div class="card">
+      <div class="photo">
+        <img src="{{p.photo}}" width="120" height="120"/>
+        <form id="uploader" class="container" action="" method="post" style="display:none">
+          <div class="item ui-helper-clearfix">
+            <input name="_id" type="hidden" value="{{p._id}}"></input>
+            <input name="_rev" type="hidden" value="{{p._rev}}"></input>
+            <label style="width:60px" for="photo">File</label>
+            <div style="margin-left: 80px">
+              <input id="_attachments" name="_attachments" type="file"></input>
+            </div>
+          </div>
+        </form>
+        <div class="upload">
+          <a href="javascript:void(0);">Upload</a>
+        </div>
+      </div>
+      <div class="signature">
+        <span class="name">{{p.displayName}}</span>
+      </div>
+    </div>
+    <div class="mainmenu">
+      <ul>
+        <li>Profile</li>
+        <li>Notes</li>
+        <li>Bookmarks</li>
+        <li>Feeds</li>
+      </ul>
+    </div>
+    <div class="apps">
+      <h2>Applications</h2>
+      <ul>
+        <li>Add a new application</li>
+      </ul>
+    </div>
   </div>
-  <div class="wj-page-content ui-widget-content ui-corner-bottom">
-    <ul>
-      <li>Profile</li>
-      <li>Activities</li>
-      <li>Applications</li>
-    </ul>
+  <div class="contents">
+    Content
   </div>
 </div>

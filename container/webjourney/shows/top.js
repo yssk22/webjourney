@@ -10,7 +10,16 @@ function(doc, req){
    if( doc ){
       if( doc.type == "Person" ){
          bindings["page.title"] = doc._id.split(":")[1] + "'s home page";
-         var expected = "profile:" + req.userCtx.name;
+
+         // set binding variables
+         bindings["p._id"] = doc._id;
+         bindings["p._rev"] = doc._rev;
+         bindings["p.displayName"] = doc.displayName;
+         if( doc.photo ){
+            bindings["p.photo"] = ["", req.info.db_name, doc._id, doc.photo].join("/");
+         }
+
+         var expected = "p:" + req.userCtx.name;
          if( doc._id == expected ){
             return t.render(ddoc.templates.site.html.header, bindings) +
                t.render(ddoc.templates.pages.top.mine, bindings) +
@@ -26,9 +35,9 @@ function(doc, req){
    }else{
       if( req.path.length == 6 ){
          // id specified but not found.
-         var profile_id = req.path[req.path.length - 1];
-         var expected = "profile:" + req.userCtx.name;
-         if( profile_id == expected ){
+         var p_id = req.path[req.path.length - 1];
+         var expected = "p:" + req.userCtx.name;
+         if( p_id == expected ){
             return t.render(ddoc.templates.site.html.header, bindings) +
                t.render(ddoc.templates.pages.top.no_profile, bindings) +
                t.render(ddoc.templates.site.html.footer, bindings);

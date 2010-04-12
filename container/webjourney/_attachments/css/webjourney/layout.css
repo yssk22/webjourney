@@ -3,6 +3,7 @@ body {
 }
 
 header.site, footer.site {
+    clear: both;
     font-family: serif;
     color: #666666;
     width: 100%;
@@ -13,11 +14,12 @@ header.site a, footer.site a {
 }
 
 header.site {
-    margin-bottom: 7px;
+    margin-bottom: 20px;
 }
 
 footer.site {
-    margin-top: 7px;
+    clear: both;
+    margin-top: 20px;
     line-height: 140%;
     padding-top: 5px;
     border-top: solid 1px #aaaaaa;

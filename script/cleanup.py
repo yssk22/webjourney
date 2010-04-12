@@ -22,8 +22,11 @@ print ""
 while True:
     r = raw_input("Are you sure to clean up data? [y/n]> ")
     if r == 'y':
-        db.flush()
-        break
+        db.server.delete_db(db.dbname)
+        print "The current database has been dropped successfully."
+        print "Rebuilding webjourney database ..."
+        print ""
+        import install
     elif r == 'n':
         print "canceled."
         break
