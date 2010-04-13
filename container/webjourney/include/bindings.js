@@ -2,6 +2,7 @@
 var $ = require('vendor/crayon/lib/crayon');
 var bindings = $.extend({}, ddoc.include.page);
 bindings["assetPath"] = assetPath();
+bindings["page.role"] = "reader";
 bindings["page.user.name"] = req.userCtx.name;
 bindings["page.user.roles"] = req.userCtx.roles;
 bindings["page.account_navigation"] = function(){
@@ -12,6 +13,8 @@ bindings["page.account_navigation"] = function(){
    }
 };
 
+bindings["page.javascripts"] = [];
+bindings["page.stylesheets"] = [];
 (function(){
    var name = "js/" + req.path[4] + ".js";
    if( ddoc["_attachments"][name] ){

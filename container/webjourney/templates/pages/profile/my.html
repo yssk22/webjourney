@@ -1,8 +1,8 @@
-<div class="profile">
+<div class="profile reader">
   <div class="sidebar ui-widget-content ui-corner-all">
-    <div class="card">
+    <div class="vcard">
       <div class="photo">
-        <img src="{{p.photo}}" width="120" height="120"/>
+        <img src="{{p.photo.formatted}}" width="120" height="120"/>
         <form id="uploader" class="container" action="" method="post" style="display:none">
           <div class="item ui-helper-clearfix">
             <input name="_id" type="hidden" value="{{p._id}}"></input>
@@ -13,12 +13,14 @@
             </div>
           </div>
         </form>
-        <div class="upload">
+        {{#role.is_editor}}
+        <div class="upload editor">
           <a href="javascript:void(0);">Upload</a>
         </div>
+        {{/role.is_editor}}
       </div>
       <div class="signature">
-        <span class="name">{{p.displayName}}</span>
+        <span class="fn nickname">{{p.displayName}}</span>
       </div>
     </div>
     <div class="mainmenu">
@@ -37,6 +39,32 @@
     </div>
   </div>
   <div class="contents">
-    Content
+    <div id="profile-widget" class="ui-widget ui-corner-all">
+      <div class="wj-page-widget ui-helper-reset ui-widget-header ui-corner-all">
+        <h2>About me
+          {{#role.is_editor}}
+          <a class="edit_link editor" href="javascript:void(0);">Edit</a>
+          {{/role.is_editor}}
+        </h2>
+      </div>
+      <div class="wj-page-content ui-widget-content ui-corner-bottom">
+        <div class="show">
+          <div class="aboutMe">
+            {{{p.aboutMe.formatted}}}
+          </div>
+        </div>
+        {{#role.is_editor}}
+        <div class="edit" style="display:none" class="editor">
+          <form id="edit_profile" class="container">
+            {{{p._form}}}
+            <div class="ui-dialog-buttonpane buttonpane">
+              <button class="ui-button" type="submit">Update</button>
+              <button class="ui-button cancel" type="button">Cancel</button>
+            </div>
+          </form>
+        </div>
+        {{/role.is_editor}}
+      </div>
+    </div>
   </div>
 </div>

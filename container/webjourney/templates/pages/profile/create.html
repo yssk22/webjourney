@@ -5,25 +5,7 @@
   <div class="wj-page-content ui-widget-content ui-corner-bottom">
     <p>Your profile is not found on this server. You need to create one.</p>
     <form id="create_profile" class="container">
-      <input type="hidden" name="type" value="Person" />
-      <input type="hidden" name="_id"  value="p:{{page.user.name}}" />
-      <p class="msg"></p>
-      <div class="item ui-helper-clearfix">
-        <label for="displayName">Display Name</label>
-        <div>
-          <input id="displayName" type="text" name="displayName"
-                 value="{{page.user.name}}"
-                 size="50"></input>
-        </div>
-      </div>
-      <div class="item ui-helper-clearfix">
-        <label for="aboutMe">About me</label>
-        <div>
-          <textarea id="aboutMe" type="text" name="aboutMe" 
-                    cols="80" rows="10"></textarea>
-          <p class="note">Markdown format is available.</p>
-        </div>
-      </div>
+      {{p._form}}
       <div class="ui-dialog-buttonpane buttonpane">
         <button class="ui-button" type="submit">
           Create

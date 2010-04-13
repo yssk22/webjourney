@@ -1,0 +1,19 @@
+<input type="hidden" name="type" value="Person" />
+<input type="hidden" name="_id"  value="{{p._id}}" />
+<p class="msg"></p>
+<div class="item">
+  <label for="displayName">Display Name</label>
+  <div>
+    <input id="displayName" type="text" name="displayName"
+           value="{{p.displayName}}"
+           size="50"></input>
+  </div>
+</div>
+<div class="item">
+  <label for="aboutMe">About me</label>
+  <div>
+    <textarea id="aboutMe" type="text" name="aboutMe" 
+              cols="80" rows="10">{{p.aboutMe}}</textarea>
+    <p class="note">Markdown format is available.</p>
+  </div>
+</div>

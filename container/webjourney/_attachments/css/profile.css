@@ -6,7 +6,7 @@ div.profile div.sidebar {
     float: left;
 }
 
-div.profile div.sidebar div.card{
+div.profile div.sidebar div.vcard{
     margin-top: 10px;
     margin-left: 25px;
     margin-right: 25px;
@@ -14,11 +14,11 @@ div.profile div.sidebar div.card{
     text-align: center;
 }
 
-div.profile div.sidebar div.card div.photo div.upload {
+div.profile div.sidebar div.vcard div.photo div.upload {
     text-align:right;
 }
 
-div.profile div.sidebar div.card div.signature span.name{
+div.profile div.sidebar div.vcard div.signature span.name{
     font-size: large;
 }
 

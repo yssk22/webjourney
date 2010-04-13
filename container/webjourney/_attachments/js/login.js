@@ -8,7 +8,6 @@ function onLoginSubmit(){
       success : function() {
          var path = App.showPath("profile", "p:" + encodeURIComponent(name));
          log("Succ - " + path);
-         $("#login").nowLoading("clear");
          $("#login p.msg").infoMsg("Now redirecting your page ...");
          window.location.href = path;
       },
