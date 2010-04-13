@@ -17,7 +17,10 @@ function logout(){
 }
 
 function log(msg){
-   if(console != undefined && console.log != undefined ){
-      console.log(msg);
+   try{
+      if(console != undefined && console.log != undefined ){
+         console.log(msg);
+      }
+   }catch(e){
    }
 }

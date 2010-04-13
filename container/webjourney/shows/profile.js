@@ -40,6 +40,7 @@ function(doc, req){
             bindings["p._rev"] = undefined;
             bindings["p.displayName"] = req.userCtx.name;
             bindings["p.aboutMe"] = "Introduce yourself";
+            bindings["p._form"] = t.render(ddoc.templates.pages.profile._form, bindings);
             return t.render(ddoc.templates.site.html.header, bindings) +
                t.render(ddoc.templates.pages.profile.create, bindings) +
                t.render(ddoc.templates.site.html.footer, bindings);
